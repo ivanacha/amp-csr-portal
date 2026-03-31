@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP — CSR Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --amp-navy:       #0F2447;
+  --amp-cobalt:     #1B3A6B;
+  --amp-blue:       #2A5298;
+  --amp-sky:        #4A90D9;
+  --amp-light-blue: #EBF3FB;
+  --bg:             #F4F6FA;
+  --surface:        #FFFFFF;
+  --surface-2:      #F0F4F9;
+  --border:         #DDE3EE;
+  --border-dark:    #C4CEDF;
+  --text:           #0F2447;
+  --text-2:         #4A5E80;
+  --text-3:         #8A9BB8;
+  --green:          #0E7A4E;
+  --green-bg:       #E6F5EE;
+  --green-border:   #A3D9BC;
+  --yellow:         #946A00;
+  --yellow-bg:      #FEF5D9;
+  --yellow-border:  #F5D97A;
+  --red:            #B91C1C;
+  --red-bg:         #FEE2E2;
+  --red-border:     #FCA5A5;
+  --grey:           #1F2937;
+  --grey-bg:        #D1D5DB;
+  --grey-border:    #9CA3AF;
+  --header-h:       60px;
+  --radius:         10px;
+  --radius-sm:      7px;
+  --shadow-sm:      0 1px 3px rgba(15,36,71,0.08),0 1px 2px rgba(15,36,71,0.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+
+/* ── HEADER ── */
+.header{height:var(--header-h);background:var(--amp-navy);display:flex;align-items:center;padding:0 28px;gap:16px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(15,36,71,0.25)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;background:var(--amp-sky);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#fff;letter-spacing:.5px}
+.h-div{width:1px;height:20px;background:rgba(255,255,255,.2)}
+.breadcrumbs{display:flex;align-items:center;gap:6px;font-size:13.5px}
+.crumb-link{color:rgba(255,255,255,.6);cursor:pointer;transition:color .15s}
+.crumb-link:hover{color:#fff}
+.crumb-sep{color:rgba(255,255,255,.3);font-size:12px}
+.crumb-current{color:#fff;font-weight:500}
+.h-spacer{flex:1}
+.portal-label{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase}
+.agent-chip{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.agent-avatar{width:26px;height:26px;border-radius:50%;background:var(--amp-sky);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.agent-name{font-size:12.5px;color:#fff;font-weight:500}
+.agent-role{font-size:10.5px;color:rgba(255,255,255,.4)}
+
+/* ── VIEWS ── */
+.view{display:none;flex:1;overflow-y:auto}
+.view.active{display:block}
+
+/* ── LIST ── */
+.page{padding:28px 32px;max-width:1200px;margin:0 auto}
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.search-wrap{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;width:280px;box-shadow:var(--shadow-sm)}
+.search-wrap:focus-within{border-color:var(--amp-sky)}
+.search-wrap svg{color:var(--text-3);flex-shrink:0}
+.search-wrap input{border:none;outline:none;font-size:13.5px;color:var(--text);width:100%;background:transparent;font-family:'DM Sans',sans-serif}
+.search-wrap input::placeholder{color:var(--text-3)}
+.filter-group{display:flex;gap:6px;margin-left:auto}
+.pill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--text-2);font-size:12.5px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.pill:hover{border-color:var(--amp-cobalt);color:var(--amp-cobalt)}
+.pill.active{background:var(--amp-cobalt);border-color:var(--amp-cobalt);color:#fff;font-weight:600}
+.count{font-size:13px;color:var(--text-3);margin-bottom:12px}
+.table-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--surface-2);border-bottom:1px solid var(--border)}
+th{padding:11px 16px;text-align:left;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--text-3);font-weight:500;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--amp-light-blue)}
+td{padding:13px 16px;vertical-align:middle}
+.user-cell{display:flex;align-items:center;gap:11px}
+.u-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.u-name{font-size:13.5px;font-weight:600;color:var(--text)}
+.u-email{font-size:12px;color:var(--text-3);margin-top:1px}
+.mono{font-family:'DM Mono',monospace;font-size:12px;color:var(--text-2)}
+
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.badge.active{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge.paused{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.badge.overdue{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge.cancelled{background:var(--grey-bg);color:var(--grey);border:1px solid var(--grey-border)}
+
+.view-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--amp-cobalt);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s}
+.view-btn:hover{background:var(--amp-cobalt);color:#fff;border-color:var(--amp-cobalt)}
+
+/* ── PROFILE ── */
+.hero{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px 26px;display:flex;align-items:center;gap:18px;margin-bottom:20px;box-shadow:var(--shadow-sm);border-left:4px solid var(--amp-sky)}
+.hero-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--border)}
+.hero-name{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.3px;color:var(--amp-navy)}
+.hero-meta{display:flex;align-items:center;gap:10px;margin-top:4px;font-size:13px;color:var(--text-2)}
+.hero-sep{color:var(--border-dark)}
+.stat-strip{display:flex;gap:8px;margin-top:12px}
+.stat-chip{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:6px 14px;text-align:center}
+.stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--amp-navy)}
+.stat-lbl{font-size:11px;color:var(--text-3);margin-top:1px}
+.hero-actions{margin-left:auto;display:flex;gap:8px}
+
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+
+/* Cards */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.card-title{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--amp-navy)}
+.card-title svg{color:var(--amp-cobalt)}
+.card-body{padding:20px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid transparent;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--amp-cobalt);color:#fff;border-color:var(--amp-cobalt)}
+.btn-primary:hover{background:var(--amp-blue)}
+.btn-secondary{background:#fff;color:var(--amp-cobalt);border-color:var(--border)}
+.btn-secondary:hover{border-color:var(--amp-cobalt)}
+.btn-ghost{background:transparent;color:var(--text-2);border-color:var(--border)}
+
+/* Field grid */
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-full{grid-column:1/-1}
+.field-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:5px}
+.field-value{font-size:13.5px;color:var(--text)}
+.field-input{background:var(--surface-2);border:1.5px solid var(--amp-sky);border-radius:var(--radius-sm);padding:7px 10px;font-size:13.5px;color:var(--text);outline:none;width:100%;font-family:'DM Sans',sans-serif;display:none}
+.field-input:focus{border-color:var(--amp-cobalt)}
+.edit-mode .field-value{display:none}
+.edit-mode .field-input{display:block}
+.edit-actions{display:none;gap:8px}
+.view-actions-card{display:flex;gap:8px}
+.edit-mode .edit-actions{display:flex}
+.edit-mode .view-actions-card{display:none}
+
+/* Vehicles */
+.vehicle-item{display:flex;align-items:center;gap:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px}
+.vehicle-item:last-child{margin-bottom:0}
+.veh-icon{width:38px;height:38px;border-radius:8px;background:var(--amp-light-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.veh-plate{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;letter-spacing:1px;color:var(--amp-navy)}
+.veh-desc{font-size:12px;color:var(--text-3);margin-top:2px}
+.veh-plan-name{font-size:13px;font-weight:600;color:var(--green);text-align:right}
+.veh-plan-name.paused{color:var(--yellow)}
+.veh-renew{font-size:11.5px;color:var(--text-3);text-align:right;margin-top:2px}
+.veh-actions{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-2);transition:all .15s}
+.icon-btn:hover{border-color:var(--amp-sky);color:var(--amp-cobalt)}
+.icon-btn.danger:hover{border-color:var(--red-border);color:var(--red)}
+.add-row{display:flex;align-items:center;gap:8px;padding:8px 4px;color:var(--amp-sky);font-size:13px;cursor:pointer;font-weight:500;margin-top:4px;border-radius:6px;transition:background .15s}
+.add-row:hover{background:var(--amp-light-blue);padding:8px 10px}
+
+/* Transactions */
+.tx-row{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--border)}
+.tx-row:last-child{border-bottom:none}
+.tx-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tx-icon.subscription{background:var(--amp-light-blue);color:var(--amp-cobalt)}
+.tx-icon.wash{background:var(--green-bg);color:var(--green)}
+.tx-icon.refund{background:var(--red-bg);color:var(--red)}
+.tx-icon.coupon{background:var(--yellow-bg);color:var(--yellow)}
+.tx-desc{font-size:13.5px;font-weight:500;color:var(--text)}
+.tx-meta{font-size:12px;color:var(--text-3);margin-top:2px}
+.tx-amount{margin-left:auto;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;white-space:nowrap}
+.tx-amount.credit{color:var(--green)}
+
+/* Info banner */
+.info-banner{display:flex;align-items:flex-start;gap:9px;margin-top:16px;padding:10px 13px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--radius-sm);font-size:12.5px;color:var(--yellow)}
+.info-banner svg{flex-shrink:0;margin-top:1px}
+
+/* Tag */
+.tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);letter-spacing:.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:2px 8px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--amp-navy);border:1px solid var(--green-border);border-radius:10px;padding:12px 18px;font-size:13.5px;color:var(--green);display:flex;align-items:center;gap:8px;z-index:100;opacity:0;pointer-events:none;transform:translateY(10px);transition:all .3s}
+.toast.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+
+/* Empty */
+.empty-state{text-align:center;padding:32px 0;color:var(--text-3);font-size:13.5px}
+.empty-state svg{display:block;margin:0 auto 10px;opacity:.35}
+
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <span class="logo-text">AMP</span>
+  </div>
+  <div class="h-div"></div>
+  <nav class="breadcrumbs" id="breadcrumbs">
+    <span class="crumb-current">Customers</span>
+  </nav>
+  <div class="h-spacer"></div>
+  <span class="portal-label">CSR Portal</span>
+  <div class="agent-chip">
+    <div class="agent-avatar">JR</div>
+    <div>
+      <div class="agent-name">Jamie R.</div>
+      <div class="agent-role">CSR Agent</div>
+    </div>
+  </div>
+</header>
+
+<!-- LIST VIEW -->
+<div class="view active" id="view-list">
+  <div class="page">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchInput" type="text" placeholder="Search name, email, phone, ID…" oninput="filterTable()">
+      </div>
+      <div class="filter-group">
+        <button class="pill active" onclick="setFilter('all',this)">All Customers</button>
+        <button class="pill" onclick="setFilter('active',this)">Active</button>
+        <button class="pill" onclick="setFilter('paused',this)">Paused</button>
+        <button class="pill" onclick="setFilter('overdue',this)">Overdue</button>
+        <button class="pill" onclick="setFilter('cancelled',this)">Cancelled</button>
+      </div>
+    </div>
+    <div class="count" id="count"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Account ID</th>
+            <th>Status</th>
+            <th>Plan</th>
+            <th>Vehicles</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="customerTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE VIEW -->
+<div class="view" id="view-profile">
+  <div class="page">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-avatar" id="pAvatar"></div>
+      <div>
+        <div class="hero-name" id="pName"></div>
+        <div class="hero-meta">
+          <span id="pEmail"></span>
+          <span class="hero-sep">·</span>
+          <span id="pPhone"></span>
+          <span class="hero-sep">·</span>
+          <span id="pStatus"></span>
+        </div>
+        <div class="stat-strip" id="pStats"></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-ghost" onclick="showView('list')">← Back</button>
+        <button class="btn btn-ghost">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Add Note
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="profile-grid">
+      <!-- Account Info -->
+      <div class="card" id="accountCard">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Account Information
+          </div>
+          <div class="view-actions-card">
+            <button class="btn btn-secondary" onclick="startEdit('accountCard')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+          </div>
+          <div class="edit-actions">
+            <button class="btn btn-ghost" onclick="cancelEdit('accountCard')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveEdit('accountCard')">Save Changes</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="field-grid">
+            <div>
+              <div class="field-label">First Name</div>
+              <div class="field-value" id="fv-firstName"></div>
+              <input class="field-input" id="fi-firstName" type="text">
+            </div>
+            <div>
+              <div class="field-label">Last Name</div>
+              <div class="field-value" id="fv-lastName"></div>
+              <input class="field-input" id="fi-lastName" type="text">
+            </div>
+            <div class="field-full">
+              <div class="field-label">Email Address</div>
+              <div class="field-value" id="fv-email"></div>
+              <input class="field-input" id="fi-email" type="email">
+            </div>
+            <div>
+              <div class="field-label">Phone</div>
+              <div class="field-value" id="fv-phone"></div>
+              <input class="field-input" id="fi-phone" type="tel">
+            </div>
+            <div>
+              <div class="field-label">Home Location</div>
+              <div class="field-value" id="fv-location"></div>
+              <input class="field-input" id="fi-location" type="text">
+            </div>
+            <div>
+              <div class="field-label">Account ID</div>
+              <div class="field-value mono" id="fv-id"></div>
+              <input class="field-input" id="fi-id" disabled style="opacity:.45;cursor:not-allowed">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicles -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Vehicle Subscriptions
+          </div>
+          <button class="btn btn-primary">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Vehicle
+          </button>
+        </div>
+        <div class="card-body" id="vehicleList"></div>
+      </div>
+
+      <!-- Payment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Payment Method
+          </div>
+          <button class="btn btn-secondary">Update Card</button>
+        </div>
+        <div class="card-body">
+          <div class="field-grid">
+            <div class="field-full">
+              <div class="field-label">Card on File</div>
+              <div class="field-value" id="fv-card"></div>
+            </div>
+            <div>
+              <div class="field-label">Expires</div>
+              <div class="field-value" id="fv-expiry"></div>
+            </div>
+            <div>
+              <div class="field-label">Billing ZIP</div>
+              <div class="field-value" id="fv-zip"></div>
+            </div>
+          </div>
+          <div class="info-banner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Card details are tokenized. Direct customers to update via the AMP app for security.
+          </div>
+        </div>
+      </div>
+
+      <!-- Purchase History -->
+      <div class="card full">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Purchase History
+          </div>
+          <span class="tag">Last 90 days</span>
+        </div>
+        <div class="card-body" id="txList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Changes saved</span>
+</div>
+
+<script>
+const COLORS=[
+  'linear-gradient(135deg,#1B3A6B,#2A5298)',
+  'linear-gradient(135deg,#2A5298,#4A90D9)',
+  'linear-gradient(135deg,#1B3A6B,#0F2447)',
+  'linear-gradient(135deg,#4A90D9,#2A5298)',
+  'linear-gradient(135deg,#0F2447,#1B3A6B)',
+  'linear-gradient(135deg,#2A5298,#1B3A6B)',
+  'linear-gradient(135deg,#3B6EB5,#1B3A6B)',
+  'linear-gradient(135deg,#1B3A6B,#3B6EB5)',
+];
+
+const customers=[
+  {id:'AMP-00341',firstName:'Marcus',lastName:'Delacroix',email:'marcus.delacroix@email.com',phone:'(404) 555-0182',status:'active',plan:'Unlimited Pro',vehicles:2,location:'Buckhead — ATL',card:'Visa ••••4821',expiry:'09/26',zip:'30305',color:0},
+  {id:'AMP-00284',firstName:'Priya',lastName:'Nair',email:'priya.nair@gmail.com',phone:'(678) 555-0247',status:'active',plan:'Basic',vehicles:1,location:'Midtown — ATL',card:'Mastercard ••••7734',expiry:'02/25',zip:'30308',color:1},
+  {id:'AMP-00519',firstName:'Devon',lastName:'Ashford',email:'devon.ashford@work.com',phone:'(770) 555-0091',status:'cancelled',plan:'—',vehicles:0,location:'Alpharetta, GA',card:'Visa ••••2209',expiry:'11/24',zip:'30022',color:2},
+  {id:'AMP-00763',firstName:'Keisha',lastName:'Okafor',email:'keisha.o@outlook.com',phone:'(404) 555-0360',status:'overdue',plan:'Unlimited Pro',vehicles:3,location:'Sandy Springs, GA',card:'Amex ••••1005',expiry:'06/27',zip:'30328',color:3},
+  {id:'AMP-00102',firstName:'Nathaniel',lastName:'Cruz',email:'ncruz@icloud.com',phone:'(678) 555-0118',status:'paused',plan:'Premium',vehicles:1,location:'Decatur, GA',card:'Discover ••••6641',expiry:'03/26',zip:'30030',color:4},
+  {id:'AMP-00887',firstName:'Simone',lastName:'Beaumont',email:'simone.beaumont@email.com',phone:'(404) 555-0433',status:'active',plan:'Basic',vehicles:1,location:'East Atlanta',card:'Visa ••••3318',expiry:'08/26',zip:'30316',color:5},
+  {id:'AMP-00655',firstName:'Terrence',lastName:'Whitfield',email:'twhitfield@gmail.com',phone:'(770) 555-0274',status:'active',plan:'Premium',vehicles:2,location:'Marietta, GA',card:'Mastercard ••••5502',expiry:'01/26',zip:'30060',color:6},
+  {id:'AMP-00491',firstName:'Lily',lastName:'Chen',email:'lily.chen@company.io',phone:'(678) 555-0380',status:'paused',plan:'Unlimited Pro',vehicles:1,location:'Dunwoody, GA',card:'Visa ••••9980',expiry:'07/25',zip:'30338',color:7},
+];
+
+const vehicleData={
+  'AMP-00341':[{plate:'GTA-8821',desc:'2021 BMW X5 · Silver',plan:'Unlimited Pro',renew:'Apr 15, 2026'},{plate:'HMX-4430',desc:'2019 Toyota Camry · White',plan:'Unlimited Pro',renew:'Apr 15, 2026'}],
+  'AMP-00284':[{plate:'JKL-5510',desc:'2022 Honda Civic · Blue',plan:'Basic',renew:'Apr 3, 2026'}],
+  'AMP-00519':[],
+  'AMP-00763':[{plate:'PLT-9902',desc:'2020 Audi Q7 · Black',plan:'Unlimited Pro',renew:'Overdue'},{plate:'RTY-1123',desc:'2023 Mercedes GLE · Gray',plan:'Unlimited Pro',renew:'Overdue'},{plate:'YUI-3348',desc:'2018 Jeep Grand Cherokee · Red',plan:'Unlimited Pro',renew:'Overdue'}],
+  'AMP-00102':[{plate:'BNM-6671',desc:'2022 Tesla Model 3 · White',plan:'Premium',renew:'Paused',isPaused:true}],
+  'AMP-00887':[{plate:'CVB-4412',desc:'2021 Subaru Outback · Green',plan:'Basic',renew:'Apr 8, 2026'}],
+  'AMP-00655':[{plate:'DFG-8803',desc:'2020 Ford F-150 · Blue',plan:'Premium',renew:'Apr 22, 2026'},{plate:'HJK-2290',desc:'2023 Chevrolet Tahoe · Black',plan:'Premium',renew:'Apr 22, 2026'}],
+  'AMP-00491':[{plate:'ZXC-5517',desc:'2022 Porsche Cayenne · White',plan:'Unlimited Pro',renew:'Paused',isPaused:true}],
+};
+
+const txData={
+  'AMP-00341':[{type:'subscription',desc:'Subscription Renewal — Unlimited Pro (×2)',meta:'Mar 15, 2026 · Auto-billed',amount:'$59.98'},{type:'wash',desc:'Single Wash — Premium Express',meta:'Mar 10, 2026 · Buckhead Location',amount:'$19.99'},{type:'coupon',desc:'Coupon Applied — SPRING25',meta:'Mar 10, 2026 · 25% off single wash',amount:'−$5.00',credit:true},{type:'subscription',desc:'Subscription Renewal — Unlimited Pro (×2)',meta:'Feb 15, 2026 · Auto-billed',amount:'$59.98'},{type:'refund',desc:'Refund Issued — Subscription Credit',meta:'Jan 28, 2026 · CSR processed',amount:'+$29.99',credit:true}],
+  'AMP-00284':[{type:'subscription',desc:'Subscription Renewal — Basic',meta:'Apr 1, 2026 · Auto-billed',amount:'$14.99'},{type:'wash',desc:'Single Wash — Basic Wash',meta:'Mar 22, 2026 · Midtown Location',amount:'$9.99'}],
+  'AMP-00519':[{type:'refund',desc:'Cancellation Refund',meta:'Mar 1, 2026 · Account closed',amount:'+$14.99',credit:true}],
+  'AMP-00763':[{type:'subscription',desc:'Payment Failed — Unlimited Pro (×3)',meta:'May 1, 2026 · Retry pending',amount:'$89.97'},{type:'wash',desc:'Single Wash — Supreme Detail',meta:'Apr 20, 2026',amount:'$29.99'},{type:'coupon',desc:'Loyalty Reward Applied',meta:'Apr 20, 2026',amount:'−$10.00',credit:true}],
+  'AMP-00102':[{type:'subscription',desc:'Subscription Paused',meta:'Mar 5, 2026 · Customer request',amount:'$0.00'},{type:'subscription',desc:'Subscription — Premium',meta:'Feb 1, 2026 · Auto-billed',amount:'$29.99'}],
+  'AMP-00887':[{type:'subscription',desc:'New Subscription — Basic',meta:'Jun 12, 2023 · Initial signup',amount:'$14.99'}],
+  'AMP-00655':[{type:'subscription',desc:'Subscription Renewal — Premium (×2)',meta:'Apr 22, 2026',amount:'$59.98'},{type:'wash',desc:'Single Wash — Premium Express',meta:'Apr 15, 2026',amount:'$19.99'}],
+  'AMP-00491':[{type:'subscription',desc:'Subscription Paused',meta:'Mar 31, 2026 · Customer request',amount:'$0.00'},{type:'coupon',desc:'Referral Credit Applied',meta:'Mar 15, 2026',amount:'−$15.00',credit:true}],
+};
+
+const TX_ICONS={
+  subscription:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+  wash:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M8 12s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>`,
+  refund:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>`,
+  coupon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+};
+
+let currentFilter='all';
+let currentId=null;
+
+function initials(c){return(c.firstName[0]+c.lastName[0]).toUpperCase()}
+
+function statusBadge(s){
+  return`<span class="badge ${s}">${{active:'Active',paused:'Paused',overdue:'Overdue',cancelled:'Cancelled'}[s]||s}</span>`;
+}
+
+function renderTable(data){
+  const tbody=document.getElementById('customerTable');
+  document.getElementById('count').textContent=`${data.length} ${data.length===1?'customer':'customers'}`;
+  if(!data.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--text-3)">No customers found</td></tr>`;return}
+  tbody.innerHTML=data.map(c=>`
+    <tr onclick="openProfile('${c.id}')">
+      <td><div class="user-cell">
+        <div class="u-avatar" style="background:${COLORS[c.color]}">${initials(c)}</div>
+        <div><div class="u-name">${c.firstName} ${c.lastName}</div><div class="u-email">${c.email}</div></div>
+      </div></td>
+      <td><span class="mono">${c.id}</span></td>
+      <td>${statusBadge(c.status)}</td>
+      <td><span style="font-size:13px;color:var(--text-2)">${c.plan}</span></td>
+      <td><span class="mono" style="font-size:13px">${c.vehicles}</span></td>
+      <td style="text-align:right"><button class="view-btn" onclick="event.stopPropagation();openProfile('${c.id}')">View Profile</button></td>
+    </tr>
+  `).join('');
+}
+
+function filterTable(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=customers.filter(c=>{
+    const matchQ=[c.firstName,c.lastName,c.email,c.phone,c.id].join(' ').toLowerCase().includes(q);
+    const matchS=currentFilter==='all'||c.status===currentFilter;
+    return matchQ&&matchS;
+  });
+  renderTable(filtered);
+}
+
+function setFilter(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  filterTable();
+}
+
+function openProfile(id){
+  currentId=id;
+  const c=customers.find(x=>x.id===id);
+  const vehicles=vehicleData[id]||[];
+  const txs=txData[id]||[];
+
+  // breadcrumb
+  document.getElementById('breadcrumbs').innerHTML=`
+    <span class="crumb-link" onclick="showView('list')">Customers</span>
+    <span class="crumb-sep">›</span>
+    <span class="crumb-current">${c.firstName} ${c.lastName}</span>
+  `;
+
+  // hero
+  const av=document.getElementById('pAvatar');
+  av.style.background=COLORS[c.color];
+  av.textContent=initials(c);
+  document.getElementById('pName').textContent=`${c.firstName} ${c.lastName}`;
+  document.getElementById('pEmail').textContent=c.email;
+  document.getElementById('pPhone').textContent=c.phone;
+  document.getElementById('pStatus').innerHTML=statusBadge(c.status);
+
+  const totalSpent=txs.filter(t=>!t.credit).reduce((s,t)=>s+parseFloat(t.amount.replace(/[^0-9.]/g,'')||'0'),0);
+  document.getElementById('pStats').innerHTML=[
+    {val:vehicles.length,lbl:'Vehicles'},
+    {val:txs.length,lbl:'Transactions'},
+    {val:`$${totalSpent.toFixed(2)}`,lbl:'90-Day Spend'},
+  ].map(s=>`<div class="stat-chip"><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join('');
+
+  // account fields
+  ['firstName','lastName','email','phone','location'].forEach(k=>{
+    document.getElementById('fv-'+k).textContent=c[k];
+    document.getElementById('fi-'+k).value=c[k];
+  });
+  document.getElementById('fv-id').textContent=c.id;
+  document.getElementById('fi-id').value=c.id;
+  document.getElementById('fv-card').textContent=c.card;
+  document.getElementById('fv-expiry').textContent=c.expiry;
+  document.getElementById('fv-zip').textContent=c.zip;
+
+  // vehicles
+  const vl=document.getElementById('vehicleList');
+  if(!vehicles.length){
+    vl.innerHTML=`<div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>No active vehicle subscriptions</div>`;
+  }else{
+    vl.innerHTML=vehicles.map(v=>`
+      <div class="vehicle-item">
+        <div class="veh-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amp-cobalt)" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div><div class="veh-plate">${v.plate}</div><div class="veh-desc">${v.desc}</div></div>
+        <div style="margin-left:auto">
+          <div class="veh-plan-name ${v.isPaused?'paused':''}">${v.plan}</div>
+          <div class="veh-renew">${v.isPaused?'⏸ Paused':'Renews '+v.renew}</div>
+        </div>
+        <div class="veh-actions">
+          <div class="icon-btn" title="Edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          <div class="icon-btn" title="Transfer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+          <div class="icon-btn danger" title="Cancel"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></div>
+        </div>
+      </div>
+    `).join('')+`<div class="add-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add vehicle subscription</div>`;
+  }
+
+  // transactions
+  const tl=document.getElementById('txList');
+  if(!txs.length){tl.innerHTML=`<div class="empty-state">No transactions found</div>`;return}
+  tl.innerHTML=txs.map(t=>`
+    <div class="tx-row">
+      <div class="tx-icon ${t.type}">${TX_ICONS[t.type]||TX_ICONS.subscription}</div>
+      <div><div class="tx-desc">${t.desc}</div><div class="tx-meta">${t.meta}</div></div>
+      <div class="tx-amount ${t.credit?'credit':''}">${t.amount}</div>
+    </div>
+  `).join('');
+
+  showView('profile');
+}
+
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(name==='list'){
+    document.getElementById('breadcrumbs').innerHTML=`<span class="crumb-current">Customers</span>`;
+    document.querySelectorAll('.card.edit-mode').forEach(c=>c.classList.remove('edit-mode'));
+  }
+}
+
+function startEdit(cardId){document.getElementById(cardId).classList.add('edit-mode')}
+function cancelEdit(cardId){
+  document.getElementById(cardId).classList.remove('edit-mode');
+  if(currentId){
+    const c=customers.find(x=>x.id===currentId);
+    ['firstName','lastName','email','phone','location'].forEach(k=>{document.getElementById('fi-'+k).value=c[k]});
+  }
+}
+function saveEdit(cardId){
+  const c=customers.find(x=>x.id===currentId);
+  ['firstName','lastName','email','phone','location'].forEach(k=>{
+    c[k]=document.getElementById('fi-'+k).value;
+    document.getElementById('fv-'+k).textContent=c[k];
+  });
+  document.getElementById('pName').textContent=`${c.firstName} ${c.lastName}`;
+  document.getElementById('pEmail').textContent=c.email;
+  document.getElementById('pPhone').textContent=c.phone;
+  document.getElementById(cardId).classList.remove('edit-mode');
+  showToast('Account information saved');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+renderTable(customers);
+</script>
+</body>
+</html>

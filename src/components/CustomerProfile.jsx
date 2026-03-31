@@ -1,0 +1,416 @@
+import React, { useState } from 'react';
+import StatusBadge from './StatusBadge';
+import { customers, vehicleData, transactionData, AVATAR_COLORS } from '../data/mockData';
+
+function initials(c) {
+  return (c.firstName[0] + c.lastName[0]).toUpperCase();
+}
+
+/* ── Shared card shell ──────────────────────────────────────────────────── */
+function Card({ title, icon, actions, children }) {
+  return (
+    <div style={{
+      background: '#fff',
+      border: '1px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      overflow: 'hidden',
+      boxShadow: 'var(--shadow-sm)',
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '14px 20px',
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--surface-2)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13.5, color: 'var(--amp-navy)' }}>
+          {icon}
+          {title}
+        </div>
+        {actions}
+      </div>
+      <div style={{ padding: '20px' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+function Btn({ onClick, variant = 'secondary', children, style: extra }) {
+  const base = {
+    display: 'inline-flex', alignItems: 'center', gap: 5,
+    padding: '6px 14px',
+    borderRadius: 'var(--radius-sm)',
+    fontSize: 12.5, fontWeight: 500,
+    cursor: 'pointer', transition: 'all 0.15s',
+    border: '1px solid transparent',
+    ...extra,
+  };
+  const variants = {
+    primary: { background: 'var(--amp-cobalt)', color: '#fff', borderColor: 'var(--amp-cobalt)' },
+    secondary: { background: '#fff', color: 'var(--amp-cobalt)', borderColor: 'var(--border)' },
+    ghost: { background: 'transparent', color: 'var(--text-2)', borderColor: 'var(--border)' },
+    danger: { background: '#fff', color: 'var(--red)', borderColor: 'var(--red-border)' },
+  };
+  return <button style={{ ...base, ...variants[variant] }} onClick={onClick}>{children}</button>;
+}
+
+/* ── Icon button ──────────────────────────────────────────────────────── */
+function IconBtn({ onClick, title, danger, children }) {
+  return (
+    <button
+      title={title}
+      onClick={onClick}
+      style={{
+        width: 30, height: 30,
+        borderRadius: 7,
+        border: `1px solid ${danger ? 'var(--red-border)' : 'var(--border)'}`,
+        background: '#fff',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer',
+        color: danger ? 'var(--red)' : 'var(--text-2)',
+        transition: 'all 0.15s',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+/* ── Field ────────────────────────────────────────────────────────────── */
+function Field({ label, value, editing, inputProps }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>
+        {label}
+      </div>
+      {editing ? (
+        <input
+          style={{
+            background: 'var(--surface-2)',
+            border: '1.5px solid var(--amp-sky)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '7px 10px',
+            fontSize: 13.5,
+            color: 'var(--text)',
+            outline: 'none',
+            width: '100%',
+          }}
+          {...inputProps}
+        />
+      ) : (
+        <div style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{value}</div>
+      )}
+    </div>
+  );
+}
+
+/* ── Account Info Card ────────────────────────────────────────────────── */
+function AccountCard({ customer, onSave }) {
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({
+    firstName: customer.firstName,
+    lastName: customer.lastName,
+    email: customer.email,
+    phone: customer.phone,
+    location: customer.location,
+  });
+
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  return (
+    <Card
+      title="Account Information"
+      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
+      actions={
+        editing ? (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Btn variant="ghost" onClick={() => { setEditing(false); setForm({ firstName: customer.firstName, lastName: customer.lastName, email: customer.email, phone: customer.phone, location: customer.location }); }}>
+              Cancel
+            </Btn>
+            <Btn variant="primary" onClick={() => { onSave(form); setEditing(false); }}>
+              Save Changes
+            </Btn>
+          </div>
+        ) : (
+          <Btn variant="secondary" onClick={() => setEditing(true)}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </Btn>
+        )
+      }
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <Field label="First Name" value={customer.firstName} editing={editing} inputProps={{ value: form.firstName, onChange: set('firstName') }} />
+        <Field label="Last Name" value={customer.lastName} editing={editing} inputProps={{ value: form.lastName, onChange: set('lastName') }} />
+        <div style={{ gridColumn: '1/-1' }}>
+          <Field label="Email Address" value={customer.email} editing={editing} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
+        </div>
+        <Field label="Phone" value={customer.phone} editing={editing} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
+        <Field label="Home Location" value={customer.location} editing={editing} inputProps={{ value: form.location, onChange: set('location') }} />
+        <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
+      </div>
+    </Card>
+  );
+}
+
+/* ── Vehicle Subscriptions Card ───────────────────────────────────────── */
+function VehicleCard({ customerId }) {
+  const vehicles = vehicleData[customerId] || [];
+
+  return (
+    <Card
+      title="Vehicle Subscriptions"
+      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
+      actions={
+        <Btn variant="primary">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Add Vehicle
+        </Btn>
+      }
+    >
+      {vehicles.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-3)', fontSize: 13.5 }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: 10, opacity: 0.4, display: 'block', margin: '0 auto 10px' }}><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          No active vehicle subscriptions
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {vehicles.map((v) => (
+            <div key={v.id} style={{
+              display: 'flex', alignItems: 'center', gap: 14,
+              background: 'var(--surface-2)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '12px 14px',
+            }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: 8,
+                background: 'var(--amp-light-blue)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amp-cobalt)" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              </div>
+              <div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--amp-navy)' }}>{v.plate}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.desc}</div>
+              </div>
+              <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : 'var(--green)' }}>{v.plan}</div>
+                <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+                  {v.isPaused ? '⏸ Paused' : `Renews ${v.renew}`}
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                <IconBtn title="Edit subscription">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </IconBtn>
+                <IconBtn title="Transfer to another vehicle">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </IconBtn>
+                <IconBtn title="Cancel subscription" danger>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+                </IconBtn>
+              </div>
+            </div>
+          ))}
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 4px', color: 'var(--amp-sky)', fontSize: 13, cursor: 'pointer', fontWeight: 500 }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add vehicle subscription
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+/* ── Payment Method Card ──────────────────────────────────────────────── */
+function PaymentCard({ customer }) {
+  return (
+    <Card
+      title="Payment Method"
+      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+      actions={<Btn variant="secondary">Update Card</Btn>}
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ gridColumn: '1/-1' }}>
+          <Field label="Card on File" value={customer.card} />
+        </div>
+        <Field label="Expires" value={customer.expiry} />
+        <Field label="Billing ZIP" value={customer.zip} />
+      </div>
+      <div style={{
+        display: 'flex', alignItems: 'flex-start', gap: 9,
+        marginTop: 16, padding: '10px 13px',
+        background: 'var(--yellow-bg)',
+        border: '1px solid var(--yellow-border)',
+        borderRadius: 'var(--radius-sm)',
+        fontSize: 12.5, color: 'var(--yellow)',
+      }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ flexShrink: 0, marginTop: 1 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Card details are tokenized. Direct customers to update via the AMP app for security.
+      </div>
+    </Card>
+  );
+}
+
+/* ── Purchase History Card ────────────────────────────────────────────── */
+const TX_ICONS = {
+  subscription: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  wash: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M8 12s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>,
+  refund: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>,
+  coupon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>,
+};
+
+const TX_STYLE = {
+  subscription: { bg: 'var(--amp-light-blue)', color: 'var(--amp-cobalt)' },
+  wash: { bg: 'var(--green-bg)', color: 'var(--green)' },
+  refund: { bg: 'var(--red-bg)', color: 'var(--red)' },
+  coupon: { bg: 'var(--yellow-bg)', color: 'var(--yellow)' },
+};
+
+function PurchaseHistoryCard({ customerId }) {
+  const txs = transactionData[customerId] || [];
+  return (
+    <Card
+      title="Purchase History"
+      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
+      actions={
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'var(--text-3)', letterSpacing: '0.5px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 4, padding: '2px 8px' }}>
+          Last 90 days
+        </span>
+      }
+    >
+      {txs.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-3)', fontSize: 13.5 }}>No transactions found</div>
+      ) : (
+        <div>
+          {txs.map((t, i) => {
+            const ts = TX_STYLE[t.type] || TX_STYLE.subscription;
+            return (
+              <div key={t.id} style={{
+                display: 'flex', alignItems: 'center', gap: 13,
+                padding: '11px 0',
+                borderBottom: i < txs.length - 1 ? '1px solid var(--border)' : 'none',
+              }}>
+                <div style={{
+                  width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                  background: ts.bg, color: ts.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {TX_ICONS[t.type]}
+                </div>
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text)' }}>{t.desc}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{t.meta}</div>
+                </div>
+                <div style={{
+                  marginLeft: 'auto',
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: t.isCredit ? 'var(--green)' : 'var(--text)',
+                }}>
+                  {t.amount}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+/* ── Main CustomerProfile ─────────────────────────────────────────────── */
+export default function CustomerProfile({ customerId, onSaveAccount }) {
+  const customer = customers.find((c) => c.id === customerId);
+  if (!customer) return null;
+
+  const vehicles = vehicleData[customerId] || [];
+  const txs = transactionData[customerId] || [];
+  const totalSpent = txs.filter((t) => !t.isCredit).reduce((sum, t) => {
+    const n = parseFloat(t.amount.replace(/[^0-9.]/g, ''));
+    return sum + (isNaN(n) ? 0 : n);
+  }, 0);
+
+  const stats = [
+    { val: vehicles.length, label: 'Vehicles' },
+    { val: txs.length, label: 'Transactions' },
+    { val: `$${totalSpent.toFixed(2)}`, label: '90-Day Spend' },
+  ];
+
+  return (
+    <div style={{ padding: '28px 32px', maxWidth: 1200, margin: '0 auto' }}>
+      {/* Hero */}
+      <div style={{
+        background: '#fff',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius)',
+        padding: '22px 26px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 18,
+        marginBottom: 20,
+        boxShadow: 'var(--shadow-sm)',
+        borderLeft: '4px solid var(--amp-sky)',
+      }}>
+        <div style={{
+          width: 52, height: 52, borderRadius: '50%',
+          background: AVATAR_COLORS[customer.color],
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 20, fontWeight: 700, color: '#fff', flexShrink: 0,
+          border: '2px solid var(--border)',
+        }}>
+          {initials(customer)}
+        </div>
+        <div>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20, letterSpacing: '-0.3px', color: 'var(--amp-navy)' }}>
+            {customer.firstName} {customer.lastName}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4, fontSize: 13, color: 'var(--text-2)' }}>
+            <span>{customer.email}</span>
+            <span style={{ color: 'var(--border-dark)' }}>·</span>
+            <span>{customer.phone}</span>
+            <span style={{ color: 'var(--border-dark)' }}>·</span>
+            <StatusBadge status={customer.status} />
+          </div>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+            {stats.map((s) => (
+              <div key={s.label} style={{
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '6px 14px',
+                textAlign: 'center',
+              }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 17, color: 'var(--amp-navy)' }}>{s.val}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+          <Btn variant="ghost">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Add Note
+          </Btn>
+        </div>
+      </div>
+
+      {/* Cards Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <AccountCard customer={customer} onSave={onSaveAccount} />
+        <VehicleCard customerId={customerId} />
+        <PaymentCard customer={customer} />
+        <div style={{ gridColumn: '1/-1' }}>
+          <PurchaseHistoryCard customerId={customerId} />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,69 @@
+/* AMP Brand Palette — Cobalt Navy */
+:root {
+  /* Brand */
+  --amp-navy:       #0F2447;
+  --amp-cobalt:     #1B3A6B;
+  --amp-blue:       #2A5298;
+  --amp-sky:        #4A90D9;
+  --amp-light-blue: #EBF3FB;
+
+  /* Surface */
+  --bg:             #F4F6FA;
+  --surface:        #FFFFFF;
+  --surface-2:      #F0F4F9;
+  --border:         #DDE3EE;
+  --border-dark:    #C4CEDF;
+
+  /* Text */
+  --text:           #0F2447;
+  --text-2:         #4A5E80;
+  --text-3:         #8A9BB8;
+
+  /* Status */
+  --green:          #0E7A4E;
+  --green-bg:       #E6F5EE;
+  --green-border:   #A3D9BC;
+
+  --yellow:         #946A00;
+  --yellow-bg:      #FEF5D9;
+  --yellow-border:  #F5D97A;
+
+  --red:            #B91C1C;
+  --red-bg:         #FEE2E2;
+  --red-border:     #FCA5A5;
+
+  --grey:           #1F2937;
+  --grey-bg:        #D1D5DB;
+  --grey-border:    #9CA3AF;
+
+  /* Layout */
+  --header-h:       60px;
+  --radius:         10px;
+  --radius-sm:      7px;
+  --shadow-sm:      0 1px 3px rgba(15,36,71,0.08), 0 1px 2px rgba(15,36,71,0.04);
+  --shadow:         0 4px 12px rgba(15,36,71,0.10), 0 1px 3px rgba(15,36,71,0.06);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
