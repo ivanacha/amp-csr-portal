@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import StatusBadge from './StatusBadge';
 import { AVATAR_COLORS } from '../data/mockData';
 
@@ -122,10 +122,15 @@ const s = {
   },
 };
 
+const PAGE_SIZE = 10;
+
 export default function CustomerList({ customers, onSelectCustomer }) {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => { setCurrentPage(1); }, [query, activeFilter]);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
@@ -192,7 +197,7 @@ export default function CustomerList({ customers, onSelectCustomer }) {
                 </td>
               </tr>
             ) : (
-              filtered.map((c) => (
+              filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((c) => (
                 <tr
                   key={c.id}
                   style={{
@@ -248,6 +253,58 @@ export default function CustomerList({ customers, onSelectCustomer }) {
           </tbody>
         </table>
       </div>
+
+      {filtered.length > PAGE_SIZE && (() => {
+        const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+        // Build page number list: always show first, last, current ±1, with ellipsis gaps
+        const pages = [];
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            pages.push(i);
+          } else if (pages[pages.length - 1] !== '...') {
+            pages.push('...');
+          }
+        }
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 14 }}>
+            <button
+              style={{ ...s.viewBtn, opacity: currentPage === 1 ? 0.4 : 1, cursor: currentPage === 1 ? 'default' : 'pointer' }}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              ← Prev
+            </button>
+
+            {pages.map((p, i) =>
+              p === '...'
+                ? <span key={`ellipsis-${i}`} style={{ fontSize: 13, color: 'var(--text-3)', padding: '0 4px' }}>…</span>
+                : <button
+                    key={p}
+                    style={{
+                      ...s.viewBtn,
+                      minWidth: 32,
+                      justifyContent: 'center',
+                      background: p === currentPage ? 'var(--amp-cobalt)' : '#fff',
+                      color: p === currentPage ? '#fff' : 'var(--amp-cobalt)',
+                      borderColor: p === currentPage ? 'var(--amp-cobalt)' : 'var(--border)',
+                      fontWeight: p === currentPage ? 600 : 500,
+                    }}
+                    onClick={() => setCurrentPage(p)}
+                  >
+                    {p}
+                  </button>
+            )}
+
+            <button
+              style={{ ...s.viewBtn, opacity: currentPage === totalPages ? 0.4 : 1, cursor: currentPage === totalPages ? 'default' : 'pointer' }}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next →
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }
