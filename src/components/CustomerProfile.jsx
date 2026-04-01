@@ -208,20 +208,13 @@ function AccountCard({ customer, onSave }) {
 }
 
 /* ── Vehicle Edit Modal ───────────────────────────────────────────────── */
-function toInputDate(date) {
-  if (!date) return '';
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-
 function VehicleModal({ vehicle, onSave, onClose }) {
-  const today = new Date().toISOString().split('T')[0];
   const [form, setForm] = useState({
     plate: vehicle?.plate ?? '',
-    desc: vehicle?.desc ?? '',
-    renew: toInputDate(vehicle?.renew ?? null),
+    year: vehicle?.year ?? '',
+    make: vehicle?.make ?? '',
+    model: vehicle?.model ?? '',
+    color: vehicle?.color ?? '',
   });
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -229,8 +222,10 @@ function VehicleModal({ vehicle, onSave, onClose }) {
   function handleSave() {
     onSave({
       plate: form.plate,
-      desc: form.desc,
-      renew: form.renew ? new Date(form.renew + 'T00:00:00') : null,
+      year: form.year ? parseInt(form.year, 10) : '',
+      make: form.make,
+      model: form.model,
+      color: form.color,
     });
   }
 
@@ -276,13 +271,23 @@ function VehicleModal({ vehicle, onSave, onClose }) {
           <label style={labelStyle}>License Plate</label>
           <input style={inputStyle} value={form.plate} onChange={set('plate')} placeholder="e.g. ABC-1234" />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={labelStyle}>Vehicle Description</label>
-          <input style={inputStyle} value={form.desc} onChange={set('desc')} placeholder="e.g. 2022 Honda Civic · Blue" />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={labelStyle}>Renewal Date</label>
-          <input style={inputStyle} type="date" min={today} value={form.renew} onChange={set('renew')} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Year</label>
+            <input style={inputStyle} value={form.year} onChange={set('year')} placeholder="e.g. 2022" type="number" min="1980" max="2030" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Make</label>
+            <input style={inputStyle} value={form.make} onChange={set('make')} placeholder="e.g. Honda" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Model</label>
+            <input style={inputStyle} value={form.model} onChange={set('model')} placeholder="e.g. Civic" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Color</label>
+            <input style={inputStyle} value={form.color} onChange={set('color')} placeholder="e.g. Blue" />
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
           <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
@@ -356,7 +361,7 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
                 </div>
                 <div>
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--amp-navy)' }}>{v.plate}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.desc}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.year} {v.make} {v.model} · {v.color}</div>
                 </div>
                 <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
                   {(() => {
@@ -481,7 +486,7 @@ function PurchaseHistoryCard({ transactions }) {
                   {TX_ICONS[t.type]}
                 </div>
                 <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text)' }}>{t.desc}</div>
+                  <div style={{ fontSize: 13.5, fontWeight: 500, color: t.accepted === false ? 'var(--red)' : 'var(--text)' }}>{t.desc}</div>
                   <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{t.meta}</div>
                 </div>
                 <div style={{
@@ -489,7 +494,7 @@ function PurchaseHistoryCard({ transactions }) {
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 13,
                   fontWeight: 500,
-                  color: t.isCredit ? 'var(--green)' : 'var(--text)',
+                  color: t.accepted === false ? 'var(--red)' : t.isCredit ? 'var(--green)' : 'var(--text)',
                 }}>
                   {t.amount}
                 </div>

@@ -369,85 +369,84 @@ export const customers = [
 
 export const vehicleData = {
   'AMP-00341': [
-    { id: 'v1', plate: 'GTA-8821', desc: '2021 BMW X5 · Silver', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
-    { id: 'v2', plate: 'HMX-4430', desc: '2019 Toyota Camry · White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
+    { id: 'v1', plate: 'GTA-8821', year: 2021, make: 'BMW', model: 'X5', color: 'Silver', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
+    { id: 'v2', plate: 'HMX-4430', year: 2019, make: 'Toyota', model: 'Camry', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
   ],
   'AMP-00284': [
-    { id: 'v3', plate: 'JKL-5510', desc: '2022 Honda Civic · Blue', plan: 'Basic', renew: new Date(2026, 4, 1) },
+    { id: 'v3', plate: 'JKL-5510', year: 2022, make: 'Honda', model: 'Civic', color: 'Blue', plan: 'Basic', renew: new Date(2026, 4, 1) },
   ],
   'AMP-00519': [],
   'AMP-00763': [
-    { id: 'v4', plate: 'PLT-9902', desc: '2020 Audi Q7 · Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
-    { id: 'v5', plate: 'RTY-1123', desc: '2023 Mercedes GLE · Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
-    { id: 'v6', plate: 'YUI-3348', desc: '2018 Jeep Grand Cherokee · Red', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
+    { id: 'v4', plate: 'PLT-9902', year: 2020, make: 'Audi', model: 'Q7', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
+    { id: 'v5', plate: 'RTY-1123', year: 2023, make: 'Mercedes', model: 'GLE', color: 'Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
+    { id: 'v6', plate: 'YUI-3348', year: 2018, make: 'Jeep', model: 'Grand Cherokee', color: 'Red', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
   ],
   'AMP-00102': [
-    { id: 'v7', plate: 'BNM-6671', desc: '2022 Tesla Model 3 · White', plan: 'Premium', renew: null, isPaused: true },
+    { id: 'v7', plate: 'BNM-6671', year: 2022, make: 'Tesla', model: 'Model 3', color: 'White', plan: 'Premium', renew: null, isPaused: true },
   ],
   'AMP-00887': [
-    { id: 'v8', plate: 'CVB-4412', desc: '2021 Subaru Outback · Green', plan: 'Basic', renew: new Date(2026, 3, 8) },
+    { id: 'v8', plate: 'CVB-4412', year: 2021, make: 'Subaru', model: 'Outback', color: 'Green', plan: 'Basic', renew: new Date(2026, 3, 8) },
   ],
   'AMP-00655': [
-    { id: 'v9', plate: 'DFG-8803', desc: '2020 Ford F-150 · Blue', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v10', plate: 'HJK-2290', desc: '2023 Chevrolet Tahoe · Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v9', plate: 'DFG-8803', year: 2020, make: 'Ford', model: 'F-150', color: 'Blue', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v10', plate: 'HJK-2290', year: 2023, make: 'Chevrolet', model: 'Tahoe', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
   ],
   'AMP-00491': [
-    { id: 'v11', plate: 'ZXC-5517', desc: '2022 Porsche Cayenne · White', plan: 'Unlimited Pro', renew: null, isPaused: true },
+    { id: 'v11', plate: 'ZXC-5517', year: 2022, make: 'Porsche', model: 'Cayenne', color: 'White', plan: 'Unlimited Pro', renew: null, isPaused: true },
   ],
-  // New customers
   'AMP-01001': [
-    { id: 'v12', plate: 'NWQ-3310', desc: '2023 Toyota Corolla · Gray', plan: 'Basic', renew: new Date(2026, 3, 20) },
+    { id: 'v12', plate: 'NWQ-3310', year: 2023, make: 'Toyota', model: 'Corolla', color: 'Gray', plan: 'Basic', renew: new Date(2026, 3, 20) },
   ],
   'AMP-01002': [
-    { id: 'v13', plate: 'KPR-7740', desc: '2021 Honda Accord · White', plan: 'Premium', renew: new Date(2026, 3, 5) },
-    { id: 'v14', plate: 'MBT-2281', desc: '2022 Hyundai Tucson · Blue', plan: 'Premium', renew: new Date(2026, 3, 5) },
+    { id: 'v13', plate: 'KPR-7740', year: 2021, make: 'Honda', model: 'Accord', color: 'White', plan: 'Premium', renew: new Date(2026, 3, 5) },
+    { id: 'v14', plate: 'MBT-2281', year: 2022, make: 'Hyundai', model: 'Tucson', color: 'Blue', plan: 'Premium', renew: new Date(2026, 3, 5) },
   ],
   'AMP-01003': [
-    { id: 'v15', plate: 'QLP-5590', desc: '2022 Chevy Silverado · Black', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
-    { id: 'v16', plate: 'STX-8832', desc: '2020 Jeep Wrangler · Green', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
-    { id: 'v17', plate: 'VZR-1143', desc: '2023 Ford Explorer · Red', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
+    { id: 'v15', plate: 'QLP-5590', year: 2022, make: 'Chevrolet', model: 'Silverado', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
+    { id: 'v16', plate: 'STX-8832', year: 2020, make: 'Jeep', model: 'Wrangler', color: 'Green', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
+    { id: 'v17', plate: 'VZR-1143', year: 2023, make: 'Ford', model: 'Explorer', color: 'Red', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
   ],
   'AMP-01004': [
-    { id: 'v18', plate: 'WYN-4401', desc: '2021 Nissan Sentra · Silver', plan: 'Basic', renew: new Date(2026, 3, 10) },
+    { id: 'v18', plate: 'WYN-4401', year: 2021, make: 'Nissan', model: 'Sentra', color: 'Silver', plan: 'Basic', renew: new Date(2026, 3, 10) },
   ],
   'AMP-01005': [
-    { id: 'v19', plate: 'XBD-6620', desc: '2022 Kia Stinger · Black', plan: 'Premium', renew: new Date(2026, 3, 18) },
+    { id: 'v19', plate: 'XBD-6620', year: 2022, make: 'Kia', model: 'Stinger', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 18) },
   ],
   'AMP-01006': [
-    { id: 'v20', plate: 'ACF-3312', desc: '2021 Mazda CX-5 · White', plan: 'Basic', renew: null, isPaused: true },
+    { id: 'v20', plate: 'ACF-3312', year: 2021, make: 'Mazda', model: 'CX-5', color: 'White', plan: 'Basic', renew: null, isPaused: true },
   ],
   'AMP-01007': [
-    { id: 'v21', plate: 'BHK-7751', desc: '2020 BMW 3 Series · Blue', plan: 'Premium', renew: null, isPaused: true },
-    { id: 'v22', plate: 'CJM-2293', desc: '2019 Audi A4 · Gray', plan: 'Premium', renew: null, isPaused: true },
+    { id: 'v21', plate: 'BHK-7751', year: 2020, make: 'BMW', model: '3 Series', color: 'Blue', plan: 'Premium', renew: null, isPaused: true },
+    { id: 'v22', plate: 'CJM-2293', year: 2019, make: 'Audi', model: 'A4', color: 'Gray', plan: 'Premium', renew: null, isPaused: true },
   ],
   'AMP-01008': [
-    { id: 'v23', plate: 'DLP-5534', desc: '2023 Tesla Model Y · White', plan: 'Unlimited Pro', renew: null, isPaused: true },
+    { id: 'v23', plate: 'DLP-5534', year: 2023, make: 'Tesla', model: 'Model Y', color: 'White', plan: 'Unlimited Pro', renew: null, isPaused: true },
   ],
   'AMP-01009': [
-    { id: 'v24', plate: 'ENR-8870', desc: '2021 Lexus RX · Black', plan: 'Premium', renew: new Date(2026, 2, 5) },
-    { id: 'v25', plate: 'FQT-1112', desc: '2022 Volvo XC60 · Silver', plan: 'Premium', renew: new Date(2026, 2, 5) },
+    { id: 'v24', plate: 'ENR-8870', year: 2021, make: 'Lexus', model: 'RX', color: 'Black', plan: 'Premium', renew: new Date(2026, 2, 5) },
+    { id: 'v25', plate: 'FQT-1112', year: 2022, make: 'Volvo', model: 'XC60', color: 'Silver', plan: 'Premium', renew: new Date(2026, 2, 5) },
   ],
   'AMP-01010': [
-    { id: 'v26', plate: 'GRV-4453', desc: '2020 Range Rover Sport · Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
-    { id: 'v27', plate: 'HSX-7791', desc: '2023 Cadillac Escalade · Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
+    { id: 'v26', plate: 'GRV-4453', year: 2020, make: 'Land Rover', model: 'Range Rover Sport', color: 'Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
+    { id: 'v27', plate: 'HSX-7791', year: 2023, make: 'Cadillac', model: 'Escalade', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
   ],
   'AMP-01011': [
-    { id: 'v28', plate: 'ITY-2230', desc: '2022 GMC Sierra · Blue', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
-    { id: 'v29', plate: 'JWZ-5571', desc: '2021 Toyota 4Runner · White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
+    { id: 'v28', plate: 'ITY-2230', year: 2022, make: 'GMC', model: 'Sierra', color: 'Blue', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
+    { id: 'v29', plate: 'JWZ-5571', year: 2021, make: 'Toyota', model: '4Runner', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
   ],
   'AMP-01012': [
-    { id: 'v30', plate: 'KXA-8813', desc: '2023 Honda CR-V · Red', plan: 'Basic', renew: new Date(2026, 3, 15) },
+    { id: 'v30', plate: 'KXA-8813', year: 2023, make: 'Honda', model: 'CR-V', color: 'Red', plan: 'Basic', renew: new Date(2026, 3, 15) },
   ],
   'AMP-01013': [
-    { id: 'v31', plate: 'LYB-1150', desc: '2022 Subaru Forester · Green', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v32', plate: 'MZC-4492', desc: '2021 Dodge Durango · Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v33', plate: 'NAD-7730', desc: '2023 Toyota RAV4 · Silver', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v31', plate: 'LYB-1150', year: 2022, make: 'Subaru', model: 'Forester', color: 'Green', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v32', plate: 'MZC-4492', year: 2021, make: 'Dodge', model: 'Durango', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v33', plate: 'NAD-7730', year: 2023, make: 'Toyota', model: 'RAV4', color: 'Silver', plan: 'Premium', renew: new Date(2026, 3, 22) },
   ],
   'AMP-01014': [
-    { id: 'v34', plate: 'OBE-2271', desc: '2023 Lexus IS · White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 8) },
+    { id: 'v34', plate: 'OBE-2271', year: 2023, make: 'Lexus', model: 'IS', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 8) },
   ],
   'AMP-01015': [
-    { id: 'v35', plate: 'PCF-5513', desc: '2020 Volkswagen Jetta · Gray', plan: 'Basic', renew: new Date(2026, 2, 18) },
+    { id: 'v35', plate: 'PCF-5513', year: 2020, make: 'Volkswagen', model: 'Jetta', color: 'Gray', plan: 'Basic', renew: new Date(2026, 2, 18) },
   ],
   'AMP-01016': [],
   'AMP-01017': [],
@@ -455,104 +454,104 @@ export const vehicleData = {
 
 export const transactionData = {
   'AMP-00341': [
-    { id: 't1', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Mar 15, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
-    { id: 't2', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 10, 2026 · Buckhead Location', amount: '$19.99', isCredit: false },
-    { id: 't3', type: 'coupon', desc: 'Coupon Applied — SPRING25', meta: 'Mar 10, 2026 · 25% off single wash', amount: '−$5.00', isCredit: true },
-    { id: 't4', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Feb 15, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
-    { id: 't5', type: 'refund', desc: 'Refund Issued — Subscription Credit', meta: 'Jan 28, 2026 · CSR processed', amount: '+$29.99', isCredit: true },
+    { id: 't1', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Mar 15, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
+    { id: 't2', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 10, 2026 · Buckhead Location', amount: '$19.99', isCredit: false, accepted: true },
+    { id: 't3', type: 'coupon', desc: 'Coupon Applied — SPRING25', meta: 'Mar 10, 2026 · 25% off single wash', amount: '−$5.00', isCredit: true, accepted: true },
+    { id: 't4', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Feb 15, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
+    { id: 't5', type: 'refund', desc: 'Refund Issued — Subscription Credit', meta: 'Jan 28, 2026 · CSR processed', amount: '+$29.99', isCredit: true, accepted: true },
   ],
   'AMP-00284': [
-    { id: 't6', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Apr 1, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
-    { id: 't7', type: 'wash', desc: 'Single Wash — Basic Wash', meta: 'Mar 22, 2026 · Midtown Location', amount: '$9.99', isCredit: false },
+    { id: 't6', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Apr 1, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
+    { id: 't7', type: 'wash', desc: 'Single Wash — Basic Wash', meta: 'Mar 22, 2026 · Midtown Location', amount: '$9.99', isCredit: false, accepted: true },
   ],
   'AMP-00519': [
-    { id: 't8', type: 'refund', desc: 'Cancellation Refund', meta: 'Mar 1, 2026 · Account closed', amount: '+$14.99', isCredit: true },
+    { id: 't8', type: 'refund', desc: 'Cancellation Refund', meta: 'Mar 1, 2026 · Account closed', amount: '+$14.99', isCredit: true, accepted: true },
   ],
   'AMP-00763': [
-    { id: 't9', type: 'subscription', desc: 'Payment Failed — Unlimited Pro (×3)', meta: 'Mar 1, 2026 · Retry pending', amount: '$89.97', isCredit: false },
-    { id: 't10', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Feb 20, 2026', amount: '$29.99', isCredit: false },
-    { id: 't11', type: 'coupon', desc: 'Loyalty Reward Applied', meta: 'Feb 20, 2026', amount: '−$10.00', isCredit: true },
+    { id: 't9', type: 'subscription', desc: 'Payment Failed — Unlimited Pro (×3)', meta: 'Mar 1, 2026 · Retry pending', amount: '$89.97', isCredit: false, accepted: false },
+    { id: 't10', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Feb 20, 2026', amount: '$29.99', isCredit: false, accepted: true },
+    { id: 't11', type: 'coupon', desc: 'Loyalty Reward Applied', meta: 'Feb 20, 2026', amount: '−$10.00', isCredit: true, accepted: true },
   ],
   'AMP-00102': [
-    { id: 't12', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 5, 2026 · Customer request', amount: '$0.00', isCredit: false },
-    { id: 't13', type: 'subscription', desc: 'Subscription — Premium', meta: 'Feb 1, 2026 · Auto-billed', amount: '$29.99', isCredit: false },
+    { id: 't12', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 5, 2026 · Customer request', amount: '$0.00', isCredit: false, accepted: true },
+    { id: 't13', type: 'subscription', desc: 'Subscription — Premium', meta: 'Feb 1, 2026 · Auto-billed', amount: '$29.99', isCredit: false, accepted: true },
   ],
   'AMP-00887': [
-    { id: 't19', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 8, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
-    { id: 't14', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 8, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
+    { id: 't19', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 8, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
+    { id: 't14', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 8, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
   ],
   'AMP-00655': [
-    { id: 't15', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Mar 22, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
-    { id: 't16', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 15, 2026', amount: '$19.99', isCredit: false },
+    { id: 't15', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Mar 22, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
+    { id: 't16', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 15, 2026', amount: '$19.99', isCredit: false, accepted: true },
   ],
   'AMP-00491': [
-    { id: 't17', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 31, 2026 · Customer request', amount: '$0.00', isCredit: false },
-    { id: 't18', type: 'coupon', desc: 'Referral Credit Applied', meta: 'Mar 15, 2026', amount: '−$15.00', isCredit: true },
+    { id: 't17', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 31, 2026 · Customer request', amount: '$0.00', isCredit: false, accepted: true },
+    { id: 't18', type: 'coupon', desc: 'Referral Credit Applied', meta: 'Mar 15, 2026', amount: '−$15.00', isCredit: true, accepted: true },
   ],
   'AMP-01001': [
-    { id: 't20', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 20, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
-    { id: 't21', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 20, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
+    { id: 't20', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 20, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
+    { id: 't21', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 20, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
   ],
   'AMP-01002': [
-    { id: 't22', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Mar 5, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
-    { id: 't23', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Feb 28, 2026', amount: '$19.99', isCredit: false },
+    { id: 't22', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Mar 5, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
+    { id: 't23', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Feb 28, 2026', amount: '$19.99', isCredit: false, accepted: true },
   ],
   'AMP-01003': [
-    { id: 't24', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×3)', meta: 'Mar 25, 2026 · Auto-billed', amount: '$89.97', isCredit: false },
-    { id: 't25', type: 'coupon', desc: 'Coupon Applied — VIP20', meta: 'Mar 25, 2026 · 20% off renewal', amount: '−$17.99', isCredit: true },
+    { id: 't24', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×3)', meta: 'Mar 25, 2026 · Auto-billed', amount: '$89.97', isCredit: false, accepted: true },
+    { id: 't25', type: 'coupon', desc: 'Coupon Applied — VIP20', meta: 'Mar 25, 2026 · 20% off renewal', amount: '−$17.99', isCredit: true, accepted: true },
   ],
   'AMP-01004': [
-    { id: 't26', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 10, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
-    { id: 't27', type: 'wash', desc: 'Single Wash — Basic Wash', meta: 'Mar 5, 2026', amount: '$9.99', isCredit: false },
+    { id: 't26', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 10, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
+    { id: 't27', type: 'wash', desc: 'Single Wash — Basic Wash', meta: 'Mar 5, 2026', amount: '$9.99', isCredit: false, accepted: true },
   ],
   'AMP-01005': [
-    { id: 't28', type: 'subscription', desc: 'Subscription Renewal — Premium', meta: 'Mar 18, 2026 · Auto-billed', amount: '$29.99', isCredit: false },
-    { id: 't29', type: 'refund', desc: 'Refund Issued — Duplicate Charge', meta: 'Mar 10, 2026 · CSR processed', amount: '+$29.99', isCredit: true },
+    { id: 't28', type: 'subscription', desc: 'Subscription Renewal — Premium', meta: 'Mar 18, 2026 · Auto-billed', amount: '$29.99', isCredit: false, accepted: true },
+    { id: 't29', type: 'refund', desc: 'Refund Issued — Duplicate Charge', meta: 'Mar 10, 2026 · CSR processed', amount: '+$29.99', isCredit: true, accepted: true },
   ],
   'AMP-01006': [
-    { id: 't30', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 2, 2026 · Customer request', amount: '$0.00', isCredit: false },
-    { id: 't31', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 2, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
+    { id: 't30', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 2, 2026 · Customer request', amount: '$0.00', isCredit: false, accepted: true },
+    { id: 't31', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 2, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
   ],
   'AMP-01007': [
-    { id: 't32', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 14, 2026 · Customer request', amount: '$0.00', isCredit: false },
-    { id: 't33', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Feb 14, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
+    { id: 't32', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 14, 2026 · Customer request', amount: '$0.00', isCredit: false, accepted: true },
+    { id: 't33', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Feb 14, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
   ],
   'AMP-01008': [
-    { id: 't34', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 20, 2026 · Customer request', amount: '$0.00', isCredit: false },
-    { id: 't35', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Feb 20, 2026 · Auto-billed', amount: '$29.99', isCredit: false },
+    { id: 't34', type: 'subscription', desc: 'Subscription Paused', meta: 'Mar 20, 2026 · Customer request', amount: '$0.00', isCredit: false, accepted: true },
+    { id: 't35', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Feb 20, 2026 · Auto-billed', amount: '$29.99', isCredit: false, accepted: true },
   ],
   'AMP-01009': [
-    { id: 't36', type: 'subscription', desc: 'Payment Failed — Premium (×2)', meta: 'Mar 5, 2026 · Retry pending', amount: '$59.98', isCredit: false },
-    { id: 't37', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Feb 5, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
+    { id: 't36', type: 'subscription', desc: 'Payment Failed — Premium (×2)', meta: 'Mar 5, 2026 · Retry pending', amount: '$59.98', isCredit: false, accepted: false },
+    { id: 't37', type: 'subscription', desc: 'Subscription Renewal — Premium (×2)', meta: 'Feb 5, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
   ],
   'AMP-01010': [
-    { id: 't38', type: 'subscription', desc: 'Payment Failed — Unlimited Pro (×2)', meta: 'Mar 12, 2026 · Retry pending', amount: '$59.98', isCredit: false },
-    { id: 't39', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Feb 28, 2026', amount: '$29.99', isCredit: false },
+    { id: 't38', type: 'subscription', desc: 'Payment Failed — Unlimited Pro (×2)', meta: 'Mar 12, 2026 · Retry pending', amount: '$59.98', isCredit: false, accepted: false },
+    { id: 't39', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Feb 28, 2026', amount: '$29.99', isCredit: false, accepted: true },
   ],
   'AMP-01011': [
-    { id: 't40', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Mar 28, 2026 · Auto-billed', amount: '$59.98', isCredit: false },
-    { id: 't41', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 20, 2026', amount: '$19.99', isCredit: false },
+    { id: 't40', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro (×2)', meta: 'Mar 28, 2026 · Auto-billed', amount: '$59.98', isCredit: false, accepted: true },
+    { id: 't41', type: 'wash', desc: 'Single Wash — Premium Express', meta: 'Mar 20, 2026', amount: '$19.99', isCredit: false, accepted: true },
   ],
   'AMP-01012': [
-    { id: 't42', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 15, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
-    { id: 't43', type: 'coupon', desc: 'Referral Credit Applied', meta: 'Mar 15, 2026', amount: '−$10.00', isCredit: true },
+    { id: 't42', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Mar 15, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
+    { id: 't43', type: 'coupon', desc: 'Referral Credit Applied', meta: 'Mar 15, 2026', amount: '−$10.00', isCredit: true, accepted: true },
   ],
   'AMP-01013': [
-    { id: 't44', type: 'subscription', desc: 'Subscription Renewal — Premium (×3)', meta: 'Mar 22, 2026 · Auto-billed', amount: '$89.97', isCredit: false },
-    { id: 't45', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Mar 18, 2026', amount: '$29.99', isCredit: false },
+    { id: 't44', type: 'subscription', desc: 'Subscription Renewal — Premium (×3)', meta: 'Mar 22, 2026 · Auto-billed', amount: '$89.97', isCredit: false, accepted: true },
+    { id: 't45', type: 'wash', desc: 'Single Wash — Supreme Detail', meta: 'Mar 18, 2026', amount: '$29.99', isCredit: false, accepted: true },
   ],
   'AMP-01014': [
-    { id: 't46', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Mar 8, 2026 · Auto-billed', amount: '$29.99', isCredit: false },
-    { id: 't47', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Feb 8, 2026 · Auto-billed', amount: '$29.99', isCredit: false },
+    { id: 't46', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Mar 8, 2026 · Auto-billed', amount: '$29.99', isCredit: false, accepted: true },
+    { id: 't47', type: 'subscription', desc: 'Subscription Renewal — Unlimited Pro', meta: 'Feb 8, 2026 · Auto-billed', amount: '$29.99', isCredit: false, accepted: true },
   ],
   'AMP-01015': [
-    { id: 't48', type: 'subscription', desc: 'Payment Failed — Basic', meta: 'Mar 18, 2026 · Retry pending', amount: '$14.99', isCredit: false },
-    { id: 't49', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 18, 2026 · Auto-billed', amount: '$14.99', isCredit: false },
+    { id: 't48', type: 'subscription', desc: 'Payment Failed — Basic', meta: 'Mar 18, 2026 · Retry pending', amount: '$14.99', isCredit: false, accepted: false },
+    { id: 't49', type: 'subscription', desc: 'Subscription Renewal — Basic', meta: 'Feb 18, 2026 · Auto-billed', amount: '$14.99', isCredit: false, accepted: true },
   ],
   'AMP-01016': [
-    { id: 't50', type: 'refund', desc: 'Cancellation Refund', meta: 'Feb 15, 2026 · Account closed', amount: '+$29.99', isCredit: true },
+    { id: 't50', type: 'refund', desc: 'Cancellation Refund', meta: 'Feb 15, 2026 · Account closed', amount: '+$29.99', isCredit: true, accepted: true },
   ],
   'AMP-01017': [
-    { id: 't51', type: 'refund', desc: 'Cancellation Refund', meta: 'Jan 20, 2026 · Account closed', amount: '+$14.99', isCredit: true },
+    { id: 't51', type: 'refund', desc: 'Cancellation Refund', meta: 'Jan 20, 2026 · Account closed', amount: '+$14.99', isCredit: true, accepted: true },
   ],
 };
