@@ -115,7 +115,6 @@ function AccountCard({ customer, onSave }) {
     lastName: customer.lastName,
     email: customer.email,
     phone: customer.phone,
-    location: customer.location,
   });
 
   // Keep form in sync if customer prop changes (e.g. navigating between profiles)
@@ -125,7 +124,6 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
-      location: customer.location,
     });
     setEditing(false);
   }, [customer.id]);
@@ -139,7 +137,6 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
-      location: customer.location,
     });
   }
 
@@ -173,7 +170,6 @@ function AccountCard({ customer, onSave }) {
           <Field label="Email Address" value={customer.email} editing={editing} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
         </div>
         <Field label="Phone" value={customer.phone} editing={editing} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
-        <Field label="Home Location" value={customer.location} editing={editing} inputProps={{ value: form.location, onChange: set('location') }} />
         <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
       </div>
     </Card>
@@ -301,7 +297,7 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
             No active vehicle subscriptions
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {vehicles.map((v) => (
               <div key={v.id} style={{
                 display: 'flex', alignItems: 'center', gap: 14,
@@ -340,6 +336,7 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
           </div>
         )}
       </Card>
+
 
       {editingVehicle && (
         <VehicleModal
@@ -457,7 +454,7 @@ function PurchaseHistoryCard({ transactions }) {
 }
 
 /* ── Main CustomerProfile ─────────────────────────────────────────────── */
-export default function CustomerProfile({ customer, vehicles, transactions, onUpdateCustomer, onUpdateVehicles }) {
+export default function CustomerProfile({ customer, vehicles, transactions, onUpdateCustomer, onUpdateVehicles, onBack }) {
   const totalSpent = transactions.filter((t) => !t.isCredit).reduce((sum, t) => {
     const n = parseFloat(t.amount.replace(/[^0-9.]/g, ''));
     return sum + (isNaN(n) ? 0 : n);
@@ -482,7 +479,6 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
         gap: 18,
         marginBottom: 20,
         boxShadow: 'var(--shadow-sm)',
-        borderLeft: '4px solid var(--amp-sky)',
       }}>
         <div style={{
           width: 52, height: 52, borderRadius: '50%',
@@ -494,14 +490,10 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
           {initials(customer)}
         </div>
         <div>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20, letterSpacing: '-0.3px', color: 'var(--amp-navy)' }}>
-            {customer.firstName} {customer.lastName}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4, fontSize: 13, color: 'var(--text-2)' }}>
-            <span>{customer.email}</span>
-            <span style={{ color: 'var(--border-dark)' }}>·</span>
-            <span>{customer.phone}</span>
-            <span style={{ color: 'var(--border-dark)' }}>·</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ fontWeight: 600, fontSize: 20, color: 'var(--text)' }}>
+              {customer.firstName} {customer.lastName}
+            </div>
             <StatusBadge status={customer.status} />
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
@@ -520,9 +512,9 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-          <Btn variant="ghost">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Add Note
+          <Btn variant="ghost" onClick={onBack}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
           </Btn>
         </div>
       </div>
@@ -530,8 +522,10 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
       {/* Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <AccountCard customer={customer} onSave={onUpdateCustomer} />
-        <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} />
         <PaymentCard customer={customer} />
+        <div style={{ gridColumn: '1/-1' }}>
+          <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} />
+        </div>
         <div style={{ gridColumn: '1/-1' }}>
           <PurchaseHistoryCard transactions={transactions} />
         </div>
