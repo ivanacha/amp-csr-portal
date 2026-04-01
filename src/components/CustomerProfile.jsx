@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import StatusBadge from './StatusBadge';
-import { AVATAR_COLORS } from '../data/mockData';
+import { AVATAR_COLORS, formatRenewDate } from '../data/mockData';
+
+const PLANS = ['Basic', 'Premium', 'Unlimited Pro'];
 
 function initials(c) {
   return (c.firstName[0] + c.lastName[0]).toUpperCase();
@@ -115,6 +117,7 @@ function AccountCard({ customer, onSave }) {
     lastName: customer.lastName,
     email: customer.email,
     phone: customer.phone,
+    plan: customer.plan,
   });
 
   // Keep form in sync if customer prop changes (e.g. navigating between profiles)
@@ -124,6 +127,7 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
+      plan: customer.plan,
     });
     setEditing(false);
   }, [customer.id]);
@@ -137,6 +141,7 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
+      plan: customer.plan,
     });
   }
 
@@ -170,22 +175,64 @@ function AccountCard({ customer, onSave }) {
           <Field label="Email Address" value={customer.email} editing={editing} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
         </div>
         <Field label="Phone" value={customer.phone} editing={editing} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
-        <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Plan</div>
+          {editing ? (
+            <select
+              value={form.plan}
+              onChange={set('plan')}
+              style={{
+                background: 'var(--surface-2)',
+                border: '1.5px solid var(--amp-sky)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '7px 10px',
+                fontSize: 13.5,
+                color: 'var(--text)',
+                outline: 'none',
+                width: '100%',
+                cursor: 'pointer',
+              }}
+            >
+              {PLANS.map((p) => <option key={p}>{p}</option>)}
+            </select>
+          ) : (
+            <div style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{customer.plan}</div>
+          )}
+        </div>
+        <div style={{ gridColumn: '1/-1' }}>
+          <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
+        </div>
       </div>
     </Card>
   );
 }
 
 /* ── Vehicle Edit Modal ───────────────────────────────────────────────── */
+function toInputDate(date) {
+  if (!date) return '';
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 function VehicleModal({ vehicle, onSave, onClose }) {
+  const today = new Date().toISOString().split('T')[0];
   const [form, setForm] = useState({
     plate: vehicle?.plate ?? '',
     desc: vehicle?.desc ?? '',
-    plan: vehicle?.plan ?? '',
-    renew: vehicle?.renew ?? '',
+    renew: toInputDate(vehicle?.renew ?? null),
   });
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  function handleSave() {
+    onSave({
+      plate: form.plate,
+      desc: form.desc,
+      renew: form.renew ? new Date(form.renew + 'T00:00:00') : null,
+    });
+  }
 
   const inputStyle = {
     background: 'var(--surface-2)',
@@ -233,19 +280,13 @@ function VehicleModal({ vehicle, onSave, onClose }) {
           <label style={labelStyle}>Vehicle Description</label>
           <input style={inputStyle} value={form.desc} onChange={set('desc')} placeholder="e.g. 2022 Honda Civic · Blue" />
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Plan</label>
-            <input style={inputStyle} value={form.plan} onChange={set('plan')} placeholder="e.g. Basic" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Renewal Date</label>
-            <input style={inputStyle} value={form.renew} onChange={set('renew')} placeholder="e.g. Apr 15, 2026" />
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={labelStyle}>Renewal Date</label>
+          <input style={inputStyle} type="date" min={today} value={form.renew} onChange={set('renew')} />
         </div>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
           <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
-          <Btn variant="primary" onClick={() => onSave(form)}>
+          <Btn variant="primary" onClick={handleSave}>
             {vehicle ? 'Save Changes' : 'Add Vehicle'}
           </Btn>
         </div>
@@ -318,10 +359,18 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
                   <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.desc}</div>
                 </div>
                 <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : 'var(--green)' }}>{v.plan}</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
-                    {v.isPaused ? '⏸ Paused' : `Renews ${v.renew}`}
-                  </div>
+                  {(() => {
+                    const now = new Date();
+                    const isOverdue = !v.isPaused && v.renew && v.renew < now;
+                    return (
+                      <>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : isOverdue ? 'var(--red)' : 'var(--green)' }}>{v.plan}</div>
+                        <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+                          {v.isPaused ? '⏸ Paused' : isOverdue ? 'Overdue' : `Renews ${formatRenewDate(v.renew)}`}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                   <IconBtn title="Edit vehicle" onClick={() => setEditingVehicle(v)}>
