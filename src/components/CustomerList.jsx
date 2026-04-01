@@ -129,15 +129,17 @@ export default function CustomerList({ customers, onSelectCustomer }) {
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
-    return customers.filter((c) => {
-      const matchesQuery = [c.firstName, c.lastName, c.email, c.phone, c.id]
-        .join(' ')
-        .toLowerCase()
-        .includes(q);
-      const matchesStatus = activeFilter === 'all' || c.status === activeFilter;
-      return matchesQuery && matchesStatus;
-    });
-  }, [query, activeFilter]);
+    return customers
+      .filter((c) => {
+        const matchesQuery = [c.firstName, c.lastName, c.email, c.phone, c.id]
+          .join(' ')
+          .toLowerCase()
+          .includes(q);
+        const matchesStatus = activeFilter === 'all' || c.status === activeFilter;
+        return matchesQuery && matchesStatus;
+      })
+      .sort((a, b) => a.lastName.localeCompare(b.lastName));
+  }, [query, activeFilter, customers]);
 
   return (
     <div style={s.page}>
