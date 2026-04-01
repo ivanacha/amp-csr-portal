@@ -65,6 +65,7 @@ export default function App() {
             transactions={transactionData[selectedId] || []}
             onUpdateCustomer={updateCustomer}
             onUpdateVehicles={updateVehicles}
+            onBack={() => { setView('list'); setSelectedId(null); }}
           />
         )}
       </main>
