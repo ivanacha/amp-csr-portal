@@ -41,6 +41,12 @@ export default function App() {
 
   function updateCustomer(fields) {
     setCustomers((prev) => prev.map((c) => (c.id === selectedId ? { ...c, ...fields } : c)));
+    if ('plan' in fields) {
+      setVehicleData((prev) => ({
+        ...prev,
+        [selectedId]: (prev[selectedId] || []).map((v) => ({ ...v, plan: fields.plan })),
+      }));
+    }
   }
 
   function updateVehicles(newVehicles) {
