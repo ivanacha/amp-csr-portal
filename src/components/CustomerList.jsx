@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import StatusBadge from './StatusBadge';
-import { customers, AVATAR_COLORS } from '../data/mockData';
+import { AVATAR_COLORS } from '../data/mockData';
 
 const STATUS_FILTERS = [
   { value: 'all', label: 'All Customers' },
@@ -122,7 +122,7 @@ const s = {
   },
 };
 
-export default function CustomerList({ onSelectCustomer }) {
+export default function CustomerList({ customers, onSelectCustomer }) {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredRow, setHoveredRow] = useState(null);

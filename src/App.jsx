@@ -4,12 +4,18 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
-import { customers } from './data/mockData';
+import {
+  customers as initialCustomers,
+  vehicleData as initialVehicleData,
+  transactionData,
+} from './data/mockData';
 
 export default function App() {
-  // view: 'list' | 'profile'
   const [view, setView] = useState('list');
   const [selectedId, setSelectedId] = useState(null);
+
+  const [customers, setCustomers] = useState(initialCustomers);
+  const [vehicleData, setVehicleData] = useState(initialVehicleData);
 
   const selectedCustomer = customers.find((c) => c.id === selectedId);
 
@@ -33,10 +39,15 @@ export default function App() {
     setView('profile');
   }
 
-  function handleSaveAccount(updatedFields) {
-    // In a real app, dispatch to your state management / API here.
-    // The mock data is read-only, so this is a no-op placeholder.
-    console.log('Saving account fields:', updatedFields);
+  function updateCustomer(fields) {
+    setCustomers((prev) => prev.map((c) => (c.id === selectedId ? { ...c, ...fields } : c)));
+  }
+
+  function updateVehicles(newVehicles) {
+    setVehicleData((prev) => ({ ...prev, [selectedId]: newVehicles }));
+    setCustomers((prev) =>
+      prev.map((c) => (c.id === selectedId ? { ...c, vehicles: newVehicles.length } : c))
+    );
   }
 
   return (
@@ -45,10 +56,16 @@ export default function App() {
 
       <main style={{ flex: 1, overflowY: 'auto' }}>
         {view === 'list' && (
-          <CustomerList onSelectCustomer={handleSelectCustomer} />
+          <CustomerList customers={customers} onSelectCustomer={handleSelectCustomer} />
         )}
-        {view === 'profile' && selectedId && (
-          <CustomerProfile customerId={selectedId} onSaveAccount={handleSaveAccount} />
+        {view === 'profile' && selectedCustomer && (
+          <CustomerProfile
+            customer={selectedCustomer}
+            vehicles={vehicleData[selectedId] || []}
+            transactions={transactionData[selectedId] || []}
+            onUpdateCustomer={updateCustomer}
+            onUpdateVehicles={updateVehicles}
+          />
         )}
       </main>
 

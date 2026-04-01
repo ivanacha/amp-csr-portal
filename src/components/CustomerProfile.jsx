@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StatusBadge from './StatusBadge';
-import { customers, vehicleData, transactionData, AVATAR_COLORS } from '../data/mockData';
+import { AVATAR_COLORS } from '../data/mockData';
 
 function initials(c) {
   return (c.firstName[0] + c.lastName[0]).toUpperCase();
@@ -118,7 +118,35 @@ function AccountCard({ customer, onSave }) {
     location: customer.location,
   });
 
+  // Keep form in sync if customer prop changes (e.g. navigating between profiles)
+  React.useEffect(() => {
+    setForm({
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phone: customer.phone,
+      location: customer.location,
+    });
+    setEditing(false);
+  }, [customer.id]);
+
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  function handleCancel() {
+    setEditing(false);
+    setForm({
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phone: customer.phone,
+      location: customer.location,
+    });
+  }
+
+  function handleSave() {
+    onSave(form);
+    setEditing(false);
+  }
 
   return (
     <Card
@@ -127,12 +155,8 @@ function AccountCard({ customer, onSave }) {
       actions={
         editing ? (
           <div style={{ display: 'flex', gap: 8 }}>
-            <Btn variant="ghost" onClick={() => { setEditing(false); setForm({ firstName: customer.firstName, lastName: customer.lastName, email: customer.email, phone: customer.phone, location: customer.location }); }}>
-              Cancel
-            </Btn>
-            <Btn variant="primary" onClick={() => { onSave(form); setEditing(false); }}>
-              Save Changes
-            </Btn>
+            <Btn variant="ghost" onClick={handleCancel}>Cancel</Btn>
+            <Btn variant="primary" onClick={handleSave}>Save Changes</Btn>
           </div>
         ) : (
           <Btn variant="secondary" onClick={() => setEditing(true)}>
@@ -156,75 +180,182 @@ function AccountCard({ customer, onSave }) {
   );
 }
 
-/* ── Vehicle Subscriptions Card ───────────────────────────────────────── */
-function VehicleCard({ customerId }) {
-  const vehicles = vehicleData[customerId] || [];
+/* ── Vehicle Edit Modal ───────────────────────────────────────────────── */
+function VehicleModal({ vehicle, onSave, onClose }) {
+  const [form, setForm] = useState({
+    plate: vehicle?.plate ?? '',
+    desc: vehicle?.desc ?? '',
+    plan: vehicle?.plan ?? '',
+    renew: vehicle?.renew ?? '',
+  });
+
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const inputStyle = {
+    background: 'var(--surface-2)',
+    border: '1.5px solid var(--amp-sky)',
+    borderRadius: 'var(--radius-sm)',
+    padding: '7px 10px',
+    fontSize: 13.5,
+    color: 'var(--text)',
+    outline: 'none',
+    width: '100%',
+  };
+
+  const labelStyle = {
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 10,
+    letterSpacing: '0.8px',
+    textTransform: 'uppercase',
+    color: 'var(--text-3)',
+    marginBottom: 5,
+    display: 'block',
+  };
 
   return (
-    <Card
-      title="Vehicle Subscriptions"
-      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
-      actions={
-        <Btn variant="primary">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Add Vehicle
-        </Btn>
-      }
-    >
-      {vehicles.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-3)', fontSize: 13.5 }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: 10, opacity: 0.4, display: 'block', margin: '0 auto 10px' }}><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          No active vehicle subscriptions
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 200,
+      background: 'rgba(15,36,71,0.45)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }} onClick={onClose}>
+      <div style={{
+        background: '#fff',
+        borderRadius: 'var(--radius)',
+        boxShadow: 'var(--shadow)',
+        padding: 28,
+        width: 420,
+        display: 'flex', flexDirection: 'column', gap: 16,
+      }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)' }}>
+          {vehicle ? 'Edit Vehicle' : 'Add Vehicle'}
         </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {vehicles.map((v) => (
-            <div key={v.id} style={{
-              display: 'flex', alignItems: 'center', gap: 14,
-              background: 'var(--surface-2)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '12px 14px',
-            }}>
-              <div style={{
-                width: 38, height: 38, borderRadius: 8,
-                background: 'var(--amp-light-blue)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amp-cobalt)" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              </div>
-              <div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--amp-navy)' }}>{v.plate}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.desc}</div>
-              </div>
-              <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : 'var(--green)' }}>{v.plan}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
-                  {v.isPaused ? '⏸ Paused' : `Renews ${v.renew}`}
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <IconBtn title="Edit subscription">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                </IconBtn>
-                <IconBtn title="Transfer to another vehicle">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </IconBtn>
-                <IconBtn title="Cancel subscription" danger>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
-                </IconBtn>
-              </div>
-            </div>
-          ))}
-          <div
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 4px', color: 'var(--amp-sky)', fontSize: 13, cursor: 'pointer', fontWeight: 500 }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            Add vehicle subscription
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={labelStyle}>License Plate</label>
+          <input style={inputStyle} value={form.plate} onChange={set('plate')} placeholder="e.g. ABC-1234" />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={labelStyle}>Vehicle Description</label>
+          <input style={inputStyle} value={form.desc} onChange={set('desc')} placeholder="e.g. 2022 Honda Civic · Blue" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Plan</label>
+            <input style={inputStyle} value={form.plan} onChange={set('plan')} placeholder="e.g. Basic" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Renewal Date</label>
+            <input style={inputStyle} value={form.renew} onChange={set('renew')} placeholder="e.g. Apr 15, 2026" />
           </div>
         </div>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
+          <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+          <Btn variant="primary" onClick={() => onSave(form)}>
+            {vehicle ? 'Save Changes' : 'Add Vehicle'}
+          </Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Vehicle Subscriptions Card ───────────────────────────────────────── */
+function VehicleCard({ vehicles, onUpdateVehicles }) {
+  const [editingVehicle, setEditingVehicle] = useState(null); // vehicle object or null
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  function handleSaveEdit(form) {
+    onUpdateVehicles(
+      vehicles.map((v) => (v.id === editingVehicle.id ? { ...v, ...form } : v))
+    );
+    setEditingVehicle(null);
+  }
+
+  function handleAdd(form) {
+    const newVehicle = {
+      id: `v_${Date.now()}`,
+      ...form,
+    };
+    onUpdateVehicles([...vehicles, newVehicle]);
+    setShowAddModal(false);
+  }
+
+  function handleRemove(vehicleId) {
+    onUpdateVehicles(vehicles.filter((v) => v.id !== vehicleId));
+  }
+
+  return (
+    <>
+      <Card
+        title="Vehicle Subscriptions"
+        icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
+        actions={
+          <Btn variant="primary" onClick={() => setShowAddModal(true)}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Vehicle
+          </Btn>
+        }
+      >
+        {vehicles.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-3)', fontSize: 13.5 }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: 10, opacity: 0.4, display: 'block', margin: '0 auto 10px' }}><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            No active vehicle subscriptions
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {vehicles.map((v) => (
+              <div key={v.id} style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '12px 14px',
+              }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: 8,
+                  background: 'var(--amp-light-blue)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amp-cobalt)" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--amp-navy)' }}>{v.plate}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.desc}</div>
+                </div>
+                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : 'var(--green)' }}>{v.plan}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+                    {v.isPaused ? '⏸ Paused' : `Renews ${v.renew}`}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                  <IconBtn title="Edit vehicle" onClick={() => setEditingVehicle(v)}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </IconBtn>
+                  <IconBtn title="Remove vehicle" danger onClick={() => handleRemove(v.id)}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+                  </IconBtn>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {editingVehicle && (
+        <VehicleModal
+          vehicle={editingVehicle}
+          onSave={handleSaveEdit}
+          onClose={() => setEditingVehicle(null)}
+        />
       )}
-    </Card>
+      {showAddModal && (
+        <VehicleModal
+          vehicle={null}
+          onSave={handleAdd}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+    </>
   );
 }
 
@@ -273,8 +404,7 @@ const TX_STYLE = {
   coupon: { bg: 'var(--yellow-bg)', color: 'var(--yellow)' },
 };
 
-function PurchaseHistoryCard({ customerId }) {
-  const txs = transactionData[customerId] || [];
+function PurchaseHistoryCard({ transactions }) {
   return (
     <Card
       title="Purchase History"
@@ -285,17 +415,17 @@ function PurchaseHistoryCard({ customerId }) {
         </span>
       }
     >
-      {txs.length === 0 ? (
+      {transactions.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-3)', fontSize: 13.5 }}>No transactions found</div>
       ) : (
         <div>
-          {txs.map((t, i) => {
+          {transactions.map((t, i) => {
             const ts = TX_STYLE[t.type] || TX_STYLE.subscription;
             return (
               <div key={t.id} style={{
                 display: 'flex', alignItems: 'center', gap: 13,
                 padding: '11px 0',
-                borderBottom: i < txs.length - 1 ? '1px solid var(--border)' : 'none',
+                borderBottom: i < transactions.length - 1 ? '1px solid var(--border)' : 'none',
               }}>
                 <div style={{
                   width: 34, height: 34, borderRadius: 8, flexShrink: 0,
@@ -327,20 +457,15 @@ function PurchaseHistoryCard({ customerId }) {
 }
 
 /* ── Main CustomerProfile ─────────────────────────────────────────────── */
-export default function CustomerProfile({ customerId, onSaveAccount }) {
-  const customer = customers.find((c) => c.id === customerId);
-  if (!customer) return null;
-
-  const vehicles = vehicleData[customerId] || [];
-  const txs = transactionData[customerId] || [];
-  const totalSpent = txs.filter((t) => !t.isCredit).reduce((sum, t) => {
+export default function CustomerProfile({ customer, vehicles, transactions, onUpdateCustomer, onUpdateVehicles }) {
+  const totalSpent = transactions.filter((t) => !t.isCredit).reduce((sum, t) => {
     const n = parseFloat(t.amount.replace(/[^0-9.]/g, ''));
     return sum + (isNaN(n) ? 0 : n);
   }, 0);
 
   const stats = [
     { val: vehicles.length, label: 'Vehicles' },
-    { val: txs.length, label: 'Transactions' },
+    { val: transactions.length, label: 'Transactions' },
     { val: `$${totalSpent.toFixed(2)}`, label: '90-Day Spend' },
   ];
 
@@ -404,11 +529,11 @@ export default function CustomerProfile({ customerId, onSaveAccount }) {
 
       {/* Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <AccountCard customer={customer} onSave={onSaveAccount} />
-        <VehicleCard customerId={customerId} />
+        <AccountCard customer={customer} onSave={onUpdateCustomer} />
+        <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} />
         <PaymentCard customer={customer} />
         <div style={{ gridColumn: '1/-1' }}>
-          <PurchaseHistoryCard customerId={customerId} />
+          <PurchaseHistoryCard transactions={transactions} />
         </div>
       </div>
     </div>
