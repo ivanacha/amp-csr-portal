@@ -461,13 +461,21 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
   }, 0);
 
   const stats = [
-    { val: vehicles.length, label: 'Vehicles' },
-    { val: transactions.length, label: 'Transactions' },
+    { val: vehicles.length, label: 'Vehicle(s)' },
+    { val: transactions.length, label: 'Transaction(s)' },
     { val: `$${totalSpent.toFixed(2)}`, label: '90-Day Spend' },
   ];
 
   return (
     <div style={{ padding: '28px 32px', maxWidth: 1200, margin: '0 auto' }}>
+      {/* Back button row */}
+      <div style={{ marginBottom: 14 }}>
+        <Btn variant="ghost" onClick={onBack}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </Btn>
+      </div>
+
       {/* Hero */}
       <div style={{
         background: '#fff',
@@ -496,26 +504,20 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
             </div>
             <StatusBadge status={customer.status} />
           </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-            {stats.map((s) => (
-              <div key={s.label} style={{
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border)',
-                borderRadius: 8,
-                padding: '6px 14px',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 17, color: 'var(--amp-navy)' }}>{s.val}</div>
-                <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-          <Btn variant="ghost" onClick={onBack}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-            Back
-          </Btn>
+          {stats.map((s) => (
+            <div key={s.label} style={{
+              background: 'var(--surface-2)',
+              border: '1px solid var(--border)',
+              borderRadius: 8,
+              padding: '6px 14px',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 17, color: 'var(--amp-navy)' }}>{s.val}</div>
+              <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 1 }}>{s.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
