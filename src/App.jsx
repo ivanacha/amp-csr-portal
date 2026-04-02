@@ -16,6 +16,7 @@ export default function App() {
 
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicleData, setVehicleData] = useState(initialVehicleData);
+  const [extraTransactions, setExtraTransactions] = useState({});
 
   const selectedCustomer = customers.find((c) => c.id === selectedId);
 
@@ -56,6 +57,13 @@ export default function App() {
     );
   }
 
+  function addTransaction(tx) {
+    setExtraTransactions((prev) => ({
+      ...prev,
+      [selectedId]: [tx, ...(prev[selectedId] || [])],
+    }));
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
       <Header breadcrumbs={breadcrumbs} onCrumbClick={handleCrumbClick} />
@@ -68,9 +76,10 @@ export default function App() {
           <CustomerProfile
             customer={selectedCustomer}
             vehicles={vehicleData[selectedId] || []}
-            transactions={transactionData[selectedId] || []}
+            transactions={[...(extraTransactions[selectedId] || []), ...(transactionData[selectedId] || [])]}
             onUpdateCustomer={updateCustomer}
             onUpdateVehicles={updateVehicles}
+            onAddTransaction={addTransaction}
             onBack={() => { setView('list'); setSelectedId(null); }}
           />
         )}
