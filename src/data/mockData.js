@@ -28,6 +28,7 @@ export const customers = [
     expiry: '09/26',
     zip: '30305',
     color: 0,
+    renew: new Date(2026, 3, 15),
   },
   {
     id: 'AMP-00284',
@@ -42,6 +43,7 @@ export const customers = [
     expiry: '02/25',
     zip: '30308',
     color: 1,
+    renew: new Date(2026, 4, 1),
   },
   {
     id: 'AMP-00519',
@@ -56,6 +58,7 @@ export const customers = [
     expiry: '11/24',
     zip: '30022',
     color: 2,
+    renew: null,
   },
   {
     id: 'AMP-00763',
@@ -70,6 +73,7 @@ export const customers = [
     expiry: '06/27',
     zip: '30328',
     color: 3,
+    renew: new Date(2026, 2, 1),
   },
   {
     id: 'AMP-00102',
@@ -84,6 +88,7 @@ export const customers = [
     expiry: '03/26',
     zip: '30030',
     color: 4,
+    renew: null,
   },
   {
     id: 'AMP-00887',
@@ -98,6 +103,7 @@ export const customers = [
     expiry: '08/26',
     zip: '30316',
     color: 5,
+    renew: new Date(2026, 3, 8),
   },
   {
     id: 'AMP-00655',
@@ -112,6 +118,7 @@ export const customers = [
     expiry: '01/26',
     zip: '30060',
     color: 6,
+    renew: new Date(2026, 3, 22),
   },
   {
     id: 'AMP-00491',
@@ -126,6 +133,7 @@ export const customers = [
     expiry: '07/25',
     zip: '30338',
     color: 7,
+    renew: null,
   },
   {
     id: 'AMP-01001',
@@ -140,6 +148,7 @@ export const customers = [
     expiry: '05/27',
     zip: '30301',
     color: 0,
+    renew: new Date(2026, 3, 20),
   },
   {
     id: 'AMP-01002',
@@ -154,6 +163,7 @@ export const customers = [
     expiry: '11/26',
     zip: '30309',
     color: 1,
+    renew: new Date(2026, 3, 5),
   },
   {
     id: 'AMP-01003',
@@ -168,6 +178,7 @@ export const customers = [
     expiry: '08/27',
     zip: '30312',
     color: 2,
+    renew: new Date(2026, 3, 25),
   },
   {
     id: 'AMP-01004',
@@ -182,6 +193,7 @@ export const customers = [
     expiry: '03/27',
     zip: '30324',
     color: 3,
+    renew: new Date(2026, 3, 10),
   },
   {
     id: 'AMP-01005',
@@ -196,6 +208,7 @@ export const customers = [
     expiry: '06/27',
     zip: '30306',
     color: 4,
+    renew: new Date(2026, 3, 18),
   },
   {
     id: 'AMP-01006',
@@ -210,6 +223,7 @@ export const customers = [
     expiry: '04/26',
     zip: '30317',
     color: 5,
+    renew: null,
   },
   {
     id: 'AMP-01007',
@@ -224,6 +238,7 @@ export const customers = [
     expiry: '09/26',
     zip: '30342',
     color: 6,
+    renew: null,
   },
   {
     id: 'AMP-01008',
@@ -238,6 +253,7 @@ export const customers = [
     expiry: '12/26',
     zip: '30319',
     color: 7,
+    renew: null,
   },
   {
     id: 'AMP-01009',
@@ -252,6 +268,7 @@ export const customers = [
     expiry: '07/27',
     zip: '30326',
     color: 0,
+    renew: new Date(2026, 2, 5),
   },
   {
     id: 'AMP-01010',
@@ -266,6 +283,7 @@ export const customers = [
     expiry: '10/26',
     zip: '30311',
     color: 1,
+    renew: new Date(2026, 2, 12),
   },
   {
     id: 'AMP-01011',
@@ -280,6 +298,7 @@ export const customers = [
     expiry: '02/27',
     zip: '30315',
     color: 2,
+    renew: new Date(2026, 3, 28),
   },
   {
     id: 'AMP-01012',
@@ -294,6 +313,7 @@ export const customers = [
     expiry: '05/26',
     zip: '30307',
     color: 3,
+    renew: new Date(2026, 3, 15),
   },
   {
     id: 'AMP-01013',
@@ -308,6 +328,7 @@ export const customers = [
     expiry: '01/27',
     zip: '30332',
     color: 4,
+    renew: new Date(2026, 3, 22),
   },
   {
     id: 'AMP-01014',
@@ -322,6 +343,7 @@ export const customers = [
     expiry: '08/26',
     zip: '30303',
     color: 5,
+    renew: new Date(2026, 3, 8),
   },
   {
     id: 'AMP-01015',
@@ -336,6 +358,7 @@ export const customers = [
     expiry: '06/26',
     zip: '30329',
     color: 6,
+    renew: new Date(2026, 2, 18),
   },
   {
     id: 'AMP-01016',
@@ -350,6 +373,7 @@ export const customers = [
     expiry: '03/25',
     zip: '30345',
     color: 7,
+    renew: null,
   },
   {
     id: 'AMP-01017',
@@ -364,89 +388,90 @@ export const customers = [
     expiry: '01/25',
     zip: '30318',
     color: 0,
+    renew: null,
   },
 ];
 
 export const vehicleData = {
   'AMP-00341': [
-    { id: 'v1', plate: 'GTA-8821', year: 2021, make: 'BMW', model: 'X5', color: 'Silver', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
-    { id: 'v2', plate: 'HMX-4430', year: 2019, make: 'Toyota', model: 'Camry', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 15) },
+    { id: 'v1', plate: 'GTA-8821', year: 2021, make: 'BMW', model: 'X5', color: 'Silver', plan: 'Unlimited Pro' },
+    { id: 'v2', plate: 'HMX-4430', year: 2019, make: 'Toyota', model: 'Camry', color: 'White', plan: 'Unlimited Pro' },
   ],
   'AMP-00284': [
-    { id: 'v3', plate: 'JKL-5510', year: 2022, make: 'Honda', model: 'Civic', color: 'Blue', plan: 'Basic', renew: new Date(2026, 4, 1) },
+    { id: 'v3', plate: 'JKL-5510', year: 2022, make: 'Honda', model: 'Civic', color: 'Blue', plan: 'Basic' },
   ],
   'AMP-00519': [],
   'AMP-00763': [
-    { id: 'v4', plate: 'PLT-9902', year: 2020, make: 'Audi', model: 'Q7', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
-    { id: 'v5', plate: 'RTY-1123', year: 2023, make: 'Mercedes', model: 'GLE', color: 'Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
-    { id: 'v6', plate: 'YUI-3348', year: 2018, make: 'Jeep', model: 'Grand Cherokee', color: 'Red', plan: 'Unlimited Pro', renew: new Date(2026, 2, 1) },
+    { id: 'v4', plate: 'PLT-9902', year: 2020, make: 'Audi', model: 'Q7', color: 'Black', plan: 'Unlimited Pro' },
+    { id: 'v5', plate: 'RTY-1123', year: 2023, make: 'Mercedes', model: 'GLE', color: 'Gray', plan: 'Unlimited Pro' },
+    { id: 'v6', plate: 'YUI-3348', year: 2018, make: 'Jeep', model: 'Grand Cherokee', color: 'Red', plan: 'Unlimited Pro' },
   ],
   'AMP-00102': [
-    { id: 'v7', plate: 'BNM-6671', year: 2022, make: 'Tesla', model: 'Model 3', color: 'White', plan: 'Premium', renew: null, isPaused: true },
+    { id: 'v7', plate: 'BNM-6671', year: 2022, make: 'Tesla', model: 'Model 3', color: 'White', plan: 'Premium', isPaused: true },
   ],
   'AMP-00887': [
-    { id: 'v8', plate: 'CVB-4412', year: 2021, make: 'Subaru', model: 'Outback', color: 'Green', plan: 'Basic', renew: new Date(2026, 3, 8) },
+    { id: 'v8', plate: 'CVB-4412', year: 2021, make: 'Subaru', model: 'Outback', color: 'Green', plan: 'Basic' },
   ],
   'AMP-00655': [
-    { id: 'v9', plate: 'DFG-8803', year: 2020, make: 'Ford', model: 'F-150', color: 'Blue', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v10', plate: 'HJK-2290', year: 2023, make: 'Chevrolet', model: 'Tahoe', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v9', plate: 'DFG-8803', year: 2020, make: 'Ford', model: 'F-150', color: 'Blue', plan: 'Premium' },
+    { id: 'v10', plate: 'HJK-2290', year: 2023, make: 'Chevrolet', model: 'Tahoe', color: 'Black', plan: 'Premium' },
   ],
   'AMP-00491': [
-    { id: 'v11', plate: 'ZXC-5517', year: 2022, make: 'Porsche', model: 'Cayenne', color: 'White', plan: 'Unlimited Pro', renew: null, isPaused: true },
+    { id: 'v11', plate: 'ZXC-5517', year: 2022, make: 'Porsche', model: 'Cayenne', color: 'White', plan: 'Unlimited Pro', isPaused: true },
   ],
   'AMP-01001': [
-    { id: 'v12', plate: 'NWQ-3310', year: 2023, make: 'Toyota', model: 'Corolla', color: 'Gray', plan: 'Basic', renew: new Date(2026, 3, 20) },
+    { id: 'v12', plate: 'NWQ-3310', year: 2023, make: 'Toyota', model: 'Corolla', color: 'Gray', plan: 'Basic' },
   ],
   'AMP-01002': [
-    { id: 'v13', plate: 'KPR-7740', year: 2021, make: 'Honda', model: 'Accord', color: 'White', plan: 'Premium', renew: new Date(2026, 3, 5) },
-    { id: 'v14', plate: 'MBT-2281', year: 2022, make: 'Hyundai', model: 'Tucson', color: 'Blue', plan: 'Premium', renew: new Date(2026, 3, 5) },
+    { id: 'v13', plate: 'KPR-7740', year: 2021, make: 'Honda', model: 'Accord', color: 'White', plan: 'Premium' },
+    { id: 'v14', plate: 'MBT-2281', year: 2022, make: 'Hyundai', model: 'Tucson', color: 'Blue', plan: 'Premium' },
   ],
   'AMP-01003': [
-    { id: 'v15', plate: 'QLP-5590', year: 2022, make: 'Chevrolet', model: 'Silverado', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
-    { id: 'v16', plate: 'STX-8832', year: 2020, make: 'Jeep', model: 'Wrangler', color: 'Green', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
-    { id: 'v17', plate: 'VZR-1143', year: 2023, make: 'Ford', model: 'Explorer', color: 'Red', plan: 'Unlimited Pro', renew: new Date(2026, 3, 25) },
+    { id: 'v15', plate: 'QLP-5590', year: 2022, make: 'Chevrolet', model: 'Silverado', color: 'Black', plan: 'Unlimited Pro' },
+    { id: 'v16', plate: 'STX-8832', year: 2020, make: 'Jeep', model: 'Wrangler', color: 'Green', plan: 'Unlimited Pro' },
+    { id: 'v17', plate: 'VZR-1143', year: 2023, make: 'Ford', model: 'Explorer', color: 'Red', plan: 'Unlimited Pro' },
   ],
   'AMP-01004': [
-    { id: 'v18', plate: 'WYN-4401', year: 2021, make: 'Nissan', model: 'Sentra', color: 'Silver', plan: 'Basic', renew: new Date(2026, 3, 10) },
+    { id: 'v18', plate: 'WYN-4401', year: 2021, make: 'Nissan', model: 'Sentra', color: 'Silver', plan: 'Basic' },
   ],
   'AMP-01005': [
-    { id: 'v19', plate: 'XBD-6620', year: 2022, make: 'Kia', model: 'Stinger', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 18) },
+    { id: 'v19', plate: 'XBD-6620', year: 2022, make: 'Kia', model: 'Stinger', color: 'Black', plan: 'Premium' },
   ],
   'AMP-01006': [
-    { id: 'v20', plate: 'ACF-3312', year: 2021, make: 'Mazda', model: 'CX-5', color: 'White', plan: 'Basic', renew: null, isPaused: true },
+    { id: 'v20', plate: 'ACF-3312', year: 2021, make: 'Mazda', model: 'CX-5', color: 'White', plan: 'Basic', isPaused: true },
   ],
   'AMP-01007': [
-    { id: 'v21', plate: 'BHK-7751', year: 2020, make: 'BMW', model: '3 Series', color: 'Blue', plan: 'Premium', renew: null, isPaused: true },
-    { id: 'v22', plate: 'CJM-2293', year: 2019, make: 'Audi', model: 'A4', color: 'Gray', plan: 'Premium', renew: null, isPaused: true },
+    { id: 'v21', plate: 'BHK-7751', year: 2020, make: 'BMW', model: '3 Series', color: 'Blue', plan: 'Premium', isPaused: true },
+    { id: 'v22', plate: 'CJM-2293', year: 2019, make: 'Audi', model: 'A4', color: 'Gray', plan: 'Premium', isPaused: true },
   ],
   'AMP-01008': [
-    { id: 'v23', plate: 'DLP-5534', year: 2023, make: 'Tesla', model: 'Model Y', color: 'White', plan: 'Unlimited Pro', renew: null, isPaused: true },
+    { id: 'v23', plate: 'DLP-5534', year: 2023, make: 'Tesla', model: 'Model Y', color: 'White', plan: 'Unlimited Pro', isPaused: true },
   ],
   'AMP-01009': [
-    { id: 'v24', plate: 'ENR-8870', year: 2021, make: 'Lexus', model: 'RX', color: 'Black', plan: 'Premium', renew: new Date(2026, 2, 5) },
-    { id: 'v25', plate: 'FQT-1112', year: 2022, make: 'Volvo', model: 'XC60', color: 'Silver', plan: 'Premium', renew: new Date(2026, 2, 5) },
+    { id: 'v24', plate: 'ENR-8870', year: 2021, make: 'Lexus', model: 'RX', color: 'Black', plan: 'Premium' },
+    { id: 'v25', plate: 'FQT-1112', year: 2022, make: 'Volvo', model: 'XC60', color: 'Silver', plan: 'Premium' },
   ],
   'AMP-01010': [
-    { id: 'v26', plate: 'GRV-4453', year: 2020, make: 'Land Rover', model: 'Range Rover Sport', color: 'Gray', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
-    { id: 'v27', plate: 'HSX-7791', year: 2023, make: 'Cadillac', model: 'Escalade', color: 'Black', plan: 'Unlimited Pro', renew: new Date(2026, 2, 12) },
+    { id: 'v26', plate: 'GRV-4453', year: 2020, make: 'Land Rover', model: 'Range Rover Sport', color: 'Gray', plan: 'Unlimited Pro' },
+    { id: 'v27', plate: 'HSX-7791', year: 2023, make: 'Cadillac', model: 'Escalade', color: 'Black', plan: 'Unlimited Pro' },
   ],
   'AMP-01011': [
-    { id: 'v28', plate: 'ITY-2230', year: 2022, make: 'GMC', model: 'Sierra', color: 'Blue', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
-    { id: 'v29', plate: 'JWZ-5571', year: 2021, make: 'Toyota', model: '4Runner', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 28) },
+    { id: 'v28', plate: 'ITY-2230', year: 2022, make: 'GMC', model: 'Sierra', color: 'Blue', plan: 'Unlimited Pro' },
+    { id: 'v29', plate: 'JWZ-5571', year: 2021, make: 'Toyota', model: '4Runner', color: 'White', plan: 'Unlimited Pro' },
   ],
   'AMP-01012': [
-    { id: 'v30', plate: 'KXA-8813', year: 2023, make: 'Honda', model: 'CR-V', color: 'Red', plan: 'Basic', renew: new Date(2026, 3, 15) },
+    { id: 'v30', plate: 'KXA-8813', year: 2023, make: 'Honda', model: 'CR-V', color: 'Red', plan: 'Basic' },
   ],
   'AMP-01013': [
-    { id: 'v31', plate: 'LYB-1150', year: 2022, make: 'Subaru', model: 'Forester', color: 'Green', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v32', plate: 'MZC-4492', year: 2021, make: 'Dodge', model: 'Durango', color: 'Black', plan: 'Premium', renew: new Date(2026, 3, 22) },
-    { id: 'v33', plate: 'NAD-7730', year: 2023, make: 'Toyota', model: 'RAV4', color: 'Silver', plan: 'Premium', renew: new Date(2026, 3, 22) },
+    { id: 'v31', plate: 'LYB-1150', year: 2022, make: 'Subaru', model: 'Forester', color: 'Green', plan: 'Premium' },
+    { id: 'v32', plate: 'MZC-4492', year: 2021, make: 'Dodge', model: 'Durango', color: 'Black', plan: 'Premium' },
+    { id: 'v33', plate: 'NAD-7730', year: 2023, make: 'Toyota', model: 'RAV4', color: 'Silver', plan: 'Premium' },
   ],
   'AMP-01014': [
-    { id: 'v34', plate: 'OBE-2271', year: 2023, make: 'Lexus', model: 'IS', color: 'White', plan: 'Unlimited Pro', renew: new Date(2026, 3, 8) },
+    { id: 'v34', plate: 'OBE-2271', year: 2023, make: 'Lexus', model: 'IS', color: 'White', plan: 'Unlimited Pro' },
   ],
   'AMP-01015': [
-    { id: 'v35', plate: 'PCF-5513', year: 2020, make: 'Volkswagen', model: 'Jetta', color: 'Gray', plan: 'Basic', renew: new Date(2026, 2, 18) },
+    { id: 'v35', plate: 'PCF-5513', year: 2020, make: 'Volkswagen', model: 'Jetta', color: 'Gray', plan: 'Basic' },
   ],
   'AMP-01016': [],
   'AMP-01017': [],
