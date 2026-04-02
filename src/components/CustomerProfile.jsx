@@ -4,6 +4,21 @@ import { AVATAR_COLORS, formatRenewDate } from '../data/mockData';
 
 const PLANS = ['Basic', 'Premium', 'Unlimited Pro'];
 
+function formatPhone(raw) {
+  const digits = raw.replace(/\D/g, '').slice(0, 10);
+  if (digits.length < 4) return digits;
+  if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function formatPlate(raw) {
+  const clean = raw.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const letters = clean.replace(/[^A-Z]/g, '').slice(0, 3);
+  const digits = clean.replace(/[^0-9]/g, '').slice(0, 4);
+  if (!letters && !digits) return raw;
+  return `${letters}-${digits}`;
+}
+
 function initials(c) {
   return (c.firstName[0] + c.lastName[0]).toUpperCase();
 }
@@ -146,7 +161,7 @@ function AccountCard({ customer, onSave }) {
   }
 
   function handleSave() {
-    onSave(form);
+    onSave({ ...form, phone: formatPhone(form.phone) });
     setEditing(false);
   }
 
@@ -185,12 +200,17 @@ function AccountCard({ customer, onSave }) {
                 background: 'var(--surface-2)',
                 border: '1.5px solid var(--amp-sky)',
                 borderRadius: 'var(--radius-sm)',
-                padding: '7px 10px',
+                padding: '7px 32px 7px 10px',
                 fontSize: 13.5,
                 color: 'var(--text)',
                 outline: 'none',
                 width: '100%',
                 cursor: 'pointer',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 10px center',
               }}
             >
               {PLANS.map((p) => <option key={p}>{p}</option>)}
@@ -199,8 +219,12 @@ function AccountCard({ customer, onSave }) {
             <div style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{customer.plan}</div>
           )}
         </div>
-        <div style={{ gridColumn: '1/-1' }}>
-          <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
+        <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Next Renewal</div>
+          <div style={{ fontSize: 13.5, color: customer.renew ? (customer.renew < new Date() ? 'var(--red)' : 'var(--text)') : 'var(--text-3)', fontWeight: 400 }}>
+            {customer.renew ? formatRenewDate(customer.renew) : '—'}
+          </div>
         </div>
       </div>
     </Card>
@@ -221,7 +245,7 @@ function VehicleModal({ vehicle, onSave, onClose }) {
 
   function handleSave() {
     onSave({
-      plate: form.plate,
+      plate: formatPlate(form.plate),
       year: form.year ? parseInt(form.year, 10) : '',
       make: form.make,
       model: form.model,
@@ -301,7 +325,7 @@ function VehicleModal({ vehicle, onSave, onClose }) {
 }
 
 /* ── Vehicle Subscriptions Card ───────────────────────────────────────── */
-function VehicleCard({ vehicles, onUpdateVehicles }) {
+function VehicleCard({ vehicles, onUpdateVehicles, customerPlan }) {
   const [editingVehicle, setEditingVehicle] = useState(null); // vehicle object or null
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -315,6 +339,7 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
   function handleAdd(form) {
     const newVehicle = {
       id: `v_${Date.now()}`,
+      plan: customerPlan,
       ...form,
     };
     onUpdateVehicles([...vehicles, newVehicle]);
@@ -322,7 +347,10 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
   }
 
   function handleRemove(vehicleId) {
-    onUpdateVehicles(vehicles.filter((v) => v.id !== vehicleId));
+    const v = vehicles.find((x) => x.id === vehicleId);
+    const label = v ? `${v.plate} (${v.year} ${v.make} ${v.model})` : 'this vehicle';
+    if (!window.confirm(`Remove ${label} from this account?\n\nThis action cannot be undone.`)) return;
+    onUpdateVehicles(vehicles.filter((x) => x.id !== vehicleId));
   }
 
   return (
@@ -364,18 +392,10 @@ function VehicleCard({ vehicles, onUpdateVehicles }) {
                   <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.year} {v.make} {v.model} · {v.color}</div>
                 </div>
                 <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                  {(() => {
-                    const now = new Date();
-                    const isOverdue = !v.isPaused && v.renew && v.renew < now;
-                    return (
-                      <>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : isOverdue ? 'var(--red)' : 'var(--green)' }}>{v.plan}</div>
-                        <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
-                          {v.isPaused ? '⏸ Paused' : isOverdue ? 'Overdue' : `Renews ${formatRenewDate(v.renew)}`}
-                        </div>
-                      </>
-                    );
-                  })()}
+                  <div style={{ fontSize: 13, fontWeight: 600, color: v.isPaused ? 'var(--yellow)' : 'var(--green)' }}>{v.plan}</div>
+                  {v.isPaused && (
+                    <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>⏸ Paused</div>
+                  )}
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                   <IconBtn title="Edit vehicle" onClick={() => setEditingVehicle(v)}>
@@ -580,7 +600,7 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
         <AccountCard customer={customer} onSave={onUpdateCustomer} />
         <PaymentCard customer={customer} />
         <div style={{ gridColumn: '1/-1' }}>
-          <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} />
+          <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} customerPlan={customer.plan} />
         </div>
         <div style={{ gridColumn: '1/-1' }}>
           <PurchaseHistoryCard transactions={transactions} />
