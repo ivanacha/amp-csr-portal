@@ -432,33 +432,113 @@ function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, isCancelled }) 
   );
 }
 
-/* ── Payment Method Card ──────────────────────────────────────────────── */
-function PaymentCard({ customer }) {
+/* ── Card Edit Modal ──────────────────────────────────────────────────── */
+function CardModal({ card, onSave, onClose }) {
+  const [form, setForm] = useState({
+    number: card?.number ?? '',
+    name: card?.name ?? '',
+    expiry: card?.expiry ?? '',
+    csc: card?.csc ?? '',
+    zip: card?.zip ?? '',
+  });
+
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const inputStyle = {
+    background: 'var(--surface-2)',
+    border: '1.5px solid var(--amp-sky)',
+    borderRadius: 'var(--radius-sm)',
+    padding: '7px 10px',
+    fontSize: 13.5,
+    color: 'var(--text)',
+    outline: 'none',
+    width: '100%',
+  };
+
+  const labelStyle = {
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 10,
+    letterSpacing: '0.8px',
+    textTransform: 'uppercase',
+    color: 'var(--text-3)',
+    marginBottom: 5,
+    display: 'block',
+  };
+
   return (
-    <Card
-      title="Payment Method"
-      icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
-      actions={<Btn variant="secondary">Update Card</Btn>}
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(15,36,71,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      onClick={onClose}
     >
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div style={{ gridColumn: '1/-1' }}>
-          <Field label="Card on File" value={customer.card} />
+      <div
+        style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 420, display: 'flex', flexDirection: 'column', gap: 16 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)' }}>
+          Update Payment Method
         </div>
-        <Field label="Expires" value={customer.expiry} />
-        <Field label="Billing ZIP" value={customer.zip} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={labelStyle}>Card Number</label>
+          <input style={inputStyle} value={form.number} onChange={set('number')} placeholder="1234 5678 9012 3456" maxLength={16} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={labelStyle}>Name on Card</label>
+          <input style={inputStyle} value={form.name} onChange={set('name')} placeholder="Full name as on card" />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Expiration</label>
+            <input style={inputStyle} value={form.expiry} onChange={set('expiry')} placeholder="MM/YY" maxLength={5} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>Security Code</label>
+            <input style={inputStyle} value={form.csc} onChange={set('csc')} placeholder="CSC" maxLength={4} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={labelStyle}>ZIP Code</label>
+            <input style={inputStyle} value={form.zip} onChange={set('zip')} placeholder="ZIP" maxLength={10} />
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
+          <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+          <Btn variant="primary" onClick={() => onSave(form)}>Save Card</Btn>
+        </div>
       </div>
-      <div style={{
-        display: 'flex', alignItems: 'flex-start', gap: 9,
-        marginTop: 16, padding: '10px 13px',
-        background: 'var(--yellow-bg)',
-        border: '1px solid var(--yellow-border)',
-        borderRadius: 'var(--radius-sm)',
-        fontSize: 12.5, color: 'var(--yellow)',
-      }}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ flexShrink: 0, marginTop: 1 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Card details are tokenized. Direct customers to update via the AMP app for security.
-      </div>
-    </Card>
+    </div>
+  );
+}
+
+/* ── Payment Method Card ──────────────────────────────────────────────── */
+function PaymentCard({ customer, onSave }) {
+  const [showModal, setShowModal] = useState(false);
+  const { card } = customer;
+  const last4 = card?.number ? card.number.slice(-4) : '????';
+  const masked = `••••${last4}`;
+
+  return (
+    <>
+      <Card
+        title="Payment Method"
+        icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+        actions={<Btn variant="secondary" onClick={() => setShowModal(true)}>Update Card</Btn>}
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div style={{ gridColumn: '1/-1' }}>
+            <Field label="Card Number" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13 }}>{masked}</span>} />
+          </div>
+          <Field label="Name on Card" value={card?.name} />
+          <Field label="Expiration" value={card?.expiry} />
+          <Field label="Billing ZIP" value={card?.zip} />
+        </div>
+      </Card>
+      {showModal && (
+        <CardModal
+          card={card}
+          onSave={(updated) => { onSave({ card: updated }); setShowModal(false); }}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 }
 
@@ -579,10 +659,11 @@ function ChangeStatusModal({ customer, vehicles, onUpdateCustomer, onUpdateVehic
       onUpdateCustomer({ status: 'cancelled', plan: '—', renew: null });
       onUpdateVehicles([]);
     } else if (pendingStatus === 'active') {
+      const renewDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
       const price = PLAN_PRICE[customer.plan] || 0;
       const total = price * vehicles.length;
       const countLabel = vehicles.length > 1 ? ` (×${vehicles.length})` : '';
-      onUpdateCustomer({ status: 'active', renew: today });
+      onUpdateCustomer({ status: 'active', renew: renewDate });
       onUpdateVehicles(vehicles.map((v) => ({ ...v, isPaused: false })));
       onAddTransaction({
         id: `t_${Date.now()}`,
@@ -775,7 +856,7 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
       {/* Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <AccountCard customer={customer} onSave={onUpdateCustomer} />
-        <PaymentCard customer={customer} />
+        <PaymentCard customer={customer} onSave={onUpdateCustomer} />
         <div style={{ gridColumn: '1/-1' }}>
           <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} customerPlan={customer.plan} isCancelled={customer.status === 'cancelled'} />
         </div>
