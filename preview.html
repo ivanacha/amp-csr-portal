@@ -98,7 +98,7 @@ td{padding:13px 16px;vertical-align:middle}
 .badge.active{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
 .badge.paused{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
 .badge.overdue{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
-.badge.cancelled{background:var(--grey-bg);color:var(--grey);border:1px solid var(--grey-border)}
+.badge.canceled{background:var(--grey-bg);color:var(--grey);border:1px solid var(--grey-border)}
 
 .view-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--amp-cobalt);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s}
 .view-btn:hover{background:var(--amp-cobalt);color:#fff;border-color:var(--amp-cobalt)}
@@ -230,7 +230,7 @@ td{padding:13px 16px;vertical-align:middle}
         <button class="pill" onclick="setFilter('active',this)">Active</button>
         <button class="pill" onclick="setFilter('paused',this)">Paused</button>
         <button class="pill" onclick="setFilter('overdue',this)">Overdue</button>
-        <button class="pill" onclick="setFilter('cancelled',this)">Cancelled</button>
+        <button class="pill" onclick="setFilter('canceled',this)">Canceled</button>
       </div>
     </div>
     <div class="count" id="count"></div>
@@ -416,7 +416,7 @@ const COLORS=[
 const customers=[
   {id:'AMP-00341',firstName:'Marcus',lastName:'Delacroix',email:'marcus.delacroix@email.com',phone:'(404) 555-0182',status:'active',plan:'Unlimited Pro',vehicles:2,location:'Buckhead — ATL',card:'Visa ••••4821',expiry:'09/26',zip:'30305',color:0},
   {id:'AMP-00284',firstName:'Priya',lastName:'Nair',email:'priya.nair@gmail.com',phone:'(678) 555-0247',status:'active',plan:'Basic',vehicles:1,location:'Midtown — ATL',card:'Mastercard ••••7734',expiry:'02/25',zip:'30308',color:1},
-  {id:'AMP-00519',firstName:'Devon',lastName:'Ashford',email:'devon.ashford@work.com',phone:'(770) 555-0091',status:'cancelled',plan:'—',vehicles:0,location:'Alpharetta, GA',card:'Visa ••••2209',expiry:'11/24',zip:'30022',color:2},
+  {id:'AMP-00519',firstName:'Devon',lastName:'Ashford',email:'devon.ashford@work.com',phone:'(770) 555-0091',status:'canceled',plan:'—',vehicles:0,location:'Alpharetta, GA',card:'Visa ••••2209',expiry:'11/24',zip:'30022',color:2},
   {id:'AMP-00763',firstName:'Keisha',lastName:'Okafor',email:'keisha.o@outlook.com',phone:'(404) 555-0360',status:'overdue',plan:'Unlimited Pro',vehicles:3,location:'Sandy Springs, GA',card:'Amex ••••1005',expiry:'06/27',zip:'30328',color:3},
   {id:'AMP-00102',firstName:'Nathaniel',lastName:'Cruz',email:'ncruz@icloud.com',phone:'(678) 555-0118',status:'paused',plan:'Premium',vehicles:1,location:'Decatur, GA',card:'Discover ••••6641',expiry:'03/26',zip:'30030',color:4},
   {id:'AMP-00887',firstName:'Simone',lastName:'Beaumont',email:'simone.beaumont@email.com',phone:'(404) 555-0433',status:'active',plan:'Basic',vehicles:1,location:'East Atlanta',card:'Visa ••••3318',expiry:'08/26',zip:'30316',color:5},
@@ -459,7 +459,7 @@ let currentId=null;
 function initials(c){return(c.firstName[0]+c.lastName[0]).toUpperCase()}
 
 function statusBadge(s){
-  return`<span class="badge ${s}">${{active:'Active',paused:'Paused',overdue:'Overdue',cancelled:'Cancelled'}[s]||s}</span>`;
+  return`<span class="badge ${s}">${{active:'Active',paused:'Paused',overdue:'Overdue',canceled:'Canceled'}[s]||s}</span>`;
 }
 
 function renderTable(data){

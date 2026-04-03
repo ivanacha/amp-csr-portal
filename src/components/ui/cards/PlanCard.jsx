@@ -9,8 +9,8 @@ export default function PlanCard({ customer, vehicles, onUpdateCustomer, onUpdat
   const [showChangePlan, setShowChangePlan] = useState(false);
   const isOverdue = customer.status === 'overdue';
   const isPaused = customer.status === 'paused';
-  const isCancelled = customer.status === 'cancelled';
-  const showChangePlanBtn = !isCancelled && !isOverdue && !isPaused;
+  const isCanceled = customer.status === 'canceled';
+  const showChangePlanBtn = !isCanceled && !isOverdue && !isPaused;
   const monthlyCharge = (PLAN_PRICE[customer.plan] || 0) * (vehicles.length || 0);
 
   return (
@@ -29,7 +29,7 @@ export default function PlanCard({ customer, vehicles, onUpdateCustomer, onUpdat
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Plan</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{customer.plan}</span>
-              {!isCancelled && monthlyCharge > 0 && (
+              {!isCanceled && monthlyCharge > 0 && (
                 <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, fontWeight: 500, color: 'var(--text-3)' }}>
                   ${monthlyCharge.toFixed(2)}/mo
                 </span>

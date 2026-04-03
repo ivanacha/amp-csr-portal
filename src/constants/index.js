@@ -9,14 +9,14 @@ export const PLAN_PRICE = {
 export const STATUS_LABELS = {
   active: 'Active',
   paused: 'Paused',
-  cancelled: 'Cancelled',
+  canceled: 'Canceled',
   overdue: 'Overdue',
 };
 
 export const STATUS_OPTIONS = [
   { value: 'active',    label: 'Active',    color: 'var(--green)',  bg: 'var(--green-bg)' },
   { value: 'paused',    label: 'Paused',    color: 'var(--yellow)', bg: 'var(--yellow-bg)' },
-  { value: 'cancelled', label: 'Cancelled', color: 'var(--red)',    bg: 'var(--red-bg)' },
+  { value: 'canceled', label: 'Canceled', color: 'var(--red)',    bg: 'var(--red-bg)' },
 ];
 
 export const STATUS_FILTERS = [
@@ -24,7 +24,7 @@ export const STATUS_FILTERS = [
   { value: 'active',    label: 'Active' },
   { value: 'paused',    label: 'Paused' },
   { value: 'overdue',   label: 'Overdue' },
-  { value: 'cancelled', label: 'Cancelled' },
+  { value: 'canceled', label: 'Canceled' },
 ];
 
 export const PAGE_SIZE = 10;

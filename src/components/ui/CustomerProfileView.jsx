@@ -32,7 +32,7 @@ export default function CustomerProfileView({
   const isOverdue = customer.status === 'overdue';
 
   function handleConfirmCancel() {
-    onUpdateCustomer({ status: 'cancelled', plan: '—', renew: null });
+    onUpdateCustomer({ status: 'canceled', plan: '—', renew: null });
     onUpdateVehicles([]);
     setShowCancelModal(false);
   }
@@ -137,7 +137,7 @@ export default function CustomerProfileView({
             vehicles={vehicles}
             onUpdateVehicles={onUpdateVehicles}
             customerPlan={customer.plan}
-            isCancelled={customer.status === 'cancelled'}
+            isCanceled={customer.status === 'canceled'}
           />
         </div>
         <div style={{ gridColumn: '1/-1' }}>

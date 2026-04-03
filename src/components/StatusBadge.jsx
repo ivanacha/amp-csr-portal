@@ -19,7 +19,7 @@ const STATUS_CONFIG = {
     bg: 'var(--red-bg)',
     border: 'var(--red-border)',
   },
-  cancelled: {
+  canceled: {
     label: 'Canceled',
     color: 'var(--grey)',
     bg: 'var(--grey-bg)',
@@ -28,7 +28,7 @@ const STATUS_CONFIG = {
 };
 
 export default function StatusBadge({ status }) {
-  const config = STATUS_CONFIG[status] || STATUS_CONFIG.cancelled;
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG.canceled;
 
   return (
     <span

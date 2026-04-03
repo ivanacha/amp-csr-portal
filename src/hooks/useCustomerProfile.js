@@ -5,7 +5,7 @@ export function useCustomerProfile(customer) {
   const [showRenewModal, setShowRenewModal] = useState(false);
 
   const isRenewable =
-    customer.status === 'overdue' || customer.status === 'cancelled';
+    customer.status === 'overdue' || customer.status === 'canceled';
 
   return {
     showStatusModal,

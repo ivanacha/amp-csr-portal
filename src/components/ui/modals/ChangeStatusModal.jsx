@@ -12,19 +12,19 @@ function getStatusDescription(optValue, effectiveStatus) {
     if (effectiveStatus === 'paused') return 'Subscription & wash access currently suspended';
     return 'Immediately suspends subscription renewals and single wash purchases';
   }
-  if (optValue === 'cancelled') {
-    if (effectiveStatus === 'cancelled') return 'Account is permanently closed';
+  if (optValue === 'canceled') {
+    if (effectiveStatus === 'canceled') return 'Account is permanently closed';
     return 'Permanently clears all vehicle subscriptions — this action is irreversible';
   }
 }
 
 export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer, onUpdateVehicles, onAddTransaction, onClose }) {
   const [pendingStatus, setPendingStatus] = useState(null);
-  const isCancelled = customer.status === 'cancelled';
+  const isCanceled = customer.status === 'canceled';
   const effectiveStatus = customer.status === 'overdue' ? 'active' : customer.status;
 
   function handleSelect(optValue) {
-    if (optValue === effectiveStatus || isCancelled) return;
+    if (optValue === effectiveStatus || isCanceled) return;
     setPendingStatus(pendingStatus === optValue ? null : optValue);
   }
 
@@ -35,8 +35,8 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
     if (pendingStatus === 'paused') {
       onUpdateCustomer({ status: 'paused', renew: null });
       onUpdateVehicles(vehicles.map((v) => ({ ...v, isPaused: true })));
-    } else if (pendingStatus === 'cancelled') {
-      onUpdateCustomer({ status: 'cancelled', plan: '—', renew: null });
+    } else if (pendingStatus === 'canceled') {
+      onUpdateCustomer({ status: 'canceled', plan: '—', renew: null });
       onUpdateVehicles([]);
     } else if (pendingStatus === 'active') {
       const renewDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
@@ -72,8 +72,8 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
             Change Account Status
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
-            {isCancelled
-              ? 'Cancelled accounts cannot have their status changed.'
+            {isCanceled
+              ? 'Canceled accounts cannot have their status changed.'
               : 'Select a new status, then confirm to apply immediately.'}
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
           {STATUS_OPTIONS.map((opt) => {
             const isCurrent = opt.value === effectiveStatus;
             const isPending = pendingStatus === opt.value;
-            const isDisabled = isCancelled && !isCurrent;
+            const isDisabled = isCanceled && !isCurrent;
             const isSelectable = !isCurrent && !isDisabled;
 
             return (

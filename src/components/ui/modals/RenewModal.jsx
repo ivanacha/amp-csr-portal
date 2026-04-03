@@ -20,10 +20,10 @@ const SELECT_STYLE = {
 };
 
 export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpdateVehicles, onAddTransaction, onClose }) {
-  const isCancelled = customer.status === 'cancelled';
-  const [selectedPlan, setSelectedPlan] = useState(isCancelled ? 'Basic' : customer.plan);
+  const isCanceled = customer.status === 'canceled';
+  const [selectedPlan, setSelectedPlan] = useState(isCanceled ? 'Basic' : customer.plan);
 
-  const vehicleCount = isCancelled ? 1 : vehicles.length || 1;
+  const vehicleCount = isCanceled ? 1 : vehicles.length || 1;
   const price = PLAN_PRICE[selectedPlan] || 0;
   const total = price * vehicleCount;
   const countLabel = vehicleCount > 1 ? ` (×${vehicleCount})` : '';
@@ -33,7 +33,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
     const renewDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
 
     onUpdateCustomer({ status: 'active', plan: selectedPlan, renew: renewDate });
-    if (!isCancelled) {
+    if (!isCanceled) {
       onUpdateVehicles(vehicles.map((v) => ({ ...v, plan: selectedPlan })));
     }
     onAddTransaction({
@@ -62,15 +62,15 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
             Renew Subscription
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
-            {isCancelled
-              ? `${customer.firstName}'s account is cancelled. Select a plan to reactivate their subscription.`
+            {isCanceled
+              ? `${customer.firstName}'s account is canceled. Select a plan to reactivate their subscription.`
               : `${customer.firstName}'s subscription is overdue. Renewing will charge the outstanding balance immediately.`}
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>
-            {isCancelled ? 'Select Plan' : 'Subscription Plan'}
+            {isCanceled ? 'Select Plan' : 'Subscription Plan'}
           </div>
           <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} style={SELECT_STYLE}>
             {PLANS.map((p) => <option key={p}>{p}</option>)}
@@ -89,7 +89,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
           <div>
             <div style={{ fontSize: 13, color: 'var(--text-2)' }}>{selectedPlan}{countLabel}</div>
             <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
-              {isCancelled ? 'New subscription' : 'Outstanding balance'}
+              {isCanceled ? 'New subscription' : 'Outstanding balance'}
             </div>
           </div>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: 'var(--amp-navy)' }}>
