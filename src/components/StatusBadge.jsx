@@ -20,7 +20,7 @@ const STATUS_CONFIG = {
     border: 'var(--red-border)',
   },
   cancelled: {
-    label: 'Cancelled',
+    label: 'Canceled',
     color: 'var(--grey)',
     bg: 'var(--grey-bg)',
     border: 'var(--grey-border)',

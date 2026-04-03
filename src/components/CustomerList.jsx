@@ -124,27 +124,58 @@ const s = {
 
 const PAGE_SIZE = 10;
 
+const COLUMNS = [
+  { key: 'name',     label: 'Customer' },
+  { key: 'id',       label: 'Account ID' },
+  { key: 'status',   label: 'Status' },
+  { key: 'plan',     label: 'Plan' },
+  { key: 'vehicles', label: 'Vehicles' },
+];
+
+function sortCustomers(list, key, dir) {
+  return [...list].sort((a, b) => {
+    let av, bv;
+    if (key === 'name') { av = a.firstName; bv = b.firstName; }
+    else if (key === 'vehicles') { av = a.vehicles; bv = b.vehicles; }
+    else { av = a[key] ?? ''; bv = b[key] ?? ''; }
+    const cmp = typeof av === 'number'
+      ? av - bv
+      : String(av).localeCompare(String(bv));
+    return dir === 'asc' ? cmp : -cmp;
+  });
+}
+
 export default function CustomerList({ customers, onSelectCustomer }) {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredRow, setHoveredRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortKey, setSortKey] = useState('name');
+  const [sortDir, setSortDir] = useState('asc');
 
-  useEffect(() => { setCurrentPage(1); }, [query, activeFilter]);
+  useEffect(() => { setCurrentPage(1); }, [query, activeFilter, sortKey, sortDir]);
+
+  function handleSort(key) {
+    if (key === sortKey) {
+      setSortDir((d) => d === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
-    return customers
-      .filter((c) => {
-        const matchesQuery = [c.firstName, c.lastName, c.email, c.phone, c.id]
-          .join(' ')
-          .toLowerCase()
-          .includes(q);
-        const matchesStatus = activeFilter === 'all' || c.status === activeFilter;
-        return matchesQuery && matchesStatus;
-      })
-      .sort((a, b) => a.lastName.localeCompare(b.lastName));
-  }, [query, activeFilter, customers]);
+    const base = customers.filter((c) => {
+      const matchesQuery = [c.firstName, c.lastName, c.email, c.phone, c.id]
+        .join(' ')
+        .toLowerCase()
+        .includes(q);
+      const matchesStatus = activeFilter === 'all' || c.status === activeFilter;
+      return matchesQuery && matchesStatus;
+    });
+    return sortCustomers(base, sortKey, sortDir);
+  }, [query, activeFilter, customers, sortKey, sortDir]);
 
   return (
     <div style={s.page}>
@@ -181,11 +212,20 @@ export default function CustomerList({ customers, onSelectCustomer }) {
         <table style={s.table}>
           <thead>
             <tr>
-              <th style={s.th}>Customer</th>
-              <th style={s.th}>Account ID</th>
-              <th style={s.th}>Status</th>
-              <th style={s.th}>Plan</th>
-              <th style={s.th}>Vehicles</th>
+              {COLUMNS.map((col) => (
+                <th
+                  key={col.key}
+                  style={{ ...s.th, cursor: 'pointer', userSelect: 'none' }}
+                  onClick={() => handleSort(col.key)}
+                >
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    {col.label}
+                    <span style={{ opacity: sortKey === col.key ? 1 : 0.25, fontSize: 9 }}>
+                      {sortKey === col.key && sortDir === 'desc' ? '▼' : '▲'}
+                    </span>
+                  </span>
+                </th>
+              ))}
               <th style={s.th}></th>
             </tr>
           </thead>

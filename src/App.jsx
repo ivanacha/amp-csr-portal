@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './styles/globals.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CustomerList from './components/CustomerList';
 import CustomerProfile from './components/CustomerProfile';
+import Toast from './components/Toast';
 import {
   customers as initialCustomers,
   vehicleData as initialVehicleData,
   transactionData,
 } from './data/mockData';
+
+const STATUS_LABELS = {
+  active: 'Active', paused: 'Paused', cancelled: 'Cancelled', overdue: 'Overdue',
+};
 
 export default function App() {
   const [view, setView] = useState('list');
@@ -17,6 +22,11 @@ export default function App() {
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicleData, setVehicleData] = useState(initialVehicleData);
   const [extraTransactions, setExtraTransactions] = useState({});
+  const [toast, setToast] = useState(null);
+
+  const showToast = useCallback((message) => {
+    setToast({ message, key: Date.now() });
+  }, []);
 
   const selectedCustomer = customers.find((c) => c.id === selectedId);
 
@@ -47,6 +57,11 @@ export default function App() {
         ...prev,
         [selectedId]: (prev[selectedId] || []).map((v) => ({ ...v, plan: fields.plan })),
       }));
+    }
+    if ('status' in fields) {
+      showToast(`Account status changed to ${STATUS_LABELS[fields.status] || fields.status}`);
+    } else if ('plan' in fields) {
+      showToast(`Subscription plan updated to ${fields.plan}`);
     }
   }
 
@@ -86,6 +101,10 @@ export default function App() {
       </main>
 
       <Footer />
+
+      {toast && (
+        <Toast key={toast.key} message={toast.message} onDone={() => setToast(null)} />
+      )}
     </div>
   );
 }

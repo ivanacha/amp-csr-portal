@@ -132,7 +132,6 @@ function AccountCard({ customer, onSave }) {
     lastName: customer.lastName,
     email: customer.email,
     phone: customer.phone,
-    plan: customer.plan,
   });
 
   // Keep form in sync if customer prop changes (e.g. navigating between profiles)
@@ -142,7 +141,6 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
-      plan: customer.plan,
     });
     setEditing(false);
   }, [customer.id]);
@@ -156,7 +154,6 @@ function AccountCard({ customer, onSave }) {
       lastName: customer.lastName,
       email: customer.email,
       phone: customer.phone,
-      plan: customer.plan,
     });
   }
 
@@ -190,44 +187,185 @@ function AccountCard({ customer, onSave }) {
           <Field label="Email Address" value={customer.email} editing={editing} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
         </div>
         <Field label="Phone" value={customer.phone} editing={editing} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Plan</div>
-          {editing ? (
-            <select
-              value={form.plan}
-              onChange={set('plan')}
-              style={{
-                background: 'var(--surface-2)',
-                border: '1.5px solid var(--amp-sky)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '7px 32px 7px 10px',
-                fontSize: 13.5,
-                color: 'var(--text)',
-                outline: 'none',
-                width: '100%',
-                cursor: 'pointer',
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 10px center',
-              }}
-            >
-              {PLANS.map((p) => <option key={p}>{p}</option>)}
-            </select>
-          ) : (
-            <div style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{customer.plan}</div>
-          )}
-        </div>
-        <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Next Renewal</div>
-          <div style={{ fontSize: 13.5, color: customer.renew ? (customer.renew < new Date() ? 'var(--red)' : 'var(--text)') : 'var(--text-3)', fontWeight: 400 }}>
-            {customer.renew ? formatRenewDate(customer.renew) : '—'}
-          </div>
+        <div style={{ gridColumn: '1/-1' }}>
+          <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
         </div>
       </div>
     </Card>
+  );
+}
+
+/* ── Change Plan Modal ────────────────────────────────────────────────── */
+function ChangePlanModal({ customer, vehicles, onUpdateCustomer, onUpdateVehicles, onAddTransaction, onClose }) {
+  const [selectedPlan, setSelectedPlan] = useState(customer.plan);
+
+  const currentPrice = PLAN_PRICE[customer.plan] || 0;
+  const newPrice = PLAN_PRICE[selectedPlan] || 0;
+  const diff = newPrice - currentPrice;
+  const count = vehicles.length || 1;
+  const totalDiff = diff * count;
+  const countLabel = count > 1 ? ` (×${count})` : '';
+  const isUpgrade = totalDiff > 0;
+  const isDowngrade = totalDiff < 0;
+  const noChange = selectedPlan === customer.plan;
+
+  function handleConfirm() {
+    if (noChange) { onClose(); return; }
+    const today = new Date();
+    const dateLabel = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    onUpdateCustomer({ plan: selectedPlan });
+    onUpdateVehicles(vehicles.map((v) => ({ ...v, plan: selectedPlan })));
+    onAddTransaction({
+      id: `t_${Date.now()}`,
+      type: isDowngrade ? 'refund' : 'subscription',
+      desc: isDowngrade
+        ? `Plan Downgrade Refund — ${customer.plan} → ${selectedPlan}${countLabel}`
+        : `Plan Upgrade Charge — ${customer.plan} → ${selectedPlan}${countLabel}`,
+      meta: `${dateLabel} · Plan change`,
+      amount: isDowngrade ? `+$${Math.abs(totalDiff).toFixed(2)}` : `$${totalDiff.toFixed(2)}`,
+      isCredit: isDowngrade,
+      accepted: true,
+    });
+    onClose();
+  }
+
+  const selectStyle = {
+    background: 'var(--surface-2)',
+    border: '1.5px solid var(--amp-sky)',
+    borderRadius: 'var(--radius-sm)',
+    padding: '7px 32px 7px 10px',
+    fontSize: 13.5,
+    color: 'var(--text)',
+    outline: 'none',
+    width: '100%',
+    cursor: 'pointer',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 10px center',
+  };
+
+  return (
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(15,36,71,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 400, display: 'flex', flexDirection: 'column', gap: 18 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+            Change Plan
+          </div>
+          <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
+            Select a new subscription plan. Any price difference will be charged or refunded immediately.
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>New Plan</div>
+          <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} style={selectStyle}>
+            {PLANS.map((p) => <option key={p}>{p}</option>)}
+          </select>
+        </div>
+
+        {!noChange && (
+          <div style={{
+            background: isDowngrade ? 'var(--green-bg)' : 'var(--amp-light-blue)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '14px 16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            <div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)' }}>
+                {customer.plan} → {selectedPlan}{countLabel}
+              </div>
+              <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+                {isDowngrade ? 'Refund to card on file' : 'Charge to card on file'}
+              </div>
+            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: isDowngrade ? 'var(--green)' : 'var(--amp-navy)' }}>
+              {isDowngrade ? '+' : ''}${Math.abs(totalDiff).toFixed(2)}
+            </div>
+          </div>
+        )}
+
+        {!noChange && (
+          <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+            {isDowngrade
+              ? `A refund of $${Math.abs(totalDiff).toFixed(2)} will be issued to the card ending in ${customer.card?.number?.slice(-4) ?? '????'}.`
+              : `$${totalDiff.toFixed(2)} will be charged to the card ending in ${customer.card?.number?.slice(-4) ?? '????'}.`}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+          <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+          <Btn variant="primary" onClick={handleConfirm} style={{ opacity: noChange ? 0.5 : 1 }}>
+            {noChange ? 'No Change' : isDowngrade ? 'Confirm & Refund' : 'Confirm & Charge'}
+          </Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Subscription Plan Card ────────────────────────────────────────────── */
+function PlanCard({ customer, vehicles, onUpdateCustomer, onUpdateVehicles, onAddTransaction }) {
+  const [showModal, setShowModal] = useState(false);
+  const isOverdue = customer.renew && customer.renew < new Date();
+  const isCancelled = customer.status === 'cancelled';
+  const monthlyCharge = (PLAN_PRICE[customer.plan] || 0) * (vehicles.length || 0);
+
+  return (
+    <>
+      <Card
+        title="Subscription Plan"
+        icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>}
+        actions={
+          !isCancelled && (
+            <Btn variant="secondary" onClick={() => setShowModal(true)}>
+              Change Plan
+            </Btn>
+          )
+        }
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Plan</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 13.5, color: 'var(--text)', fontWeight: 400 }}>{customer.plan}</span>
+              {!isCancelled && monthlyCharge > 0 && (
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, fontWeight: 500, color: 'var(--text-3)' }}>
+                  ${monthlyCharge.toFixed(2)}/mo
+                </span>
+              )}
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>Due Date</div>
+            <div style={{ fontSize: 13.5, color: customer.renew ? (isOverdue ? 'var(--red)' : 'var(--text)') : 'var(--text-3)', fontWeight: 400 }}>
+              {customer.renew ? formatRenewDate(customer.renew) : '—'}
+            </div>
+          </div>
+        </div>
+      </Card>
+      {showModal && (
+        <ChangePlanModal
+          customer={customer}
+          vehicles={vehicles}
+          onUpdateCustomer={onUpdateCustomer}
+          onUpdateVehicles={onUpdateVehicles}
+          onAddTransaction={onAddTransaction}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 }
 
@@ -316,7 +454,7 @@ function VehicleModal({ vehicle, onSave, onClose }) {
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
           <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
           <Btn variant="primary" onClick={handleSave}>
-            {vehicle ? 'Save Changes' : 'Add Vehicle'}
+            Save Changes
           </Btn>
         </div>
       </div>
@@ -326,8 +464,9 @@ function VehicleModal({ vehicle, onSave, onClose }) {
 
 /* ── Vehicle Subscriptions Card ───────────────────────────────────────── */
 function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, isCancelled }) {
-  const [editingVehicle, setEditingVehicle] = useState(null); // vehicle object or null
+  const [editingVehicle, setEditingVehicle] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   function handleSaveEdit(form) {
     onUpdateVehicles(
@@ -346,12 +485,12 @@ function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, isCancelled }) 
     setShowAddModal(false);
   }
 
-  function handleRemove(vehicleId) {
-    const v = vehicles.find((x) => x.id === vehicleId);
-    const label = v ? `${v.plate} (${v.year} ${v.make} ${v.model})` : 'this vehicle';
-    if (!window.confirm(`Remove ${label} from this account?\n\nThis action cannot be undone.`)) return;
-    onUpdateVehicles(vehicles.filter((x) => x.id !== vehicleId));
+  function handleConfirmDelete() {
+    onUpdateVehicles(vehicles.filter((x) => x.id !== confirmDeleteId));
+    setConfirmDeleteId(null);
   }
+
+  const vehicleToDelete = vehicles.find((x) => x.id === confirmDeleteId);
 
   return (
     <>
@@ -403,7 +542,7 @@ function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, isCancelled }) 
                   <IconBtn title="Edit vehicle" onClick={() => setEditingVehicle(v)}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </IconBtn>
-                  <IconBtn title="Remove vehicle" danger onClick={() => handleRemove(v.id)}>
+                  <IconBtn title="Remove vehicle" danger onClick={() => setConfirmDeleteId(v.id)}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
                   </IconBtn>
                 </div>
@@ -427,6 +566,28 @@ function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, isCancelled }) 
           onSave={handleAdd}
           onClose={() => setShowAddModal(false)}
         />
+      )}
+      {confirmDeleteId && vehicleToDelete && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(15,36,71,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          onClick={() => setConfirmDeleteId(null)}
+        >
+          <div
+            style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 380, display: 'flex', flexDirection: 'column', gap: 16 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ fontSize: 13.5, color: 'var(--text)' }}>
+              Remove <strong>{vehicleToDelete.plate}</strong> ({vehicleToDelete.year} {vehicleToDelete.make} {vehicleToDelete.model}) from this account?
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--red)' }}>
+              This action cannot be undone.
+            </div>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <Btn variant="ghost" onClick={() => setConfirmDeleteId(null)}>Cancel</Btn>
+              <Btn variant="danger" onClick={handleConfirmDelete}>Remove Vehicle</Btn>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
@@ -523,11 +684,9 @@ function PaymentCard({ customer, onSave }) {
         actions={<Btn variant="secondary" onClick={() => setShowModal(true)}>Update Card</Btn>}
       >
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          <div style={{ gridColumn: '1/-1' }}>
-            <Field label="Card Number" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13 }}>{masked}</span>} />
-          </div>
-          <Field label="Name on Card" value={card?.name} />
+          <Field label="Card Number" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13 }}>{masked}</span>} />
           <Field label="Expiration" value={card?.expiry} />
+          <Field label="Name on Card" value={card?.name} />
           <Field label="Billing ZIP" value={card?.zip} />
         </div>
       </Card>
@@ -615,7 +774,7 @@ function PurchaseHistoryCard({ transactions }) {
 }
 
 /* ── Change Status Modal ──────────────────────────────────────────────── */
-const PLAN_PRICE = { Basic: 14.99, Premium: 29.99, 'Unlimited Pro': 29.99 };
+const PLAN_PRICE = { Basic: 14.99, Premium: 29.99, 'Unlimited Pro': 49.99 };
 
 const STATUS_OPTIONS = [
   { value: 'active',    label: 'Active',    color: 'var(--green)',  bg: 'var(--green-bg)' },
@@ -791,9 +950,120 @@ function ChangeStatusModal({ customer, vehicles, onUpdateCustomer, onUpdateVehic
   );
 }
 
+/* ── Renew Subscription Modal ─────────────────────────────────────────── */
+function RenewModal({ customer, vehicles, onUpdateCustomer, onUpdateVehicles, onAddTransaction, onClose }) {
+  const isCancelled = customer.status === 'cancelled';
+  const [selectedPlan, setSelectedPlan] = useState(isCancelled ? 'Basic' : customer.plan);
+
+  const vehicleCount = isCancelled ? 1 : vehicles.length || 1;
+  const price = PLAN_PRICE[selectedPlan] || 0;
+  const total = price * vehicleCount;
+  const countLabel = vehicleCount > 1 ? ` (×${vehicleCount})` : '';
+
+  function handleConfirm() {
+    const today = new Date();
+    const renewDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+    onUpdateCustomer({ status: 'active', plan: selectedPlan, renew: renewDate });
+    if (!isCancelled) {
+      onUpdateVehicles(vehicles.map((v) => ({ ...v, plan: selectedPlan })));
+    }
+    onAddTransaction({
+      id: `t_${Date.now()}`,
+      type: 'subscription',
+      desc: `Subscription Renewal — ${selectedPlan}${countLabel}`,
+      meta: `${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · Manual renewal`,
+      amount: `$${total.toFixed(2)}`,
+      isCredit: false,
+      accepted: true,
+    });
+    onClose();
+  }
+
+  const selectStyle = {
+    background: 'var(--surface-2)',
+    border: '1.5px solid var(--amp-sky)',
+    borderRadius: 'var(--radius-sm)',
+    padding: '7px 32px 7px 10px',
+    fontSize: 13.5,
+    color: 'var(--text)',
+    outline: 'none',
+    width: '100%',
+    cursor: 'pointer',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 10px center',
+  };
+
+  return (
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(15,36,71,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 400, display: 'flex', flexDirection: 'column', gap: 18 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+            Renew Subscription
+          </div>
+          <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
+            {isCancelled
+              ? `${customer.firstName}'s account is cancelled. Select a plan to reactivate their subscription.`
+              : `${customer.firstName}'s subscription is overdue. Renewing will charge the outstanding balance immediately.`}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--text-3)' }}>
+            {isCancelled ? 'Select Plan' : 'Subscription Plan'}
+          </div>
+          <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} style={selectStyle}>
+            {PLANS.map((p) => <option key={p}>{p}</option>)}
+          </select>
+        </div>
+
+        <div style={{
+          background: 'var(--amp-light-blue)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '14px 16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <div>
+            <div style={{ fontSize: 13, color: 'var(--text-2)' }}>{selectedPlan}{countLabel}</div>
+            <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+              {isCancelled ? 'New subscription' : 'Outstanding balance'}
+            </div>
+          </div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: 'var(--amp-navy)' }}>
+            ${total.toFixed(2)}
+          </div>
+        </div>
+
+        <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+          This charge will be applied to the card on file ending in <strong>{customer.card?.number?.slice(-4) ?? '????'}</strong>. Next renewal will be set one month from today.
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+          <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
+          <Btn variant="primary" onClick={handleConfirm}>Confirm &amp; Charge</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main CustomerProfile ─────────────────────────────────────────────── */
 export default function CustomerProfile({ customer, vehicles, transactions, onUpdateCustomer, onUpdateVehicles, onAddTransaction, onBack }) {
   const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showRenewModal, setShowRenewModal] = useState(false);
+  const isRenewable = customer.status === 'overdue' || customer.status === 'cancelled';
 
   return (
     <div style={{ padding: '28px 32px', maxWidth: 1200, margin: '0 auto' }}>
@@ -835,12 +1105,30 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
           </div>
         </div>
         <div style={{ marginLeft: 'auto' }}>
-          <Btn variant="secondary" onClick={() => setShowStatusModal(true)}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            Change Status
-          </Btn>
+          {isRenewable ? (
+            <Btn variant="primary" onClick={() => setShowRenewModal(true)}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+              Renew Subscription
+            </Btn>
+          ) : (
+            <Btn variant="secondary" onClick={() => setShowStatusModal(true)}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              Change Status
+            </Btn>
+          )}
         </div>
       </div>
+
+      {showRenewModal && (
+        <RenewModal
+          customer={customer}
+          vehicles={vehicles}
+          onUpdateCustomer={onUpdateCustomer}
+          onUpdateVehicles={onUpdateVehicles}
+          onAddTransaction={onAddTransaction}
+          onClose={() => setShowRenewModal(false)}
+        />
+      )}
 
       {showStatusModal && (
         <ChangeStatusModal
@@ -856,7 +1144,10 @@ export default function CustomerProfile({ customer, vehicles, transactions, onUp
       {/* Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <AccountCard customer={customer} onSave={onUpdateCustomer} />
-        <PaymentCard customer={customer} onSave={onUpdateCustomer} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <PaymentCard customer={customer} onSave={onUpdateCustomer} />
+          <PlanCard customer={customer} vehicles={vehicles} onUpdateCustomer={onUpdateCustomer} onUpdateVehicles={onUpdateVehicles} onAddTransaction={onAddTransaction} />
+        </div>
         <div style={{ gridColumn: '1/-1' }}>
           <VehicleCard vehicles={vehicles} onUpdateVehicles={onUpdateVehicles} customerPlan={customer.plan} isCancelled={customer.status === 'cancelled'} />
         </div>
