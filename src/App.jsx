@@ -11,8 +11,11 @@ import {
   transactionData,
 } from './data/mockData';
 
-const STATUS_LABELS = {
-  active: 'Active', paused: 'Paused', cancelled: 'Cancelled', overdue: 'Overdue',
+const STATUS_TOAST = {
+  active: 'This account is active',
+  paused: 'This account is paused',
+  canceled: 'This account is canceled',
+  overdue: 'This account is overdue',
 };
 
 export default function App() {
@@ -59,7 +62,7 @@ export default function App() {
       }));
     }
     if ('status' in fields) {
-      showToast(`Account status changed to ${STATUS_LABELS[fields.status] || fields.status}`);
+      showToast(STATUS_TOAST[fields.status] || `Account status changed to ${fields.status}`);
     } else if ('plan' in fields) {
       showToast(`Subscription plan updated to ${fields.plan}`);
     }
