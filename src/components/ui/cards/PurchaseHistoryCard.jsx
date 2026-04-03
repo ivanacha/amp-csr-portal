@@ -17,11 +17,12 @@ const TX_STYLE = {
 
 export default function PurchaseHistoryCard({ transactions }) {
   const totalSpent = transactions
-    .filter((t) => !t.isCredit && t.accepted === true)
+    .filter((t) => t.accepted === true)
     .reduce((sum, t) => {
       const n = parseFloat(t.amount.replace(/[^0-9.]/g, ''));
-      return sum + (isNaN(n) ? 0 : n);
+      return sum + (isNaN(n) ? 0 : t.isCredit ? -n : n);
     }, 0);
+  const displayTotal = Math.max(0, totalSpent);
 
   return (
     <Card
@@ -29,7 +30,7 @@ export default function PurchaseHistoryCard({ transactions }) {
       icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
       actions={
         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>
-          Total | ${totalSpent.toFixed(2)}
+          Total | ${displayTotal.toFixed(2)}
         </span>
       }
     >
