@@ -1,4 +1,3 @@
-    alignItems: 'center',
 import { useCustomerList } from '../hooks/useCustomerList';
 import CustomerListView from './ui/CustomerListView';
 
