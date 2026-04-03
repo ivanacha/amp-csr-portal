@@ -1,8 +1,9 @@
 import React from 'react';
+import ampLogoWhite from '../../images/AMP_Logo_White.png';
 
 const styles = {
   footer: {
-    background: '#2E4494',
+    background: '#1F4F9F',
     padding: '28px 40px',
     display: 'flex',
     alignItems: 'center',
@@ -70,7 +71,7 @@ const styles = {
     transition: 'border-color 0.15s',
   },
   bottomBar: {
-    background: '#0F1B2D',
+    background: '#152E50',
     padding: '14px 40px',
     display: 'flex',
     alignItems: 'center',
@@ -125,11 +126,7 @@ export default function Footer() {
     <footer>
       <div style={styles.footer}>
         <a href="https://ampmemberships.com" target="_blank" rel="noopener noreferrer" style={styles.logoLink}>
-          <div style={styles.logoMark}>A</div>
-          <div>
-            <div style={styles.logoText}>AMP</div>
-            <div style={styles.logoSubText}>AN NCS COMPANY</div>
-          </div>
+          <img src={ampLogoWhite} alt="AMP" style={{ height: 70, display: 'block' }} />
         </a>
 
         <a

@@ -1,9 +1,10 @@
 import React from 'react';
+import ampLogo from '../../images/AMP_Logo_CobaltNavy.png';
 
 const styles = {
   header: {
     height: 'var(--header-h)',
-    background: 'var(--amp-navy)',
+    background: '#fff',
     display: 'flex',
     alignItems: 'center',
     padding: '0 28px',
@@ -11,40 +12,17 @@ const styles = {
     position: 'sticky',
     top: 0,
     zIndex: 50,
-    boxShadow: '0 2px 8px rgba(15,36,71,0.25)',
+    boxShadow: '0 2px 12px rgba(15,36,71,0.12)',
   },
   logo: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
     marginRight: '8px',
-  },
-  logoMark: {
-    width: 32,
-    height: 32,
-    background: 'var(--amp-sky)',
-    borderRadius: 8,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: "'Syne', sans-serif",
-    fontWeight: 800,
-    fontSize: 15,
-    color: '#fff',
-    letterSpacing: '-0.5px',
-    flexShrink: 0,
-  },
-  logoText: {
-    fontFamily: "'Syne', sans-serif",
-    fontWeight: 800,
-    fontSize: 17,
-    color: '#fff',
-    letterSpacing: '0.5px',
   },
   divider: {
     width: 1,
     height: 20,
-    background: 'rgba(255,255,255,0.2)',
+    background: 'rgba(46,68,148,0.2)',
   },
   breadcrumbs: {
     display: 'flex',
@@ -53,59 +31,59 @@ const styles = {
     fontSize: 13.5,
   },
   crumbLink: {
-    color: 'rgba(255,255,255,0.6)',
+    color: 'rgba(46,68,148,0.45)',
     cursor: 'pointer',
     textDecoration: 'none',
     transition: 'color 0.15s',
   },
   crumbSep: {
-    color: 'rgba(255,255,255,0.3)',
+    color: 'rgba(46,68,148,0.25)',
     fontSize: 12,
   },
   crumbCurrent: {
-    color: '#fff',
+    color: '#2E4494',
     fontWeight: 500,
   },
   spacer: { flex: 1 },
   portalLabel: {
     fontFamily: "'DM Mono', monospace",
     fontSize: 10,
-    color: 'rgba(255,255,255,0.4)',
+    color: 'rgba(46,68,148,0.4)',
     letterSpacing: '1.5px',
     textTransform: 'uppercase',
   },
-  agentChip: {
+  agentWrap: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 8,
-    padding: '5px 10px',
-    borderRadius: 8,
-    background: 'rgba(255,255,255,0.08)',
-    border: '1px solid rgba(255,255,255,0.12)',
+    gap: 4,
   },
   agentAvatar: {
-    width: 26,
-    height: 26,
+    width: 32,
+    height: 32,
     borderRadius: '50%',
     background: 'var(--amp-sky)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 700,
     color: '#fff',
     flexShrink: 0,
   },
-  agentName: { fontSize: 12.5, color: '#fff', fontWeight: 500 },
-  agentRole: { fontSize: 10.5, color: 'rgba(255,255,255,0.4)' },
+  agentName: {
+    fontSize: 11,
+    color: '#2E4494',
+    fontWeight: 500,
+    lineHeight: 1,
+  },
 };
 
 export default function Header({ breadcrumbs = [], onCrumbClick }) {
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
-        <div style={styles.logoMark}>A</div>
-        <span style={styles.logoText}>AMP</span>
+        <img src={ampLogo} alt="AMP" style={{ height: 60, display: 'block' }} />
       </div>
 
       <div style={styles.divider} />
@@ -122,8 +100,8 @@ export default function Header({ breadcrumbs = [], onCrumbClick }) {
                 <span
                   style={styles.crumbLink}
                   onClick={() => onCrumbClick && onCrumbClick(crumb)}
-                  onMouseEnter={e => (e.target.style.color = '#fff')}
-                  onMouseLeave={e => (e.target.style.color = 'rgba(255,255,255,0.6)')}
+                  onMouseEnter={e => (e.target.style.color = '#2E4494')}
+                  onMouseLeave={e => (e.target.style.color = 'rgba(46,68,148,0.45)')}
                 >
                   {crumb.label}
                 </span>
@@ -137,12 +115,9 @@ export default function Header({ breadcrumbs = [], onCrumbClick }) {
 
       <span style={styles.portalLabel}>CSR Portal</span>
 
-      <div style={styles.agentChip}>
+      <div style={styles.agentWrap}>
         <div style={styles.agentAvatar}>JR</div>
-        <div>
-          <div style={styles.agentName}>Jamie R.</div>
-          <div style={styles.agentRole}>CSR Agent</div>
-        </div>
+        <div style={styles.agentName}>Jamie R.</div>
       </div>
     </header>
   );
