@@ -29,7 +29,8 @@ const s = {
   }),
   count: { fontSize: 13, color: 'var(--text-3)', marginTop: -4, marginBottom: 12 },
   tableWrap: { background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius)', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' },
-  table: { width: '100%', borderCollapse: 'collapse' },
+  table: { width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' },
+  colWidths: ['25%', '17%', '15%', '14%', '9%', '14%'],
   th: {
     padding: '11px 16px', textAlign: 'left',
     fontFamily: "'DM Mono', monospace", fontSize: 10,
@@ -94,6 +95,9 @@ export default function CustomerListView({
 
       <div style={s.tableWrap}>
         <table style={s.table}>
+          <colgroup>
+            {s.colWidths.map((w, i) => <col key={i} style={{ width: w }} />)}
+          </colgroup>
           <thead>
             <tr>
               {LIST_COLUMNS.map((col) => (
@@ -104,7 +108,7 @@ export default function CustomerListView({
                 >
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                     {col.label}
-                    <span style={{ opacity: sortKey === col.key ? 1 : 0.25, fontSize: 9 }}>
+                    <span style={{ display: 'inline-block', width: 8, textAlign: 'center', opacity: sortKey === col.key ? 1 : 0.25, fontSize: 9, flexShrink: 0 }}>
                       {sortKey === col.key && sortDir === 'desc' ? '▼' : '▲'}
                     </span>
                   </span>
