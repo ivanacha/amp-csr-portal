@@ -24,7 +24,7 @@ export function useCustomerList(customers) {
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
     const base = customers.filter((c) => {
-      const matchesQuery = [c.firstName, c.lastName, c.email, c.phone, c.id]
+      const matchesQuery = [c.firstName, c.lastName, c.email, c.id]
         .join(' ')
         .toLowerCase()
         .includes(q);
