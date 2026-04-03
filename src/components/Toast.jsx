@@ -19,9 +19,9 @@ export default function Toast({ message, onDone }) {
   return (
     <div style={{
       position: 'fixed',
-      bottom: 28,
+      top: 28,
       left: '50%',
-      transform: `translateX(-50%) translateY(${visible ? 0 : 20}px)`,
+      transform: `translateX(-50%) translateY(${visible ? 0 : -20}px)`,
       opacity: visible ? 1 : 0,
       transition: 'opacity 0.25s ease, transform 0.25s ease',
       zIndex: 300,
