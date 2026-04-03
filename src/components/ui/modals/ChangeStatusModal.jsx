@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLAN_PRICE, STATUS_OPTIONS } from '../../../constants';
 import { formatRenewDate } from '../../../utils/formatters';
@@ -68,7 +68,7 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
             Change Account Status
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>

@@ -21,7 +21,7 @@ export default function Card({ title, icon, actions, children }) {
           display: 'flex',
           alignItems: 'center',
           gap: 8,
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'DM Sans', sans-serif",
           fontWeight: 700,
           fontSize: 13.5,
           color: 'var(--amp-navy)',

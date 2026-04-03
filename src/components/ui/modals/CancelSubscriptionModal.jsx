@@ -1,4 +1,3 @@
-import React from 'react';
 import { Btn } from '../Btn';
 
 export default function CancelSubscriptionModal({ customer, onConfirm, onClose }) {
@@ -12,7 +11,7 @@ export default function CancelSubscriptionModal({ customer, onConfirm, onClose }
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--red)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--text)', marginBottom: 6 }}>
             Cancel Subscription
           </div>
           <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.5 }}>
@@ -43,7 +42,7 @@ export default function CancelSubscriptionModal({ customer, onConfirm, onClose }
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
           <Btn variant="ghost" onClick={onClose}>Keep Account</Btn>
-          <Btn variant="danger" onClick={onConfirm}>Confirm Cancellation</Btn>
+          <Btn variant="danger" onClick={onConfirm} style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)' }}>Confirm Cancellation</Btn>
         </div>
       </div>
     </div>

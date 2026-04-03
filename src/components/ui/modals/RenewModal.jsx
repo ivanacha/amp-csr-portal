@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLANS, PLAN_PRICE } from '../../../constants';
 
@@ -58,7 +58,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
             Renew Subscription
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Btn } from '../Btn';
 
 const inputStyle = {
@@ -42,7 +42,7 @@ export default function CardModal({ card, onSave, onClose }) {
         style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 420, display: 'flex', flexDirection: 'column', gap: 16 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)' }}>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)' }}>
           Update Payment Method
         </div>
 

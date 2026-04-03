@@ -77,7 +77,7 @@ export default function CustomerListView({
           </svg>
           <input
             style={s.searchInput}
-            placeholder="Search name, email or ID"
+            placeholder="Search name, email or account ID"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
           />

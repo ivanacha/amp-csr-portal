@@ -32,7 +32,7 @@ export default function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, 
         icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
         actions={
           !isCancelled && (
-            <Btn variant="primary" onClick={() => setShowAddModal(true)}>
+            <Btn variant="secondary" onClick={() => setShowAddModal(true)}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
               Add Vehicle
             </Btn>
@@ -102,7 +102,7 @@ export default function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, 
             <div style={{ fontSize: 12.5, color: 'var(--red)' }}>This action cannot be undone.</div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <Btn variant="ghost" onClick={() => setConfirmDeleteId(null)}>Cancel</Btn>
-              <Btn variant="danger" onClick={handleConfirmDelete}>Remove Vehicle</Btn>
+              <Btn variant="danger" onClick={handleConfirmDelete} style={{ background: 'var(--red)', color: '#fff', borderColor: 'var(--red)' }}>Remove Vehicle</Btn>
             </div>
           </div>
         </div>

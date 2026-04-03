@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import StatusBadge from '../StatusBadge';
 import { Btn } from './Btn';
 import AccountCard from './cards/AccountCard';
@@ -8,6 +8,7 @@ import VehicleCard from './cards/VehicleCard';
 import PurchaseHistoryCard from './cards/PurchaseHistoryCard';
 import ChangeStatusModal from './modals/ChangeStatusModal';
 import RenewModal from './modals/RenewModal';
+import CancelSubscriptionModal from './modals/CancelSubscriptionModal';
 import { AVATAR_COLORS } from '../../data/mockData';
 import { initials } from '../../utils/helpers';
 
@@ -27,6 +28,15 @@ export default function CustomerProfileView({
   openRenewModal,
   closeRenewModal,
 }) {
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const isOverdue = customer.status === 'overdue';
+
+  function handleConfirmCancel() {
+    onUpdateCustomer({ status: 'cancelled', plan: '—', renew: null });
+    onUpdateVehicles([]);
+    setShowCancelModal(false);
+  }
+
   return (
     <div style={{ padding: '28px 32px', maxWidth: 1200, margin: '0 auto' }}>
       {/* Back button */}
@@ -60,14 +70,20 @@ export default function CustomerProfileView({
             <StatusBadge status={customer.status} />
           </div>
         </div>
-        <div style={{ marginLeft: 'auto' }}>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+          {isOverdue && (
+            <Btn variant="danger" onClick={() => setShowCancelModal(true)}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Cancel Subscription
+            </Btn>
+          )}
           {isRenewable ? (
             <Btn variant="primary" onClick={openRenewModal}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
               Renew Subscription
             </Btn>
           ) : (
-            <Btn variant="secondary" onClick={openStatusModal}>
+            <Btn variant="primary" onClick={openStatusModal}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
               Change Status
             </Btn>
@@ -93,6 +109,13 @@ export default function CustomerProfileView({
           onUpdateVehicles={onUpdateVehicles}
           onAddTransaction={onAddTransaction}
           onClose={closeStatusModal}
+        />
+      )}
+      {showCancelModal && (
+        <CancelSubscriptionModal
+          customer={customer}
+          onConfirm={handleConfirmCancel}
+          onClose={() => setShowCancelModal(false)}
         />
       )}
 

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLANS, PLAN_PRICE } from '../../../constants';
-import { formatRenewDate } from '../../../utils/formatters';
 
 const SELECT_STYLE = {
   background: 'var(--surface-2)',
@@ -63,7 +62,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
             Change Plan
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
@@ -114,7 +113,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
           <Btn variant="ghost" onClick={onClose}>Cancel</Btn>
-          <Btn variant="primary" onClick={handleConfirm} style={{ opacity: noChange ? 0.5 : 1 }}>
+          <Btn variant="primary" onClick={handleConfirm}>
             {noChange ? 'No Change' : isDowngrade ? 'Confirm & Refund' : 'Confirm & Charge'}
           </Btn>
         </div>
