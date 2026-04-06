@@ -21,7 +21,7 @@ export default function Card({ title, icon, actions, children }) {
         justifyContent: 'space-between',
         padding: '14px 20px',
         borderBottom: '1px solid var(--border)',
-        background: 'var(--surface-2)',
+        background: '#E2E8F2',
       }}>
         <div style={{
           display: 'flex',
