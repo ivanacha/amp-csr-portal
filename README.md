@@ -1,12 +1,12 @@
 # AMP CSR Portal
 
-A Customer Service Representative portal for AMP — a membership and loyalty platform for car washes.
+A Customer Service Representative portal for AMP memberships.
 
 ## Overview
 
-The AMP CSR Portal is a fully client-side web application built as a response to the AMP take-home challenge. It gives Customer Service Representatives a single, unified interface to look up any registered AMP customer, view their complete account details, and take action on their behalf in real time — no backend required.
+The AMP CSR Portal is a fully client-side web application built as a response to the AMP take-home challenge. It gives Customer Service Representatives a single, unified interface to look up any registered AMP customer, view their complete account details, and take action on their behalf in real time (fronend only).
 
-Built with **React 18** and **Vite 5** (no TypeScript), the app manages 25 mock customers spanning all four account states (active, paused, overdue, and canceled), each with associated vehicle subscriptions and a varied purchase history. The UI is styled using a custom AMP cobalt/navy design system — CSS custom properties, DM Sans typography, and inline styles throughout — with no external component or CSS libraries.
+Built with **React 18** and **Vite 5** (no TypeScript), the app manages 25 mock customers spanning all four account states (active, paused, overdue, and canceled), each with associated vehicle subscriptions and a varied purchase history. The UI is styled using a custom AMP cobalt/navy design system (CSS custom properties, DM Sans typography, and inline styles throughout) with no external component or CSS libraries.
 
 ---
 
@@ -23,11 +23,11 @@ Built with **React 18** and **Vite 5** (no TypeScript), the app manages 25 mock 
 
 ### Beyond Requirements
 
-- **Subscription management** — Change Plan (with live proration preview), Change Status, Renew Subscription, and Cancel Subscription with a destructive-action confirmation modal
-- **Status-aware UI** — overdue accounts surface Cancel and Renew buttons in the hero; paused accounts hide Change Plan; canceled accounts surface Renew only
-- **Purchase History** — transaction list with type icons (subscription, wash, coupon, refund) and a running total that correctly subtracts credits and refunds, floored at $0.00
-- **Form validation** — red border and label highlighting on empty required fields, with an inline error prompt, across all edit and add forms (account, payment card, vehicle)
-- **Toast notifications** — slide-in confirmation from the top of the screen on every account or subscription change
+- **Subscription management**:  Change Plan (with live proration preview), Change Status, Renew Subscription, and Cancel Subscription with a destructive-action confirmation modal
+- **Status-aware UI**:  overdue accounts surface Cancel and Renew buttons in the hero; paused accounts hide Change Plan; canceled accounts surface Renew only
+- **Purchase History**:  transaction list with type icons (subscription, wash, coupon, refund) and a running total that correctly subtracts credits and refunds, floored at $0.00
+- **Form validation**:  red border and label highlighting on empty required fields, with an inline error prompt, across all edit and add forms (account, payment card, vehicle)
+- **Toast notifications**:  slide-in confirmation from the top of the screen on every account or subscription change
 
 ---
 
@@ -67,7 +67,7 @@ amp-csr-portal/
     ├── data/
     │   └── mockData.js                  # 25 customers, vehicle data, transaction history
     ├── services/
-    │   └── customerService.js           # Async data layer — mock-backed, API-ready
+    │   └── customerService.js           # Async data layer (mock-backed), API-ready
     ├── utils/
     │   ├── formatters.js                # formatPhone, formatPlate, formatRenewDate
     │   └── helpers.js                   # initials, sortCustomers, calculateProration
@@ -82,7 +82,7 @@ amp-csr-portal/
     │   ├── CustomerList.jsx             # Container: wires hook → CustomerListView
     │   ├── CustomerProfile.jsx          # Container: wires hook → CustomerProfileView
     │   └── ui/
-    │       ├── Btn.jsx                  # Button — primary / secondary / ghost / danger variants
+    │       ├── Btn.jsx                  # Button: primary / secondary / ghost / danger variants
     │       ├── Card.jsx                 # Titled section wrapper (header + body)
     │       ├── Field.jsx                # Read/edit toggle input with validation error state
     │       ├── CustomerListView.jsx     # Pure UI: search bar, filters, sortable table, pagination
@@ -119,7 +119,7 @@ The codebase is organized into five explicit layers, each with a single responsi
 
 ### 2. Service Layer
 
-`services/customerService.js` wraps all data access in async functions with a 150 ms simulated network delay. Every function — `fetchCustomers`, `fetchCustomerById`, `fetchVehicles`, `fetchTransactions`, `updateCustomer`, `updateVehicles`, `createTransaction`, and more — returns a Promise. Each function body can be swapped for a real `axios` call without touching any component.
+`services/customerService.js` wraps all data access in async functions with a 150 ms simulated network delay. Every function (e.g. `fetchCustomers`, `fetchCustomerById`, `fetchVehicles`, `fetchTransactions`, `updateCustomer`, `updateVehicles`, `createTransaction`, and more) returns a Promise. Each function body can be swapped for a real `axios` call without touching any component.
 
 ### 3. Custom Hooks
 
@@ -133,7 +133,7 @@ The codebase is organized into five explicit layers, each with a single responsi
 
 ### 5. Presentational Layer
 
-- **Views** (`CustomerListView`, `CustomerProfileView`): full-page layouts that receive all data and handlers as props — no internal state beyond local hover tracking.
+- **Views** (`CustomerListView`, `CustomerProfileView`): full-page layouts that receive all data and handlers as props (no internal state beyond local hover tracking).
 - **Cards** (`AccountCard`, `PaymentCard`, `PlanCard`, `VehicleCard`, `PurchaseHistoryCard`): section-level components that own their own local form and modal-open state, and emit changes via `onSave`-style callbacks.
 - **Modals**: self-contained forms that validate on submit, call `onSave` on success, and close via `onClose`. All required fields are enforced with red highlighting before the save is allowed.
 - **Primitives** (`Btn`, `Card`, `Field`, `StatusBadge`): zero-logic, zero-state building blocks reused throughout the app.
@@ -144,4 +144,4 @@ State is strictly top-down. `App.jsx` owns the customer list, vehicle data, and 
 
 ### Styling
 
-The design system is defined entirely in `globals.css` via CSS custom properties — brand palette (cobalt, navy, sky blue), status colors (green, yellow, red), surface and border tokens, shadow definitions, and border radii. All component styles are applied as inline style objects. There are no CSS modules, styled-components, or third-party UI libraries.
+The design system is defined entirely in `globals.css` via CSS custom properties for brand palette (cobalt, navy, sky blue), status colors (green, yellow, red), surface and border tokens, shadow definitions, and border radii. All component styles are applied as inline style objects. There are no CSS modules, styled-components, or third-party UI libraries.
