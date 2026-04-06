@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Confirmation modal that warns the CSR of permanent consequences before canceling a customer's subscription.
+ */
+
 import { Btn } from '../Btn';
 
 export default function CancelSubscriptionModal({ customer, onConfirm, onClose }) {

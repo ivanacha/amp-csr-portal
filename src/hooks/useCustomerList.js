@@ -1,7 +1,14 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Custom hook that manages search, filter, sort, pagination, and hover state for the customer list view.
+ */
+
 import { useState, useMemo, useEffect } from 'react';
 import { PAGE_SIZE } from '../constants';
 import { sortCustomers } from '../utils/helpers';
 
+/** Encapsulates all state and derived data for the searchable, sortable, paginated customer list. */
 export function useCustomerList(customers) {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
@@ -12,6 +19,7 @@ export function useCustomerList(customers) {
 
   useEffect(() => { setCurrentPage(1); }, [query, activeFilter, sortKey, sortDir]);
 
+  /** Toggles sort direction if the same key is clicked, otherwise switches to the new key ascending. */
   function handleSort(key) {
     if (key === sortKey) {
       setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -21,6 +29,7 @@ export function useCustomerList(customers) {
     }
   }
 
+  /** Filters customers by query text and active status filter, then applies the current sort. */
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
     const base = customers.filter((c) => {

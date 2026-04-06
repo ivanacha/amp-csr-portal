@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Card component that displays a customer's masked payment method and opens the CardModal for updates.
+ */
+
 import React, { useState } from 'react';
 import Card from '../Card';
 import { Btn } from '../Btn';

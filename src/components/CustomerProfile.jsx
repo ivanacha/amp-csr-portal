@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Container component that wires the useCustomerProfile hook to CustomerProfileView, passing modal state and renewal eligibility as props.
+ */
+
 import { useCustomerProfile } from '../hooks/useCustomerProfile';
 import CustomerProfileView from './ui/CustomerProfileView';
 

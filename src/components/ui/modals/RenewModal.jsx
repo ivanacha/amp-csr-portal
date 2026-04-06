@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Modal for renewing an overdue or canceled subscription — handles plan selection for canceled accounts and charges the outstanding balance.
+ */
+
 import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLANS, PLAN_PRICE } from '../../../constants';
@@ -28,6 +34,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
   const total = price * vehicleCount;
   const countLabel = vehicleCount > 1 ? ` (×${vehicleCount})` : '';
 
+  /** Reactivates the subscription, updates vehicle plans if not canceled, and records the renewal transaction. */
   function handleConfirm() {
     const today = new Date();
     const renewDate = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());

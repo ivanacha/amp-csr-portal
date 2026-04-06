@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Reusable labeled field component that toggles between a read-only display and an editable input.
+ */
+
 import React from 'react';
 
 export default function Field({ label, value, editing, inputProps }) {

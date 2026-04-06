@@ -1,5 +1,12 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Reusable button primitives (Btn and IconBtn) with variant-based styling used throughout the app's UI.
+ */
+
 import React from 'react';
 
+// Maps variant names to their inline style tokens
 const VARIANTS = {
   primary:   { background: 'var(--amp-cobalt)', color: '#fff',           borderColor: 'var(--amp-cobalt)' },
   secondary: { background: '#fff',              color: 'var(--amp-cobalt)', borderColor: 'var(--border)' },

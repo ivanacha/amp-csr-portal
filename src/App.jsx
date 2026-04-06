@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Root application component that manages top-level view routing, customer state, and toast notifications for the CSR portal.
+ */
+
 import React, { useState, useCallback } from 'react';
 import './styles/globals.css';
 import Header from './components/Header';
@@ -10,13 +16,7 @@ import {
   vehicleData as initialVehicleData,
   transactionData,
 } from './data/mockData';
-
-const STATUS_TOAST = {
-  active: 'This account is active',
-  paused: 'This account is paused',
-  canceled: 'This account is canceled',
-  overdue: 'This account is overdue',
-};
+import { STATUS_TOAST } from './constants';
 
 export default function App() {
   const [view, setView] = useState('list');
@@ -27,6 +27,7 @@ export default function App() {
   const [extraTransactions, setExtraTransactions] = useState({});
   const [toast, setToast] = useState(null);
 
+  /** Triggers a toast notification, using a timestamp key to re-mount it on repeated calls. */
   const showToast = useCallback((message) => {
     setToast({ message, key: Date.now() });
   }, []);
@@ -41,6 +42,7 @@ export default function App() {
           { label: selectedCustomer ? `${selectedCustomer.firstName} ${selectedCustomer.lastName}` : '—', view: 'profile' },
         ];
 
+  /** Navigates back to the list view when the Customers breadcrumb is clicked. */
   function handleCrumbClick(crumb) {
     if (crumb.view === 'list') {
       setView('list');
@@ -53,6 +55,7 @@ export default function App() {
     setView('profile');
   }
 
+  /** Merges field updates into the selected customer, syncing vehicle plans and showing a status/plan toast as needed. */
   function updateCustomer(fields) {
     setCustomers((prev) => prev.map((c) => (c.id === selectedId ? { ...c, ...fields } : c)));
     if ('plan' in fields) {
@@ -68,6 +71,7 @@ export default function App() {
     }
   }
 
+  /** Replaces the selected customer's vehicle list and updates the vehicle count on the customer record. */
   function updateVehicles(newVehicles) {
     setVehicleData((prev) => ({ ...prev, [selectedId]: newVehicles }));
     setCustomers((prev) =>
@@ -75,6 +79,7 @@ export default function App() {
     );
   }
 
+  /** Prepends a new transaction to the selected customer's extra transactions list. */
   function addTransaction(tx) {
     setExtraTransactions((prev) => ({
       ...prev,

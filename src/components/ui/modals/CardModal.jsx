@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Modal form for updating a customer's payment card details (number, name, expiry, CSC, ZIP).
+ */
+
 import { useState } from 'react';
 import { Btn } from '../Btn';
 

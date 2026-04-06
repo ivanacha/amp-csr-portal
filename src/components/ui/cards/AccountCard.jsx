@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Card component for viewing and inline-editing a customer's account information (name, email, phone).
+ */
+
 import React, { useState } from 'react';
 import Card from '../Card';
 import { Btn } from '../Btn';
@@ -13,6 +19,7 @@ export default function AccountCard({ customer, onSave }) {
     phone:     customer.phone,
   });
 
+  // Reset form state whenever the viewed customer changes
   React.useEffect(() => {
     setForm({
       firstName: customer.firstName,
@@ -25,6 +32,7 @@ export default function AccountCard({ customer, onSave }) {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  /** Discards unsaved changes and reverts form to the current customer values. */
   function handleCancel() {
     setEditing(false);
     setForm({
@@ -35,6 +43,7 @@ export default function AccountCard({ customer, onSave }) {
     });
   }
 
+  /** Formats the phone field then persists the form values via the onSave callback. */
   function handleSave() {
     onSave({ ...form, phone: formatPhone(form.phone) });
     setEditing(false);

@@ -1,9 +1,17 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: General-purpose helper functions for customer data manipulation, sorting, and plan proration calculations.
+ */
+
 import { PLAN_PRICE } from '../constants';
 
+/** Returns the two-letter uppercase initials from a customer's first and last name. */
 export function initials(customer) {
   return (customer.firstName[0] + customer.lastName[0]).toUpperCase();
 }
 
+/** Sorts a customer list by the given key and direction ('asc' | 'desc'), handling numeric and string comparisons. */
 export function sortCustomers(list, key, dir) {
   return [...list].sort((a, b) => {
     let av, bv;

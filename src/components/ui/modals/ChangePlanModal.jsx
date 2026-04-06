@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Modal for selecting a new subscription plan, showing a prorated charge or refund preview before confirming the change.
+ */
+
 import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLANS, PLAN_PRICE } from '../../../constants';
@@ -31,6 +37,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
   const isDowngrade = totalDiff < 0;
   const noChange = selectedPlan === customer.plan;
 
+  /** Applies the plan change to the customer and all vehicles, then records a charge or refund transaction. */
   function handleConfirm() {
     if (noChange) { onClose(); return; }
     const today = new Date();

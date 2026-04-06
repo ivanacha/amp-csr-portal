@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Reusable card shell component providing a consistent titled, bordered container for profile sections.
+ */
+
 import React from 'react';
 
 export default function Card({ title, icon, actions, children }) {

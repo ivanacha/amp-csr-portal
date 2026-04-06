@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Container component that wires the useCustomerList hook to the CustomerListView, bridging state logic and presentation.
+ */
+
 import { useCustomerList } from '../hooks/useCustomerList';
 import CustomerListView from './ui/CustomerListView';
 

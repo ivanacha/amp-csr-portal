@@ -1,8 +1,15 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Modal for changing a customer's account status (active, paused, canceled) with inline confirmation and side-effect handling per transition.
+ */
+
 import { useState } from 'react';
 import { Btn } from '../Btn';
 import { PLAN_PRICE, STATUS_OPTIONS } from '../../../constants';
 import { formatRenewDate } from '../../../utils/formatters';
 
+/** Returns a human-readable description of what selecting a given status will do, context-aware of the current state. */
 function getStatusDescription(optValue, effectiveStatus) {
   if (optValue === 'active') {
     if (effectiveStatus === 'paused') return 'Reactivates account — subscription fee charged immediately, renewal set to today';
@@ -23,11 +30,13 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
   const isCanceled = customer.status === 'canceled';
   const effectiveStatus = customer.status === 'overdue' ? 'active' : customer.status;
 
+  /** Toggles the pending selection; no-ops if the status is already current or account is canceled. */
   function handleSelect(optValue) {
     if (optValue === effectiveStatus || isCanceled) return;
     setPendingStatus(pendingStatus === optValue ? null : optValue);
   }
 
+  /** Applies the pending status transition, including charging/crediting and updating vehicles as needed. */
   function handleConfirm() {
     if (!pendingStatus) return;
     const today = new Date();

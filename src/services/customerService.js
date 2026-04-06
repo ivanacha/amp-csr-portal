@@ -1,4 +1,10 @@
 /**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Async service layer that abstracts all customer data operations, currently backed by mock data with drop-in HTTP replacement points.
+ */
+
+/**
  * customerService — async API layer for customer data operations.
  *
  * Currently wraps the in-memory mock data. Replace each function body

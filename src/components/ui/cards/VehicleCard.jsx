@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Card component for managing a customer's vehicle subscriptions — supports adding, editing, and removing vehicles with confirmation.
+ */
+
 import React, { useState } from 'react';
 import Card from '../Card';
 import { Btn, IconBtn } from '../Btn';
@@ -8,16 +14,19 @@ export default function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, 
   const [showAddModal, setShowAddModal] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
+  /** Merges edited form data into the matching vehicle entry. */
   function handleSaveEdit(form) {
     onUpdateVehicles(vehicles.map((v) => (v.id === editingVehicle.id ? { ...v, ...form } : v)));
     setEditingVehicle(null);
   }
 
+  /** Appends a new vehicle with a generated ID and the customer's current plan. */
   function handleAdd(form) {
     onUpdateVehicles([...vehicles, { id: `v_${Date.now()}`, plan: customerPlan, ...form }]);
     setShowAddModal(false);
   }
 
+  /** Removes the vehicle pending deletion from the list. */
   function handleConfirmDelete() {
     onUpdateVehicles(vehicles.filter((x) => x.id !== confirmDeleteId));
     setConfirmDeleteId(null);

@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Card component that displays the customer's active subscription plan, monthly charge, and renewal date, with a plan-change action.
+ */
+
 import { useState } from 'react';
 import Card from '../Card';
 import { Btn } from '../Btn';
@@ -10,6 +16,7 @@ export default function PlanCard({ customer, vehicles, onUpdateCustomer, onUpdat
   const isOverdue = customer.status === 'overdue';
   const isPaused = customer.status === 'paused';
   const isCanceled = customer.status === 'canceled';
+  // Hide the change-plan button for statuses where plan changes are not allowed
   const showChangePlanBtn = !isCanceled && !isOverdue && !isPaused;
   const monthlyCharge = (PLAN_PRICE[customer.plan] || 0) * (vehicles.length || 0);
 

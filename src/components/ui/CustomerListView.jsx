@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Pure presentational component that renders the full customer list UI — search bar, filter pills, sortable table, and pagination.
+ */
+
 import React from 'react';
 import StatusBadge from '../StatusBadge';
 import { AVATAR_COLORS } from '../../data/mockData';

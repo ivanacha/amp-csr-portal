@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Centralized constants for subscription plans, statuses, pagination, and table column definitions used across the app.
+ */
+
 export const PLANS = ['Basic', 'Premium', 'Unlimited Pro'];
 
 export const PLAN_PRICE = {
@@ -26,6 +32,13 @@ export const STATUS_FILTERS = [
   { value: 'overdue',   label: 'Overdue' },
   { value: 'canceled', label: 'Canceled' },
 ];
+
+export const STATUS_TOAST = {
+  active: 'This account is active',
+  paused: 'This account is paused',
+  canceled: 'This account is canceled',
+  overdue: 'This account is overdue',
+};
 
 export const PAGE_SIZE = 10;
 

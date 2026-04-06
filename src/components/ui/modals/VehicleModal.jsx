@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Modal form for adding or editing a vehicle's plate, year, make, model, and color on a customer account.
+ */
+
 import React, { useState } from 'react';
 import { Btn } from '../Btn';
 import { formatPlate } from '../../../utils/formatters';
@@ -34,6 +40,7 @@ export default function VehicleModal({ vehicle, onSave, onClose }) {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  /** Normalizes the plate format and coerces year to an integer before calling onSave. */
   function handleSave() {
     onSave({
       plate: formatPlate(form.plate),

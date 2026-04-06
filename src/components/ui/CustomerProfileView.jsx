@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Presentational component that renders the full customer profile layout including hero header, action buttons, and all detail cards.
+ */
+
 import { useState } from 'react';
 import StatusBadge from '../StatusBadge';
 import { Btn } from './Btn';
@@ -31,6 +37,7 @@ export default function CustomerProfileView({
   const [showCancelModal, setShowCancelModal] = useState(false);
   const isOverdue = customer.status === 'overdue';
 
+  /** Cancels the subscription by clearing plan/vehicles and closing the confirmation modal. */
   function handleConfirmCancel() {
     onUpdateCustomer({ status: 'canceled', plan: '—', renew: null });
     onUpdateVehicles([]);

@@ -1,3 +1,9 @@
+/**
+ * Author: Ivan Acha
+ * Created: April 2026
+ * Purpose: Card component that renders the last 90 days of transactions with type-based icons and a running net total.
+ */
+
 import React from 'react';
 import Card from '../Card';
 
@@ -16,6 +22,7 @@ const TX_STYLE = {
 };
 
 export default function PurchaseHistoryCard({ transactions }) {
+  /** Sums accepted transactions, subtracting credits, and floors at zero for display. */
   const totalSpent = transactions
     .filter((t) => t.accepted === true)
     .reduce((sum, t) => {
