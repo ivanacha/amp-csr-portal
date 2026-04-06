@@ -2,6 +2,8 @@
 
 A Customer Service Representative portal for AMP memberships.
 
+<img width="1352" height="797" alt="App_Screenshot" src="https://github.com/user-attachments/assets/e79d95da-70dd-4198-9867-3fc62db4ece1" />
+
 ## Overview
 
 The AMP CSR Portal is a fully client-side web application built as a response to the AMP take-home challenge. It gives Customer Service Representatives a single, unified interface to look up any registered AMP customer, view their complete account details, and take action on their behalf in real time (fronend only).
