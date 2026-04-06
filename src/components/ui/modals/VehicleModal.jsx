@@ -4,7 +4,7 @@
  * Purpose: Modal form for adding or editing a vehicle's plate, year, make, model, and color on a customer account.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Btn } from '../Btn';
 import { formatPlate } from '../../../utils/formatters';
 
