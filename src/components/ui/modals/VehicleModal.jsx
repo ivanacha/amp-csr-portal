@@ -8,26 +8,28 @@ import { useState } from 'react';
 import { Btn } from '../Btn';
 import { formatPlate } from '../../../utils/formatters';
 
-const inputStyle = {
-  background: 'var(--surface-2)',
-  border: '1.5px solid var(--amp-sky)',
-  borderRadius: 'var(--radius-sm)',
-  padding: '7px 10px',
-  fontSize: 13.5,
-  color: 'var(--text)',
-  outline: 'none',
-  width: '100%',
-};
-
 const labelStyle = {
   fontFamily: "'DM Mono', monospace",
   fontSize: 10,
   letterSpacing: '0.8px',
   textTransform: 'uppercase',
-  color: 'var(--text-3)',
   marginBottom: 5,
   display: 'block',
 };
+
+/** Returns the input border style, switching to red when the field has a validation error. */
+function inputStyle(error) {
+  return {
+    background: 'var(--surface-2)',
+    border: `1.5px solid ${error ? 'var(--red)' : 'var(--amp-sky)'}`,
+    borderRadius: 'var(--radius-sm)',
+    padding: '7px 10px',
+    fontSize: 13.5,
+    color: 'var(--text)',
+    outline: 'none',
+    width: '100%',
+  };
+}
 
 export default function VehicleModal({ vehicle, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -37,14 +39,26 @@ export default function VehicleModal({ vehicle, onSave, onClose }) {
     model: vehicle?.model ?? '',
     color: vehicle?.color ?? '',
   });
+  const [errors, setErrors] = useState({});
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  /** Clears the error for a field as soon as the user starts typing in it. */
+  const set = (key) => (e) => {
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: false }));
+  };
 
-  /** Normalizes the plate format and coerces year to an integer before calling onSave. */
+  /** Validates all required fields; highlights missing ones in red and blocks save if any are empty. */
   function handleSave() {
+    const required = ['plate', 'year', 'make', 'model', 'color'];
+    const newErrors = {};
+    required.forEach((key) => { if (!String(form[key]).trim()) newErrors[key] = true; });
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     onSave({
       plate: formatPlate(form.plate),
-      year:  form.year ? parseInt(form.year, 10) : '',
+      year:  parseInt(form.year, 10),
       make:  form.make,
       model: form.model,
       color: form.color,
@@ -65,28 +79,34 @@ export default function VehicleModal({ vehicle, onSave, onClose }) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={labelStyle}>License Plate</label>
-          <input style={inputStyle} value={form.plate} onChange={set('plate')} placeholder="e.g. ABC-1234" />
+          <label style={{ ...labelStyle, color: errors.plate ? 'var(--red)' : 'var(--text-3)' }}>License Plate</label>
+          <input style={inputStyle(errors.plate)} value={form.plate} onChange={set('plate')} placeholder="e.g. ABC-1234" />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Year</label>
-            <input style={inputStyle} value={form.year} onChange={set('year')} placeholder="e.g. 2022" type="number" min="1980" max="2030" />
+            <label style={{ ...labelStyle, color: errors.year ? 'var(--red)' : 'var(--text-3)' }}>Year</label>
+            <input style={inputStyle(errors.year)} value={form.year} onChange={set('year')} placeholder="e.g. 2022" type="number" min="1980" max="2030" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Make</label>
-            <input style={inputStyle} value={form.make} onChange={set('make')} placeholder="e.g. Honda" />
+            <label style={{ ...labelStyle, color: errors.make ? 'var(--red)' : 'var(--text-3)' }}>Make</label>
+            <input style={inputStyle(errors.make)} value={form.make} onChange={set('make')} placeholder="e.g. Honda" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Model</label>
-            <input style={inputStyle} value={form.model} onChange={set('model')} placeholder="e.g. Civic" />
+            <label style={{ ...labelStyle, color: errors.model ? 'var(--red)' : 'var(--text-3)' }}>Model</label>
+            <input style={inputStyle(errors.model)} value={form.model} onChange={set('model')} placeholder="e.g. Civic" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={labelStyle}>Color</label>
-            <input style={inputStyle} value={form.color} onChange={set('color')} placeholder="e.g. Blue" />
+            <label style={{ ...labelStyle, color: errors.color ? 'var(--red)' : 'var(--text-3)' }}>Color</label>
+            <input style={inputStyle(errors.color)} value={form.color} onChange={set('color')} placeholder="e.g. Blue" />
           </div>
         </div>
+
+        {Object.keys(errors).length > 0 && (
+          <div style={{ fontSize: 12.5, color: 'var(--red)', marginTop: -4 }}>
+            Please fill in all required fields before saving.
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 4 }}>
           <Btn variant="ghost" onClick={onClose}>Cancel</Btn>

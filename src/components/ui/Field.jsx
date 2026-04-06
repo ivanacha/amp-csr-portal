@@ -6,7 +6,8 @@
 
 import React from 'react';
 
-export default function Field({ label, value, editing, inputProps }) {
+/** error prop turns the input border red to signal a required field is missing. */
+export default function Field({ label, value, editing, inputProps, error }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       <div style={{
@@ -14,7 +15,7 @@ export default function Field({ label, value, editing, inputProps }) {
         fontSize: 10,
         letterSpacing: '0.8px',
         textTransform: 'uppercase',
-        color: 'var(--text-3)',
+        color: error ? 'var(--red)' : 'var(--text-3)',
       }}>
         {label}
       </div>
@@ -22,7 +23,7 @@ export default function Field({ label, value, editing, inputProps }) {
         <input
           style={{
             background: 'var(--surface-2)',
-            border: '1.5px solid var(--amp-sky)',
+            border: `1.5px solid ${error ? 'var(--red)' : 'var(--amp-sky)'}`,
             borderRadius: 'var(--radius-sm)',
             padding: '7px 10px',
             fontSize: 13.5,

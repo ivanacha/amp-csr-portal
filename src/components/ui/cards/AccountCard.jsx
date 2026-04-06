@@ -18,8 +18,9 @@ export default function AccountCard({ customer, onSave }) {
     email:     customer.email,
     phone:     customer.phone,
   });
+  const [errors, setErrors] = useState({});
 
-  // Reset form state whenever the viewed customer changes
+  // Reset form state and errors whenever the viewed customer changes
   React.useEffect(() => {
     setForm({
       firstName: customer.firstName,
@@ -28,13 +29,19 @@ export default function AccountCard({ customer, onSave }) {
       phone:     customer.phone,
     });
     setEditing(false);
+    setErrors({});
   }, [customer.id]);
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  /** Clears the error for a field as soon as the user starts typing in it. */
+  const set = (key) => (e) => {
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: false }));
+  };
 
   /** Discards unsaved changes and reverts form to the current customer values. */
   function handleCancel() {
     setEditing(false);
+    setErrors({});
     setForm({
       firstName: customer.firstName,
       lastName:  customer.lastName,
@@ -43,10 +50,18 @@ export default function AccountCard({ customer, onSave }) {
     });
   }
 
-  /** Formats the phone field then persists the form values via the onSave callback. */
+  /** Validates all required fields; highlights missing ones in red and blocks save if any are empty. */
   function handleSave() {
+    const required = ['firstName', 'lastName', 'email', 'phone'];
+    const newErrors = {};
+    required.forEach((key) => { if (!form[key].trim()) newErrors[key] = true; });
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     onSave({ ...form, phone: formatPhone(form.phone) });
     setEditing(false);
+    setErrors({});
   }
 
   return (
@@ -68,16 +83,21 @@ export default function AccountCard({ customer, onSave }) {
       }
     >
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <Field label="First Name" value={customer.firstName} editing={editing} inputProps={{ value: form.firstName, onChange: set('firstName') }} />
-        <Field label="Last Name"  value={customer.lastName}  editing={editing} inputProps={{ value: form.lastName,  onChange: set('lastName') }} />
+        <Field label="First Name" value={customer.firstName} editing={editing} error={!!errors.firstName} inputProps={{ value: form.firstName, onChange: set('firstName') }} />
+        <Field label="Last Name"  value={customer.lastName}  editing={editing} error={!!errors.lastName}  inputProps={{ value: form.lastName,  onChange: set('lastName') }} />
         <div style={{ gridColumn: '1/-1' }}>
-          <Field label="Email Address" value={customer.email} editing={editing} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
+          <Field label="Email Address" value={customer.email} editing={editing} error={!!errors.email} inputProps={{ value: form.email, onChange: set('email'), type: 'email' }} />
         </div>
-        <Field label="Phone" value={customer.phone} editing={editing} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
+        <Field label="Phone" value={customer.phone} editing={editing} error={!!errors.phone} inputProps={{ value: form.phone, onChange: set('phone'), type: 'tel' }} />
         <div style={{ gridColumn: '1/-1' }}>
           <Field label="Account ID" value={<span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5 }}>{customer.id}</span>} editing={false} />
         </div>
       </div>
+      {Object.keys(errors).length > 0 && (
+        <div style={{ marginTop: 8, fontSize: 12.5, color: 'var(--red)' }}>
+          Please fill in all required fields before saving.
+        </div>
+      )}
     </Card>
   );
 }
