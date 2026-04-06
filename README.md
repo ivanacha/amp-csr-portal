@@ -6,7 +6,7 @@ A Customer Service Representative portal for AMP memberships.
 
 ## Overview
 
-The AMP CSR Portal is a fully client-side web application built as a response to the AMP take-home challenge. It gives Customer Service Representatives a single, unified interface to look up any registered AMP customer, view their complete account details, and take action on their behalf in real time (fronend only).
+The AMP CSR Portal is a fully client-side web application built as a response to the AMP take-home challenge. It gives Customer Service Representatives a single, unified interface to look up any registered AMP customer, view their complete account details, and take action on their behalf in real time (frontend only).
 
 Built with **React 18** and **Vite 5** (no TypeScript), the app manages 25 mock customers spanning all four account states (active, paused, overdue, and canceled), each with associated vehicle subscriptions and a varied purchase history. The UI is styled using a custom AMP cobalt/navy design system (CSS custom properties, DM Sans typography, and inline styles throughout) with no external component or CSS libraries.
 
