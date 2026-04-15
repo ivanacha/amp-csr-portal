@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-/** error prop turns the input border red to signal a required field is missing. */
+/** Field component for displaying labeled input fields. Error prop turns the input border red to signal a required field is missing. */
 export default function Field({ label, value, editing, inputProps, error }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>

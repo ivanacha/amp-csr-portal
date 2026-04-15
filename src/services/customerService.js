@@ -17,14 +17,16 @@ import {
   transactionData as mockTransactionData,
 } from '../data/mockData';
 
-// Simulate network latency for realistic async behavior during development
+// Simulate network latency for realistic async behavior during development. 
 const delay = (ms = 150) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// In production: GET /api/customers e.g. axios.get('/api/customers') 
 export async function fetchCustomers() {
   await delay();
   return [...mockCustomers];
 }
 
+// In production: GET /api/customers/:id
 export async function fetchCustomerById(id) {
   await delay();
   const customer = mockCustomers.find((c) => c.id === id);
@@ -32,17 +34,19 @@ export async function fetchCustomerById(id) {
   return { ...customer };
 }
 
+// In production: GET /api/customers/:id/vehicles e.g. axios.get(`/api/customers/${id}/vehicles`)
 export async function fetchVehicles(customerId) {
   await delay();
   return [...(mockVehicleData[customerId] || [])];
 }
 
+// In production: GET /api/customers/:id/transactions
 export async function fetchTransactions(customerId) {
   await delay();
   return [...(mockTransactionData[customerId] || [])];
 }
 
-// In production: PATCH /api/customers/:id
+// In production: PATCH /api/customers/:id 
 export async function updateCustomer(id, fields) {
   await delay();
   return { id, ...fields };
@@ -54,19 +58,19 @@ export async function createCustomer(data) {
   return { id: `AMP-${Date.now()}`, ...data };
 }
 
-// In production: DELETE /api/customers/:id
+// In production: DELETE /api/customers/:id e.g. axios.delete(`/api/customers/${id}`)
 export async function deleteCustomer(id) {
   await delay();
   return { id };
 }
 
-// In production: PUT /api/customers/:id/vehicles
+// In production: PUT /api/customers/:id/vehicles 
 export async function updateVehicles(customerId, vehicles) {
   await delay();
   return vehicles;
 }
 
-// In production: POST /api/customers/:id/transactions
+// In production: POST /api/customers/:id/transactions 
 export async function createTransaction(customerId, transaction) {
   await delay();
   return transaction;

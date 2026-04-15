@@ -15,12 +15,17 @@ export function initials(customer) {
 export function sortCustomers(list, key, dir) {
   return [...list].sort((a, b) => {
     let av, bv;
+    // Special handling for 'name' (sort by first name) and 'vehicles' (sort by vehicle count), otherwise sort by the specified key. Nullish values are treated as empty strings.
     if (key === 'name') { av = a.firstName; bv = b.firstName; }
     else if (key === 'vehicles') { av = a.vehicles; bv = b.vehicles; }
     else { av = a[key] ?? ''; bv = b[key] ?? ''; }
+
+    // Compare numeric values directly, and strings using localeCompare for proper alphabetical sorting. Nullish values are treated as empty strings.
     const cmp = typeof av === 'number'
       ? av - bv
       : String(av).localeCompare(String(bv));
+
+    // Return the comparison result, reversing it if the direction is descending.
     return dir === 'asc' ? cmp : -cmp;
   });
 }

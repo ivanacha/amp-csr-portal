@@ -3,16 +3,19 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function Toast({ message, onDone }) {
   const [visible, setVisible] = useState(false);
   const timerRef = useRef(null);
+  const doneTimerRef = useRef(null);
 
+  // Triggers the entrance animation on mount, then starts a timer to trigger the exit animation and call onDone after 3 seconds. Cleans up timers on unmount.
   useEffect(() => {
     const raf = requestAnimationFrame(() => setVisible(true));
     timerRef.current = setTimeout(() => {
       setVisible(false);
-      setTimeout(onDone, 350);
+      doneTimerRef.current = setTimeout(onDone, 350);
     }, 3000);
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(timerRef.current);
+      clearTimeout(doneTimerRef.current);
     };
   }, []);
 

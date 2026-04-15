@@ -13,6 +13,7 @@ function initials(c) {
   return (c.firstName[0] + c.lastName[0]).toUpperCase();
 }
 
+// Styles object for inline styling of the customer list view components. This keeps all styles in one place and allows for dynamic styling based on inherited props.
 const s = {
   page: { padding: '28px 32px', maxWidth: 1200, margin: '0 auto' },
   toolbar: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 },
@@ -55,6 +56,7 @@ const s = {
   emptyState: { padding: '60px 20px', textAlign: 'center', color: 'var(--text-3)', fontSize: 13.5 },
 };
 
+// Presentational component for rendering the customer list UI with search, filters, sorting, and pagination. All data and handlers are received via props from the parent container component.
 export default function CustomerListView({
   paginated,
   filteredCount,
@@ -167,6 +169,7 @@ export default function CustomerListView({
         </table>
       </div>
 
+      // Pagination controls with previous/next buttons and page numbers with ellipsis for large page counts. Buttons are disabled when on the first or last page, and the current page is highlighted.
       {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 14 }}>
           <button
