@@ -23,6 +23,7 @@ const TX_STYLE = {
 
 export default function PurchaseHistoryCard({ transactions }) {
   /** Sums accepted transactions, subtracting credits, and floors at zero for display. */
+  const [searchText, setSearchText] = React.useState('');
   const totalSpent = transactions
     .filter((t) => t.accepted === true)
     .reduce((sum, t) => {
@@ -31,27 +32,28 @@ export default function PurchaseHistoryCard({ transactions }) {
     }, 0);
   const displayTotal = Math.max(0, totalSpent);
 
+  const filtered = transactions.filter((e) => e.id.includes(searchText) );
+  
+
   return (
     <Card
       title="Purchase History (Last 90 days)"
       icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
       actions={
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>
-          Total | ${displayTotal.toFixed(2)}
-        </span>
+        <input type="text" placeholder="Search transactions..." value={searchText} onChange={(e) => setSearchText(e.target.value)} />
       }
     >
-      {transactions.length === 0 ? (
+      {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-3)', fontSize: 13.5 }}>No transactions found</div>
       ) : (
         <div>
-          {transactions.map((t, i) => {
+          {filtered.map((t, i) => {
             const ts = TX_STYLE[t.type] || TX_STYLE.subscription;
             return (
               <div key={t.id} style={{
                 display: 'flex', alignItems: 'center', gap: 13,
                 padding: '11px 0',
-                borderBottom: i < transactions.length - 1 ? '1px solid var(--border)' : 'none',
+                borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none',
               }}>
                 <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: ts.bg, color: ts.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {TX_ICONS[t.type]}
