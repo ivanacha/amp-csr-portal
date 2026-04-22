@@ -1,5 +1,4 @@
 import React from 'react';
-import ampLogo from '../../images/AMP_Logo_CobaltNavy.png';
 
 const styles = {
   header: {
@@ -62,7 +61,7 @@ const styles = {
     width: 32,
     height: 32,
     borderRadius: '50%',
-    background: 'var(--amp-sky)',
+    background: 'var(--brand-sky)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -83,7 +82,7 @@ export default function Header({ breadcrumbs = [], onCrumbClick }) {
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
-        <img src={ampLogo} alt="AMP" style={{ height: 60, display: 'block' }} />
+        {/* TODO: add logo */}
       </div>
 
       <div style={styles.divider} />

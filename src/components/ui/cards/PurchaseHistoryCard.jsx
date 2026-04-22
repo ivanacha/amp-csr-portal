@@ -15,7 +15,7 @@ const TX_ICONS = {
 };
 
 const TX_STYLE = {
-  subscription: { bg: 'var(--amp-light-blue)', color: 'var(--amp-cobalt)' },
+  subscription: { bg: 'var(--brand-light-blue)', color: 'var(--brand-cobalt)' },
   wash:         { bg: 'var(--green-bg)',        color: 'var(--green)' },
   refund:       { bg: 'var(--red-bg)',          color: 'var(--red)' },
   coupon:       { bg: 'var(--yellow-bg)',       color: 'var(--yellow)' },

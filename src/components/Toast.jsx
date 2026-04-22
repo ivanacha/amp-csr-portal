@@ -28,7 +28,7 @@ export default function Toast({ message, onDone }) {
       opacity: visible ? 1 : 0,
       transition: 'opacity 0.25s ease, transform 0.25s ease',
       zIndex: 300,
-      background: 'var(--amp-navy)',
+      background: 'var(--brand-navy)',
       color: '#fff',
       borderRadius: 10,
       padding: '12px 22px',

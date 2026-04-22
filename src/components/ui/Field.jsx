@@ -23,7 +23,7 @@ export default function Field({ label, value, editing, inputProps, error }) {
         <input
           style={{
             background: 'var(--surface-2)',
-            border: `1.5px solid ${error ? 'var(--red)' : 'var(--amp-sky)'}`,
+            border: `1.5px solid ${error ? 'var(--red)' : 'var(--brand-sky)'}`,
             borderRadius: 'var(--radius-sm)',
             padding: '7px 10px',
             fontSize: 13.5,

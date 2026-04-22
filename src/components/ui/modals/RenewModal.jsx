@@ -10,7 +10,7 @@ import { PLANS, PLAN_PRICE } from '../../../constants';
 
 const SELECT_STYLE = {
   background: 'var(--surface-2)',
-  border: '1.5px solid var(--amp-sky)',
+  border: '1.5px solid var(--brand-sky)',
   borderRadius: 'var(--radius-sm)',
   padding: '7px 32px 7px 10px',
   fontSize: 13.5,
@@ -65,7 +65,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--brand-navy)', marginBottom: 6 }}>
             Renew Subscription
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
@@ -85,7 +85,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
         </div>
 
         <div style={{
-          background: 'var(--amp-light-blue)',
+          background: 'var(--brand-light-blue)',
           border: '1px solid var(--border)',
           borderRadius: 'var(--radius-sm)',
           padding: '14px 16px',
@@ -99,7 +99,7 @@ export default function RenewModal({ customer, vehicles, onUpdateCustomer, onUpd
               {isCanceled ? 'New subscription' : 'Outstanding balance'}
             </div>
           </div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: 'var(--amp-navy)' }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: 'var(--brand-navy)' }}>
             ${total.toFixed(2)}
           </div>
         </div>

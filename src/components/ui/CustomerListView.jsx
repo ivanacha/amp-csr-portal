@@ -28,8 +28,8 @@ const s = {
   filterGroup: { display: 'flex', gap: 6, marginLeft: 'auto' },
   filterPill: (active) => ({
     padding: '6px 14px', borderRadius: 20,
-    border: `1px solid ${active ? 'var(--amp-cobalt)' : 'var(--border)'}`,
-    background: active ? 'var(--amp-cobalt)' : '#fff',
+    border: `1px solid ${active ? 'var(--brand-cobalt)' : 'var(--border)'}`,
+    background: active ? 'var(--brand-cobalt)' : '#fff',
     color: active ? '#fff' : 'var(--text-2)',
     fontSize: 12.5, fontWeight: active ? 600 : 400,
     cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap',
@@ -45,14 +45,14 @@ const s = {
     color: 'var(--text)', fontWeight: 500,
     background: 'var(--surface-2)', borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap',
   },
-  tr: (hover) => ({ borderBottom: '1px solid var(--border)', cursor: 'pointer', background: hover ? 'var(--amp-light-blue)' : 'transparent', transition: 'background 0.1s' }),
+  tr: (hover) => ({ borderBottom: '1px solid var(--border)', cursor: 'pointer', background: hover ? 'var(--brand-light-blue)' : 'transparent', transition: 'background 0.1s' }),
   td: { padding: '13px 16px', verticalAlign: 'middle' },
   userCell: { display: 'flex', alignItems: 'center', gap: 11 },
   avatar: (color) => ({ width: 34, height: 34, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#fff', flexShrink: 0 }),
   userName: { fontSize: 13.5, fontWeight: 600, color: 'var(--text)' },
   userEmail: { fontSize: 12, color: 'var(--text-3)', marginTop: 1 },
   mono: { fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'var(--text-2)' },
-  viewBtn: { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 13px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: '#fff', color: 'var(--amp-cobalt)', fontSize: 12.5, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' },
+  viewBtn: { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 13px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: '#fff', color: 'var(--brand-cobalt)', fontSize: 12.5, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' },
   emptyState: { padding: '60px 20px', textAlign: 'center', color: 'var(--text-3)', fontSize: 13.5 },
 };
 
@@ -156,8 +156,8 @@ export default function CustomerListView({
                     <button
                       style={s.viewBtn}
                       onClick={(e) => { e.stopPropagation(); onSelectCustomer(c.id); }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--amp-cobalt)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--amp-cobalt)'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'var(--amp-cobalt)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--brand-cobalt)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--brand-cobalt)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'var(--brand-cobalt)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
                     >
                       View Profile
                     </button>
@@ -169,7 +169,6 @@ export default function CustomerListView({
         </table>
       </div>
 
-      // Pagination controls with previous/next buttons and page numbers with ellipsis for large page counts. Buttons are disabled when on the first or last page, and the current page is highlighted.
       {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, marginTop: 14 }}>
           <button
@@ -189,9 +188,9 @@ export default function CustomerListView({
                     ...s.viewBtn,
                     minWidth: 32,
                     justifyContent: 'center',
-                    background: p === currentPage ? 'var(--amp-cobalt)' : '#fff',
-                    color: p === currentPage ? '#fff' : 'var(--amp-cobalt)',
-                    borderColor: p === currentPage ? 'var(--amp-cobalt)' : 'var(--border)',
+                    background: p === currentPage ? 'var(--brand-cobalt)' : '#fff',
+                    color: p === currentPage ? '#fff' : 'var(--brand-cobalt)',
+                    borderColor: p === currentPage ? 'var(--brand-cobalt)' : 'var(--border)',
                     fontWeight: p === currentPage ? 600 : 500,
                   }}
                   onClick={() => onPageChange(p)}

@@ -63,11 +63,11 @@ export default function VehicleCard({ vehicles, onUpdateVehicles, customerPlan, 
                 borderRadius: 'var(--radius-sm)',
                 padding: '12px 14px',
               }}>
-                <div style={{ width: 38, height: 38, borderRadius: 8, background: 'var(--amp-light-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amp-cobalt)" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <div style={{ width: 38, height: 38, borderRadius: 8, background: 'var(--brand-light-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-cobalt)" strokeWidth="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--amp-navy)' }}>{v.plate}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, letterSpacing: 1, color: 'var(--brand-navy)' }}>{v.plate}</div>
                   <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{v.year} {v.make} {v.model} · {v.color}</div>
                 </div>
                 <div style={{ marginLeft: 'auto', textAlign: 'right' }}>

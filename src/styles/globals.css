@@ -1,11 +1,10 @@
-/* AMP Brand Palette — Cobalt Navy */
 :root {
   /* Brand */
-  --amp-navy:       #152E50;
-  --amp-cobalt:     #1B3A6B;
-  --amp-blue:       #2A5298;
-  --amp-sky:        #4A90D9;
-  --amp-light-blue: #EBF3FB;
+  --brand-navy:       #152E50;
+  --brand-cobalt:     #1B3A6B;
+  --brand-blue:       #2A5298;
+  --brand-sky:        #4A90D9;
+  --brand-light-blue: #EBF3FB;
 
   /* Surface */
   --bg:             #F4F6FA;

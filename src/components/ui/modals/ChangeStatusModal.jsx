@@ -77,7 +77,7 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--brand-navy)', marginBottom: 6 }}>
             Change Account Status
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
@@ -109,9 +109,9 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
                     border: isCurrent
                       ? `2px solid ${opt.color}`
                       : isPending
-                      ? '2px solid var(--amp-cobalt)'
+                      ? '2px solid var(--brand-cobalt)'
                       : '1.5px solid var(--border)',
-                    background: isCurrent ? opt.bg : isPending ? 'var(--amp-light-blue)' : '#fff',
+                    background: isCurrent ? opt.bg : isPending ? 'var(--brand-light-blue)' : '#fff',
                     cursor: isSelectable ? 'pointer' : 'default',
                     opacity: isDisabled ? 0.35 : 1,
                     transition: 'all 0.15s',
@@ -120,8 +120,8 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 9, height: 9, borderRadius: '50%', background: isPending ? 'var(--amp-cobalt)' : opt.color, flexShrink: 0 }} />
-                      <span style={{ fontSize: 13.5, fontWeight: isCurrent || isPending ? 600 : 400, color: isCurrent ? opt.color : isPending ? 'var(--amp-cobalt)' : 'var(--text)' }}>
+                      <div style={{ width: 9, height: 9, borderRadius: '50%', background: isPending ? 'var(--brand-cobalt)' : opt.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: 13.5, fontWeight: isCurrent || isPending ? 600 : 400, color: isCurrent ? opt.color : isPending ? 'var(--brand-cobalt)' : 'var(--text)' }}>
                         {opt.label}
                       </span>
                     </div>
@@ -149,7 +149,7 @@ export default function ChangeStatusModal({ customer, vehicles, onUpdateCustomer
                     style={{
                       height: '100%',
                       padding: '0 14px',
-                      background: 'var(--amp-cobalt)',
+                      background: 'var(--brand-cobalt)',
                       color: '#fff',
                       border: 'none',
                       borderRadius: 'var(--radius-sm)',

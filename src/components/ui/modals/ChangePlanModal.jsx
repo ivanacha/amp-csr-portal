@@ -10,7 +10,7 @@ import { PLANS, PLAN_PRICE } from '../../../constants';
 
 const SELECT_STYLE = {
   background: 'var(--surface-2)',
-  border: '1.5px solid var(--amp-sky)',
+  border: '1.5px solid var(--brand-sky)',
   borderRadius: 'var(--radius-sm)',
   padding: '7px 32px 7px 10px',
   fontSize: 13.5,
@@ -69,7 +69,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)', marginBottom: 6 }}>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--brand-navy)', marginBottom: 6 }}>
             Change Plan
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>
@@ -88,7 +88,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
 
         {!noChange && (
           <div style={{
-            background: isDowngrade ? 'var(--green-bg)' : 'var(--amp-light-blue)',
+            background: isDowngrade ? 'var(--green-bg)' : 'var(--brand-light-blue)',
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius-sm)',
             padding: '14px 16px',
@@ -104,7 +104,7 @@ export default function ChangePlanModal({ customer, vehicles, onUpdateCustomer, 
                 {isDowngrade ? 'Refund to card on file' : 'Charge to card on file'}
               </div>
             </div>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: isDowngrade ? 'var(--green)' : 'var(--amp-navy)' }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 600, color: isDowngrade ? 'var(--green)' : 'var(--brand-navy)' }}>
               {isDowngrade ? '+' : ''}${Math.abs(totalDiff).toFixed(2)}
             </div>
           </div>
