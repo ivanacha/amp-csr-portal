@@ -21,7 +21,7 @@ const labelStyle = {
 function inputStyle(error) {
   return {
     background: 'var(--surface-2)',
-    border: `1.5px solid ${error ? 'var(--red)' : 'var(--amp-sky)'}`,
+    border: `1.5px solid ${error ? 'var(--red)' : 'var(--brand-sky)'}`,
     borderRadius: 'var(--radius-sm)',
     padding: '7px 10px',
     fontSize: 13.5,
@@ -74,7 +74,7 @@ export default function VehicleModal({ vehicle, onSave, onClose }) {
         style={{ background: '#fff', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)', padding: 28, width: 420, display: 'flex', flexDirection: 'column', gap: 16 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--amp-navy)' }}>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--brand-navy)' }}>
           {vehicle ? 'Edit Vehicle' : 'Add Vehicle'}
         </div>
 

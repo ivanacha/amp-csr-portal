@@ -30,7 +30,7 @@ export default function Card({ title, icon, actions, children }) {
           fontFamily: "'DM Sans', sans-serif",
           fontWeight: 700,
           fontSize: 13.5,
-          color: 'var(--amp-navy)',
+          color: 'var(--brand-navy)',
         }}>
           {icon}
           {title}

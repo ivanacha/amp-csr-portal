@@ -1,5 +1,4 @@
 import React from 'react';
-import ampLogoWhite from '../../images/AMP_Logo_White.png';
 
 const styles = {
   footer: {
@@ -125,40 +124,39 @@ export default function Footer() {
   return (
     <footer>
       <div style={styles.footer}>
-        <a href="https://ampmemberships.com" target="_blank" rel="noopener noreferrer" style={styles.logoLink}>
-          <img src={ampLogoWhite} alt="AMP" style={{ height: 70, display: 'block' }} />
+        {/* TODO: add logo link URL */}
+        <a href="#" style={styles.logoLink}>
+          {/* TODO: add logo */}
         </a>
 
+        {/* TODO: add Privacy Policy link URL */}
         <a
-          href="https://ampmemberships.com/amp-privacy-policy/"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#"
           style={styles.navLink}
         >
           Privacy Policy
         </a>
 
         <div style={styles.socialLinks}>
+          {/* TODO: add LinkedIn URL */}
           <a
-            href="https://www.linkedin.com/company/amp-memberships/"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
             style={styles.iconLink}
             aria-label="LinkedIn"
           >
             <LinkedInIcon />
           </a>
+          {/* TODO: add Facebook URL */}
           <a
-            href="https://www.facebook.com/ampmemberships"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
             style={styles.iconLink}
             aria-label="Facebook"
           >
             <FacebookIcon />
           </a>
+          {/* TODO: add email address */}
           <a
-            href="mailto:info@ampmemberships.com"
+            href="#"
             style={styles.iconLink}
             aria-label="Email"
           >
@@ -169,21 +167,19 @@ export default function Footer() {
 
       <div style={styles.bottomBar}>
         <span style={styles.copyright}>
-          &copy; 2023 &ndash; All Rights Reserved &ndash; AMP is an AMP Memberships, LLC product.
+          &copy; 2023 &ndash; All Rights Reserved.
         </span>
         <div style={styles.bottomLinks}>
+          {/* TODO: add Contact Us link URL */}
           <a
-            href="https://ampmemberships.com/get-started/"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
             style={styles.bottomLink}
           >
             Contact Us
           </a>
+          {/* TODO: add About Us link URL */}
           <a
-            href="https://ampmemberships.com/about-us/"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
             style={styles.bottomLink}
           >
             About Us

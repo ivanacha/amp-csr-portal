@@ -9,7 +9,7 @@ export const AVATAR_COLORS = [
   'linear-gradient(135deg, #1B3A6B, #3B6EB5)',
 ];
 
-export function formatRenewDate(date) {
+export function formatRenewDate(date) { // Moved from utils/formatters.js for easier access in Header component
   if (!date) return null;
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }

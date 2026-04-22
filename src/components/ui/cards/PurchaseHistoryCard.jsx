@@ -15,7 +15,7 @@ const TX_ICONS = {
 };
 
 const TX_STYLE = {
-  subscription: { bg: 'var(--amp-light-blue)', color: 'var(--amp-cobalt)' },
+  subscription: { bg: 'var(--brand-light-blue)', color: 'var(--brand-cobalt)' },
   wash:         { bg: 'var(--green-bg)',        color: 'var(--green)' },
   refund:       { bg: 'var(--red-bg)',          color: 'var(--red)' },
   coupon:       { bg: 'var(--yellow-bg)',       color: 'var(--yellow)' },
@@ -23,6 +23,7 @@ const TX_STYLE = {
 
 export default function PurchaseHistoryCard({ transactions }) {
   /** Sums accepted transactions, subtracting credits, and floors at zero for display. */
+  const [searchText, setSearchText] = React.useState('');
   const totalSpent = transactions
     .filter((t) => t.accepted === true)
     .reduce((sum, t) => {
@@ -31,27 +32,44 @@ export default function PurchaseHistoryCard({ transactions }) {
     }, 0);
   const displayTotal = Math.max(0, totalSpent);
 
+  const filtered = transactions.filter((e) => e.type.includes(searchText) );
+  
+
   return (
     <Card
       title="Purchase History (Last 90 days)"
       icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
       actions={
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>
-          Total | ${displayTotal.toFixed(2)}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '6px 12px', boxShadow: 'var(--shadow-sm)' }}>
+            <svg style={{ color: 'var(--text-3)', flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              style={{ border: 'none', outline: 'none', fontSize: 13.5, color: 'var(--text)', width: 160, background: 'transparent' }}
+              placeholder="Search transactions..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </div>
+          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text)' }}>
+            Total | ${displayTotal.toFixed(2)}
+          </span>
+        </div>
       }
     >
-      {transactions.length === 0 ? (
+
+      {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-3)', fontSize: 13.5 }}>No transactions found</div>
       ) : (
         <div>
-          {transactions.map((t, i) => {
+          {filtered.map((t, i) => {
             const ts = TX_STYLE[t.type] || TX_STYLE.subscription;
             return (
               <div key={t.id} style={{
                 display: 'flex', alignItems: 'center', gap: 13,
                 padding: '11px 0',
-                borderBottom: i < transactions.length - 1 ? '1px solid var(--border)' : 'none',
+                borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none',
               }}>
                 <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: ts.bg, color: ts.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {TX_ICONS[t.type]}

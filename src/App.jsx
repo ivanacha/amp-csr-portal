@@ -21,7 +21,6 @@ import { STATUS_TOAST } from './constants';
 export default function App() {
   const [view, setView] = useState('list');
   const [selectedId, setSelectedId] = useState(null);
-
   const [customers, setCustomers] = useState(initialCustomers);
   const [vehicleData, setVehicleData] = useState(initialVehicleData);
   const [extraTransactions, setExtraTransactions] = useState({});
@@ -50,6 +49,7 @@ export default function App() {
     }
   }
 
+  /** Sets the selected customer ID and navigates to the profile view when a customer row is clicked. */
   function handleSelectCustomer(id) {
     setSelectedId(id);
     setView('profile');

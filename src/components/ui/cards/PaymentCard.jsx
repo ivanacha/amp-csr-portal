@@ -13,7 +13,9 @@ import CardModal from '../modals/CardModal';
 export default function PaymentCard({ customer, onSave }) {
   const [showModal, setShowModal] = useState(false);
   const { card } = customer;
-  const last4 = card?.number ? card.number.slice(-4) : '????';
+
+  // Create a masked version of the card number, showing only the last 4 digits; if no card is on file, show '????'
+  const last4 = card?.number ? card.number.slice(-4) : '????'; 
   const masked = `••••${last4}`;
 
   return (

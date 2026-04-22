@@ -8,12 +8,15 @@ import { useState } from 'react';
 
 /** Manages status/renew modal open state and derives whether the customer is eligible for renewal. */
 export function useCustomerProfile(customer) {
+  // Modal visibility state variables and handlers
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showRenewModal, setShowRenewModal] = useState(false);
 
+  // Eligibility variable - only overdue and canceled customers can be renewed, paused customers cannot.
   const isRenewable =
     customer.status === 'overdue' || customer.status === 'canceled';
 
+  // Return all state and handlers and the derived eligibility variable for use in the profile view component.
   return {
     showStatusModal,
     openStatusModal: () => setShowStatusModal(true),

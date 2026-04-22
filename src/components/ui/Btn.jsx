@@ -8,8 +8,8 @@ import React from 'react';
 
 // Maps variant names to their inline style tokens
 const VARIANTS = {
-  primary:   { background: 'var(--amp-cobalt)', color: '#fff',           borderColor: 'var(--amp-cobalt)' },
-  secondary: { background: '#fff',              color: 'var(--amp-cobalt)', borderColor: 'var(--border)' },
+  primary:   { background: 'var(--brand-cobalt)', color: '#fff',           borderColor: 'var(--brand-cobalt)' },
+  secondary: { background: '#fff',              color: 'var(--brand-cobalt)', borderColor: 'var(--border)' },
   ghost:     { background: 'transparent',       color: 'var(--text-2)',  borderColor: 'var(--border)' },
   danger:    { background: '#fff',              color: 'var(--red)',     borderColor: 'var(--red-border)' },
 };

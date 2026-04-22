@@ -98,6 +98,7 @@ export default function CustomerProfileView({
         </div>
       </div>
 
+      {/* Modals */}
       {showRenewModal && (
         <RenewModal
           customer={customer}
