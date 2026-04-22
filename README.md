@@ -2,7 +2,7 @@
 
 A Customer Service Representative portal for a carwash membership program.
 
-<img width="1352" height="797" alt="App_Screenshot" src="https://github.com/user-attachments/assets/e79d95da-70dd-4198-9867-3fc62db4ece1" />
+<img width="1352" height="735" alt="image" src="https://github.com/user-attachments/assets/bba70124-790a-48ad-8321-670a8a577088" />
 
 ## Overview
 
